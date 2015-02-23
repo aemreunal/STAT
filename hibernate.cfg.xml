@@ -12,6 +12,7 @@
         <property name="show_sql">true</property>
 
         <!-- List of mapping files -->
-        <mapping class="domain.Sale"/>
+        <!--<mapping class="domain.Sale"/>-->
+        <mapping resource="Sale.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

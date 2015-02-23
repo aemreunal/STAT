@@ -8,7 +8,7 @@
         <meta attribute="class-description">
             This class contains the sale detail.
         </meta>
-        <id name="saleId" type="int" column="id">
+        <id name="saleId" type="int" column="sale_id">
             <generator class="native"/>
         </id>
         <!--<property name="firstName" column="first_name" type="string"/>-->
