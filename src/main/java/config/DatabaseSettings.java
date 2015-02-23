@@ -20,9 +20,9 @@ import java.io.File;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 
 public class DatabaseSettings {
     private static final SessionFactory  ourSessionFactory;
@@ -32,8 +32,9 @@ public class DatabaseSettings {
         try {
             Configuration configuration = new Configuration();
             configuration.configure(new File("hibernate.cfg.xml"));
+            configuration.configure(new File("credentials.cfg.xml"));
 
-            serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+            serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
             ourSessionFactory = configuration.buildSessionFactory(serviceRegistry);
         } catch (Throwable ex) {
             throw new ExceptionInInitializerError(ex);
