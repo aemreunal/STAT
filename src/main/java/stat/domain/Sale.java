@@ -1,4 +1,4 @@
-package domain;
+package stat.domain;
 
 /*
  ***************************
@@ -17,19 +17,23 @@ package domain;
  */
 
 
-public class Sale {
-//    @Id
-//    @Column(name = "sale_id")
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @OrderColumn
-//    @Access(AccessType.PROPERTY)
-    private int saleId;
+import javax.persistence.*;
 
-    public int getSaleId() {
+@Entity
+@Table(name = "sales")
+public class Sale {
+    @Id
+    @Column(name = "sale_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @OrderColumn
+    @Access(AccessType.PROPERTY)
+    private Integer saleId;
+
+    public Integer getSaleId() {
         return saleId;
     }
 
-    public void setSaleId(int saleId) {
+    public void setSaleId(Integer saleId) {
         this.saleId = saleId;
     }
 }

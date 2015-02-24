@@ -1,15 +1,19 @@
+buildscript {
+    repositories {
+        maven { url "https://repo.spring.io/release" }
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE")
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'spring-boot'
 
 sourceCompatibility = 1.8
 version = '1.0'
-
-def hibernateCoreVersion = '4.3.8.Final'
-def hibernateCommonsVersion = '3.2.0.Final'
-def hibernateEntityManagerVersion = '4.3.8.Final'
-def hibernateJPAAPI21Version = '1.0.0.Final'
-def hibernateValidatorVersion = '5.1.3.Final'
-def mysqlConnectorJDBCVersion = '5.1.34'
-def wrapperGradleVersion = '2.3'
 
 repositories {
     mavenCentral()
@@ -17,27 +21,47 @@ repositories {
     maven {
         url "http://download.java.net/maven/2"
     }
+    maven {
+        url 'http://repo.spring.io/release/'
+    }
 }
 
+// External libs
+def hibernateC3P0Version = '4.3.8.Final'
+def javaxElVersion = '2.2.4'
+def hibernateValidatorVersion = '5.1.3.Final'
+def mysqlConnectorJDBCVersion = '5.1.34'
+def slf4jLog4jVersion = '1.7.10'
+def wrapperGradleVersion = '2.3'
+
 dependencies {
-    compile group: 'org.antlr', name: 'antlr4', version: '4.5'
-//    compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
-    compile group: 'org.jboss.spec.javax.transaction', name: 'jboss-transaction-api_1.1_spec', version: '1.0.1.Final'
-    compile group: 'org.jboss.logging', name: 'jboss-logging', version: '3.2.1.Final'
+    compile("org.springframework.boot:spring-boot-starter")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+//    compile("org.springframework.boot:spring-boot-starter-jdbc")
+
+    // slf4j, used by Hibernate for logging
+//    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: slf4jLog4jVersion
 
     // Hibernate
-    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernateCoreVersion
-//    compile group: 'org.hibernate', name: 'hibernate-commons-annotations', version: hibernateCommonsVersion
-    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: hibernateEntityManagerVersion
+    compile group: 'org.hibernate', name: 'hibernate-c3p0', version: hibernateC3P0Version
     compile group: 'org.hibernate', name: 'hibernate-validator', version: hibernateValidatorVersion
-    compile group: 'org.hibernate.javax.persistence', name: 'hibernate-jpa-2.1-api', version: hibernateJPAAPI21Version
+    compile group: 'javax.el', name: 'javax.el-api', version: javaxElVersion // Used by Hibernate
 
     // MySQL
     compile group: 'mysql', name: 'mysql-connector-java', version: mysqlConnectorJDBCVersion
+}
 
-    testCompile group: 'junit', name: 'junit', version: '4.11'
+task copyToLib(type: Copy) {
+    into "$buildDir/output/lib"
+    from configurations.runtime
 }
 
 task wrapper(type: Wrapper) {
     gradleVersion = wrapperGradleVersion
 }
+
+task listJars << {
+    configurations.compile.each { File file -> println file.name }
+}
+
+assemble.dependsOn copyToLib
