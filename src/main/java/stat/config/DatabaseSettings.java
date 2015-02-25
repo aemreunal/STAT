@@ -65,6 +65,7 @@ public class DatabaseSettings {
         }
         dataSource.setJdbcUrl(getJdbcUrl());
         dataSource.setUser(dbUsername);
+        dataSource.setPassword(dbPassword);
         return dataSource;
     }
 
