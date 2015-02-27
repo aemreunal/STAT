@@ -4,3 +4,6 @@
 build/
 
 db.properties
+
+lib/
+out/
