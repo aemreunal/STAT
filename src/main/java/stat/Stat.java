@@ -16,7 +16,9 @@ package stat;
  ***************************
  */
 
+import stat.domain.Product;
 import stat.domain.Sale;
+import stat.service.ProductService;
 import stat.service.SaleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +32,26 @@ public class Stat implements CommandLineRunner {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     private SaleService saleService;
 
+    @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    private ProductService productService;
+
     @Override
     public void run(String... args) throws Exception {
         System.out.println("------TEST-----");
-        Sale sale = new Sale();
-        saleService.save(sale);
+
+        Product product1 = productService.createNewProduct();
+        Product product2 = productService.createNewProduct();
+
+        Sale sale1 = saleService.createNewSale();
+        Sale sale2 = saleService.createNewSale();
+
+        sale1 = saleService.addProduct(sale1, product1, 4);
+        sale1 = saleService.addProduct(sale1, product2, 4);
+
+        sale2 = saleService.addProduct(sale2, product1, 4);
+        sale2 = saleService.addProduct(sale2, product2, 4);
+
+        System.out.println("------TEST-----");
     }
 }
