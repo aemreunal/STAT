@@ -38,7 +38,7 @@ public class Stat implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("------TEST-----");
+        System.out.println("<------TEST------>");
 
         Product product1 = productService.createNewProduct();
         Product product2 = productService.createNewProduct();
@@ -52,6 +52,6 @@ public class Stat implements CommandLineRunner {
         sale2 = saleService.addProduct(sale2, product1, 4);
         sale2 = saleService.addProduct(sale2, product2, 4);
 
-        System.out.println("------TEST-----");
+        System.out.println("<------TEST------>");
     }
 }

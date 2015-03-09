@@ -55,4 +55,14 @@ public class Product {
     public void setSales(Set<Sale> sales) {
         this.sales = sales;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Product) {
+            Product product = (Product) obj;
+            return product.getProductId() == this.getProductId();
+        }
+        return false;
+    }
 }

@@ -36,8 +36,8 @@ def slf4jLog4jVersion = '1.7.10'
 def wrapperGradleVersion = '2.3'
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 //    compile("org.springframework.boot:spring-boot-starter-jdbc")
 
     // slf4j, used by Hibernate for logging
@@ -50,6 +50,8 @@ dependencies {
 
     // MySQL
     compile group: 'mysql', name: 'mysql-connector-java', version: mysqlConnectorJDBCVersion
+
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
 
 task copyToLib(type: Copy) {
