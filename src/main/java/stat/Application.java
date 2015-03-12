@@ -21,8 +21,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application {
     public static void main(final String[] args) {
         SpringApplication app = new SpringApplication(Application.class);
-        app.setWebEnvironment(false);
-        app.setShowBanner(false);
+        app.setWebEnvironment(false); // To not instantiate a web environment
+        app.setHeadless(false); // To instantiate AWT
+        app.setShowBanner(false); // To not show startup banner
         app.run(args);
     }
 }
