@@ -37,8 +37,8 @@ public class Sale {
     @ManyToMany(targetEntity = Product.class,
             fetch = FetchType.LAZY)
     @JoinTable(name = "sales_to_products",
-            joinColumns = @JoinColumn(name = "sale_Id"),
-            inverseJoinColumns = @JoinColumn(name = "product_Id"))
+            joinColumns = @JoinColumn(name = "sale_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     @OrderBy("productId")
     private Set<Product> products = new LinkedHashSet<Product>();
 
