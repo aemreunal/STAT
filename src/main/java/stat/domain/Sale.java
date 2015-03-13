@@ -17,9 +17,7 @@ package stat.domain;
  */
 
 
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.*;
 
 //@SuppressWarnings("UnusedDeclaration")
@@ -44,6 +42,12 @@ public class Sale {
     @OrderBy("productId")
     private Set<Product> products = new LinkedHashSet<Product>();
 
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "amounts", joinColumns=@JoinColumn(name="sale_id"))
+    @MapKeyColumn(name = "product_id")
+    @Column(name = "amount")
+    private Map<Integer, Integer> amounts = new LinkedHashMap<>();
+
     @Column(name = "date", nullable = false)
     private Date date = null;
 
@@ -51,6 +55,11 @@ public class Sale {
 
     public void addProductToSale(Product product, int amount) {
         getProducts().add(product);
+        getAmounts().put(product.getProductId(), amount);
+    }
+
+    public int getAmountSold(Product product) {
+        return getAmounts().get(product.getProductId());
     }
 
     // Getters & Setters
@@ -69,6 +78,14 @@ public class Sale {
 
     public void setProducts(Set<Product> products) {
         this.products = products;
+    }
+
+    public Map<Integer, Integer> getAmounts() {
+        return amounts;
+    }
+
+    public void setAmounts(Map<Integer, Integer> amounts) {
+        this.amounts = amounts;
     }
 
     public Date getDate() {
