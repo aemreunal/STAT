@@ -34,6 +34,10 @@ public class SaleService {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     private SaleRepo saleRepo;
 
+    @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    private ProductService productService;
+
     public Sale createNewSale() {
         Sale sale = new Sale();
         sale = this.save(sale);
@@ -61,6 +65,7 @@ public class SaleService {
 
     public Sale addProduct(Sale sale, Product product, int amount) {
         sale.addProductToSale(product, amount);
+        productService.addSale(product, sale);
         return this.save(sale);
     }
 

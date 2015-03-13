@@ -22,6 +22,7 @@ import stat.repository.ProductRepo;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,11 +57,12 @@ public class ProductService {
     @Transactional(readOnly = true)
     public LinkedHashSet<Sale> getSalesOfProduct(Integer productId) {
         Product product = this.getProductWithId(productId);
-        LinkedHashSet<Sale> sales = new LinkedHashSet<>();
-        for (Sale sale : product.getSales()) {
-            sales.add(sale);
-        }
-        return sales;
+        return product.getSales().stream().collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public Product addSale(Product product, Sale sale) {
+        product.getSales().add(sale);
+        return this.save(product);
     }
 
     public void deleteProduct(Integer productId) {
