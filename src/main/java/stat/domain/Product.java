@@ -20,9 +20,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.persistence.*;
 
+//@SuppressWarnings("UnusedDeclaration")
 @Entity
 @Table(name = "products")
-//@Access(AccessType.PROPERTY)
 public class Product {
 
     // Empty constructor, required by Hibernate
@@ -34,6 +34,14 @@ public class Product {
     @OrderColumn
     private Integer productId;
 
+    @ManyToMany(targetEntity = Sale.class,
+            mappedBy = "products",
+            fetch = FetchType.LAZY)
+    @OrderBy("saleId")
+    private Set<Sale> sales = new LinkedHashSet<Sale>();
+
+    // Getters & Setters
+
     public Integer getProductId() {
         return productId;
     }
@@ -41,12 +49,6 @@ public class Product {
     public void setProductId(Integer productId) {
         this.productId = productId;
     }
-
-    @ManyToMany(targetEntity = Sale.class,
-            mappedBy = "products",
-            fetch = FetchType.LAZY)
-    @OrderBy("saleId")
-    private Set<Sale> sales = new LinkedHashSet<Sale>();
 
     public Set<Sale> getSales() {
         return sales;

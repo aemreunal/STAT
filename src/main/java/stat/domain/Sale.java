@@ -17,13 +17,14 @@ package stat.domain;
  */
 
 
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.persistence.*;
 
+//@SuppressWarnings("UnusedDeclaration")
 @Entity
 @Table(name = "sales")
-//@Access(AccessType.PROPERTY)
 public class Sale {
     // Empty constructor, required by Hibernate
     public Sale() {}
@@ -34,14 +35,6 @@ public class Sale {
     @OrderColumn
     private Integer saleId;
 
-    public Integer getSaleId() {
-        return saleId;
-    }
-
-    public void setSaleId(Integer saleId) {
-        this.saleId = saleId;
-    }
-
     // Sale is the owner of the relationship
     @ManyToMany(targetEntity = Product.class,
             fetch = FetchType.LAZY)
@@ -51,6 +44,25 @@ public class Sale {
     @OrderBy("productId")
     private Set<Product> products = new LinkedHashSet<Product>();
 
+    @Column(name = "date", nullable = false)
+    private Date date = null;
+
+    // Helper methods
+
+    public void addProductToSale(Product product, int amount) {
+        getProducts().add(product);
+    }
+
+    // Getters & Setters
+
+    public Integer getSaleId() {
+        return saleId;
+    }
+
+    public void setSaleId(Integer saleId) {
+        this.saleId = saleId;
+    }
+
     public Set<Product> getProducts() {
         return products;
     }
@@ -59,7 +71,19 @@ public class Sale {
         this.products = products;
     }
 
-    public void addProductToSale(Product product, int amount) {
-        getProducts().add(product);
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @PrePersist
+    private void setInitialProperties() {
+        // Set sales date
+        if (date == null) {
+            setDate(new Date());
+        }
     }
 }
