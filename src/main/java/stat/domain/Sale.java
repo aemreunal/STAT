@@ -86,4 +86,13 @@ public class Sale {
             setDate(new Date());
         }
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Sale) {
+            Sale sale = (Sale) obj;
+            return sale.getSaleId().intValue() == this.getSaleId().intValue();
+        }
+        return false;
+    }
 }
