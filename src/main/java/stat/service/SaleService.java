@@ -20,6 +20,8 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.repository.SaleRepo;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +64,25 @@ public class SaleService {
         return this.save(sale);
     }
 
-    public void deleteSaleWithId(Integer saleId) {
+    @Transactional(readOnly = true)
+    public LinkedHashMap<Product, Integer> getProductsOfSale(Integer saleId) {
+        Sale sale = this.getSaleWithId(saleId);
+        Set<Product> products = sale.getProducts();
+        Map<Integer, Integer> amounts = sale.getAmounts();
+
+        LinkedHashMap<Product, Integer> productsAndAmounts = new LinkedHashMap<Product, Integer>();
+        for (Product product : products) {
+            Integer amountOfProduct = amounts.get(product.getProductId());
+            productsAndAmounts.put(product, amountOfProduct);
+        }
+        return productsAndAmounts;
+    }
+
+    public void deleteSale(Sale sale) {
+        saleRepo.delete(sale);
+    }
+
+    public void deleteSale(Integer saleId) {
         saleRepo.delete(saleId);
     }
 }
