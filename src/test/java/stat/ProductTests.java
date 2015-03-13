@@ -19,6 +19,7 @@ package stat;
 import stat.domain.Product;
 import stat.domain.Sale;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
@@ -58,7 +59,7 @@ public class ProductTests extends StatTest {
         // Updated product object, which reflects the changes made in
         // sales, must be obtained. Therefore, sales are obtained through
         // the Product service.
-        Set<Sale> salesOfProduct = productService.getSalesOfProduct(product.getProductId());
+        LinkedHashSet<Sale> salesOfProduct = productService.getSalesOfProduct(product.getProductId());
         assertTrue("Product does not contain the sale!", salesOfProduct.contains(sale1));
         assertTrue("Product does not contain the sale!", salesOfProduct.contains(sale2));
     }

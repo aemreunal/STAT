@@ -20,8 +20,8 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.repository.ProductRepo;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,9 +54,13 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Set<Sale> getSalesOfProduct(Integer productId) {
+    public LinkedHashSet<Sale> getSalesOfProduct(Integer productId) {
         Product product = this.getProductWithId(productId);
-        return product.getSales();
+        LinkedHashSet<Sale> sales = new LinkedHashSet<>();
+        for (Sale sale : product.getSales()) {
+            sales.add(sale);
+        }
+        return sales;
     }
 
     public void deleteProduct(Integer productId) {
