@@ -24,7 +24,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "products")
 public class Product {
-
     // Empty constructor, required by Hibernate
     public Product() {}
 
