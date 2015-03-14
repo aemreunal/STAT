@@ -34,8 +34,8 @@ public class MiscTests extends StatTest{
     @Test
     @Rollback
     public void generalFunctionalityTest() throws ProductNameException {
-        Product product1 = productService.createNewProduct("test product 1");
-        Product product2 = productService.createNewProduct("test product 2");
+        Product product1 = productService.createNewProduct("test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test product 2", 1.0);
 
         Sale sale1 = saleService.createNewSale();
         Sale sale2 = saleService.createNewSale();

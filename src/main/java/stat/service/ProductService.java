@@ -21,6 +21,7 @@ import stat.domain.Sale;
 import stat.exception.ProductNameException;
 import stat.repository.ProductRepo;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,15 +37,23 @@ public class ProductService {
     private ProductRepo productRepo;
 
 
-    public Product createNewProduct(String name) throws ProductNameException {
-        return this.createNewProduct(name, "");
+    public Product createNewProduct(String name, Double price) throws ProductNameException {
+        return this.createNewProduct(name, "", BigDecimal.valueOf(price));
     }
 
-    public Product createNewProduct(String name, String description) throws ProductNameException {
+    public Product createNewProduct(String name, BigDecimal price) throws ProductNameException {
+        return this.createNewProduct(name, "", price);
+    }
+
+    public Product createNewProduct(String name, String description, Double price) throws ProductNameException {
+        return this.createNewProduct(name, description, BigDecimal.valueOf(price));
+    }
+
+    public Product createNewProduct(String name, String description, BigDecimal price) throws ProductNameException {
         if (nameExists(name)) {
             throw new ProductNameException(name);
         }
-        Product product = new Product(name, description);
+        Product product = new Product(name, description, price);
         product = this.save(product);
         return product;
     }

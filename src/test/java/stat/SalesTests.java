@@ -52,7 +52,7 @@ public class SalesTests extends StatTest {
     @Test
     @Rollback
     public void amountTest() throws ProductNameException {
-        Product product = productService.createNewProduct("test product");
+        Product product = productService.createNewProduct("test product", 1.0);
         Sale sale = saleService.createNewSale();
         int amount = 4;
         sale = saleService.addProduct(sale, product, amount);

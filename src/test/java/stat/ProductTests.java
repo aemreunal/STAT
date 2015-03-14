@@ -20,6 +20,7 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNameException;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
@@ -32,7 +33,7 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productCreateTest1() throws ProductNameException {
-        Product product = productService.createNewProduct("test product");
+        Product product = productService.createNewProduct("test product", 1.0);
         Set<Product> products = productService.getAllProducts();
         assertTrue("Product is not persisted!", products.contains(product));
     }
@@ -40,14 +41,39 @@ public class ProductTests extends StatTest {
     @Test(expected = ProductNameException.class)
     @Rollback
     public void productCreateTest2() throws ProductNameException {
-        Product product1 = productService.createNewProduct("test product");
-        Product product2 = productService.createNewProduct("test product");
+        productService.createNewProduct("test product", 1.0);
+        productService.createNewProduct("test product", 1.0);
     }
 
     @Test
     @Rollback
+    public void productPriceTest1() throws ProductNameException {
+        BigDecimal price = BigDecimal.valueOf(1.1);
+        Product product1 = productService.createNewProduct("test product 1", price);
+        assertTrue("Product price is not stored properly!", productService.getProductWithId(product1.getProductId()).getPrice().equals(price));
+    }
+
+    @Test
+    @Rollback
+    public void productPriceTest2() throws ProductNameException {
+        BigDecimal price = BigDecimal.valueOf(1.1234);
+        Product product1 = productService.createNewProduct("test product 1", price);
+        assertTrue("Product price is not stored properly!", productService.getProductWithId(product1.getProductId()).getPrice().equals(price));
+    }
+
+//    @Test
+//    @Rollback
+//    public void productPriceTest3() throws ProductNameException {
+//        BigDecimal price = BigDecimal.valueOf(1.1234567);
+//        Product product1 = productService.createNewProduct("test product 1", price);
+//        // The stored price must be bigger because it would be rounded
+//        assertEquals("Product price is not stored properly!", productService.getProductWithId(product1.getProductId()).getPrice().compareTo(price), 1);
+//    }
+
+    @Test
+    @Rollback
     public void productFindTest() throws ProductNameException {
-        Product createdProduct = productService.createNewProduct("test product");
+        Product createdProduct = productService.createNewProduct("test product", 1.0);
         Product retrievedProduct = productService.getProductWithId(createdProduct.getProductId());
         assertEquals("Stored and retrieved products are not equal!", createdProduct, retrievedProduct);
     }
@@ -55,7 +81,7 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productSalesTest() throws ProductNameException {
-        Product product = productService.createNewProduct("test product");
+        Product product = productService.createNewProduct("test product", 1.0);
         Sale sale1 = saleService.createNewSale();
         Sale sale2 = saleService.createNewSale();
         int amount = 1;
@@ -73,9 +99,9 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productNameSearchTest1() throws ProductNameException {
-        Product product1 = productService.createNewProduct("test product 1");
-        Product product2 = productService.createNewProduct("test 2");
-        Product product3 = productService.createNewProduct("test product 2");
+        Product product1 = productService.createNewProduct("test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test 2", 1.0);
+        Product product3 = productService.createNewProduct("test product 2", 1.0);
 
         Set<Product> products = productService.getProductsWithNameContaining("test");
         assertTrue("Search result does not contain the product!", products.contains(product1));
@@ -86,9 +112,9 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productNameSearchTest2() throws ProductNameException {
-        Product product1 = productService.createNewProduct("test product 1");
-        Product product2 = productService.createNewProduct("test 2");
-        Product product3 = productService.createNewProduct("test product 2");
+        Product product1 = productService.createNewProduct("test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test 2", 1.0);
+        Product product3 = productService.createNewProduct("test product 2", 1.0);
 
         Set<Product> products = productService.getProductsWithNameContaining("product");
         assertTrue("Search result does not contain the searched product!", products.contains(product1));
@@ -99,9 +125,9 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productNameSearchTest3() throws ProductNameException {
-        Product product1 = productService.createNewProduct("test product 1");
-        Product product2 = productService.createNewProduct("test 2");
-        Product product3 = productService.createNewProduct("test product 2");
+        Product product1 = productService.createNewProduct("test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test 2", 1.0);
+        Product product3 = productService.createNewProduct("test product 2", 1.0);
 
         Set<Product> products = productService.getProductsWithNameContaining("2");
         assertFalse("Search result contains a product not searched for!", products.contains(product1));
@@ -112,9 +138,9 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productNameSearchTest4() throws ProductNameException {
-        Product product1 = productService.createNewProduct("test product 1");
-        Product product2 = productService.createNewProduct("test 2");
-        Product product3 = productService.createNewProduct("test product 2");
+        Product product1 = productService.createNewProduct("test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test 2", 1.0);
+        Product product3 = productService.createNewProduct("test product 2", 1.0);
 
         Set<Product> products = productService.getProductsWithNameContaining("ST");
         assertTrue("Search result does not contain the product!", products.contains(product1));
@@ -125,9 +151,9 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productDescriptionSearchTest1() throws ProductNameException {
-        Product product1 = productService.createNewProduct("test product 1", "test product 1");
-        Product product2 = productService.createNewProduct("test product 2", "test 2");
-        Product product3 = productService.createNewProduct("test product 3", "test product 2");
+        Product product1 = productService.createNewProduct("test product 1", "test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test product 2", "test 2", 1.0);
+        Product product3 = productService.createNewProduct("test product 3", "test product 2", 1.0);
 
         Set<Product> products = productService.getProductsWithDescriptionContaining("2");
         assertFalse("Search result contains a product not searched for!", products.contains(product1));
@@ -138,9 +164,9 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productDescriptionSearchTest2() throws ProductNameException {
-        Product product1 = productService.createNewProduct("test product1", "test product 1");
-        Product product2 = productService.createNewProduct("test product2", "test 2");
-        Product product3 = productService.createNewProduct("test product3", "test product 2");
+        Product product1 = productService.createNewProduct("test product1", "test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test product2", "test 2", 1.0);
+        Product product3 = productService.createNewProduct("test product3", "test product 2", 1.0);
 
         Set<Product> products = productService.getProductsWithDescriptionContaining("ST");
         assertTrue("Search result does not contain the product!", products.contains(product1));
@@ -151,7 +177,7 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productDeleteTest() throws ProductNameException {
-        Product product = productService.createNewProduct("test product");
+        Product product = productService.createNewProduct("test product", 1.0);
         Set<Product> products = productService.getAllProducts();
         assertTrue("Product is not persisted!", products.contains(product));
 

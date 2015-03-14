@@ -16,6 +16,7 @@ package stat.domain;
  ***************************
  */
 
+import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -27,18 +28,20 @@ import javax.validation.constraints.Size;
 public class Product {
     public static final int NAME_MAX_LENGTH        = 50;
     public static final int DESCRIPTION_MAX_LENGTH = 200;
+    public static final int PRICE_DECIMAL_PRECISION = 4;
 
     // Empty constructor, required by Hibernate
     public Product() {
     }
 
-    public Product(String name) {
-        this(name, "");
+    public Product(String name, BigDecimal price) {
+        this(name, "", price);
     }
 
-    public Product(String name, String description) {
+    public Product(String name, String description, BigDecimal price) {
         this.name = name;
         this.description = description;
+        this.price = price;
     }
 
     @Id
@@ -54,6 +57,9 @@ public class Product {
     @Column(name = "description", nullable = false, length = DESCRIPTION_MAX_LENGTH)
     @Size(max = DESCRIPTION_MAX_LENGTH)
     private String description = "";
+
+    @Column(name = "price", nullable = false, precision = 16, scale = 4)
+    private BigDecimal price;
 
     @ManyToMany(targetEntity = Sale.class,
             mappedBy = "products",
@@ -93,6 +99,14 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     @Override
