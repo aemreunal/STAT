@@ -18,6 +18,8 @@ package stat;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import stat.graphics.ApplicationWindow;
+import stat.graphics.MenuPage;
 
 @Component
 public class Stat implements CommandLineRunner {
@@ -25,5 +27,7 @@ public class Stat implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("<------TEST------>");
+        ApplicationWindow appWindow = new ApplicationWindow(new MenuPage());
+        appWindow.setVisible(true);
     }
 }
