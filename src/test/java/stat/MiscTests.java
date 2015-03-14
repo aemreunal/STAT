@@ -37,8 +37,8 @@ public class MiscTests extends StatTest{
         Product product1 = productService.createNewProduct("test product 1", 1.0);
         Product product2 = productService.createNewProduct("test product 2", 1.0);
 
-        Sale sale1 = saleService.createNewSale();
-        Sale sale2 = saleService.createNewSale();
+        Sale sale1 = saleService.createNewSale("test customer");
+        Sale sale2 = saleService.createNewSale("test customer");
 
         sale1 = saleService.addProduct(sale1, product1, 4);
         sale1 = saleService.addProduct(sale1, product2, 4);

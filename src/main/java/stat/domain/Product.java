@@ -28,6 +28,7 @@ import javax.validation.constraints.Size;
 public class Product {
     public static final int NAME_MAX_LENGTH        = 50;
     public static final int DESCRIPTION_MAX_LENGTH = 200;
+    public static final int PRICE_TOTAL_PRECISION = 16;
     public static final int PRICE_DECIMAL_PRECISION = 4;
 
     // Empty constructor, required by Hibernate
@@ -58,7 +59,7 @@ public class Product {
     @Size(max = DESCRIPTION_MAX_LENGTH)
     private String description = "";
 
-    @Column(name = "price", nullable = false, precision = 16, scale = 4)
+    @Column(name = "price", nullable = false, precision = PRICE_TOTAL_PRECISION, scale = PRICE_DECIMAL_PRECISION)
     private BigDecimal price;
 
     @ManyToMany(targetEntity = Sale.class,

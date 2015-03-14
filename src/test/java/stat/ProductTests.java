@@ -82,8 +82,8 @@ public class ProductTests extends StatTest {
     @Rollback
     public void productSalesTest() throws ProductNameException {
         Product product = productService.createNewProduct("test product", 1.0);
-        Sale sale1 = saleService.createNewSale();
-        Sale sale2 = saleService.createNewSale();
+        Sale sale1 = saleService.createNewSale("test customer");
+        Sale sale2 = saleService.createNewSale("test customer");
         int amount = 1;
         sale1 = saleService.addProduct(sale1, product, amount);
         sale2 = saleService.addProduct(sale2, product, amount);

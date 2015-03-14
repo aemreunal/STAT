@@ -19,19 +19,30 @@ package stat.domain;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 //@SuppressWarnings("UnusedDeclaration")
 @Entity
 @Table(name = "sales")
 public class Sale {
+    public static final int CUSTOMER_NAME_MAX_LENGTH = 150;
+
     // Empty constructor, required by Hibernate
     public Sale() {}
+
+    public Sale(String customerName) {
+        this.customerName = customerName;
+    }
 
     @Id
     @Column(name = "sale_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @OrderColumn
     private Integer saleId;
+
+    @Column(name = "customer_name", nullable = false, length = CUSTOMER_NAME_MAX_LENGTH)
+    @Size(min = 1, max = CUSTOMER_NAME_MAX_LENGTH)
+    private String customerName = "";
 
     // Sale is the owner of the relationship
     @ManyToMany(targetEntity = Product.class,
@@ -43,7 +54,7 @@ public class Sale {
     private Set<Product> products = new LinkedHashSet<Product>();
 
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "amounts", joinColumns=@JoinColumn(name="sale_id"))
+    @CollectionTable(name = "amounts", joinColumns = @JoinColumn(name = "sale_id"))
     @MapKeyColumn(name = "product_id")
     @Column(name = "amount")
     private Map<Integer, Integer> amounts = new LinkedHashMap<>();
@@ -94,6 +105,14 @@ public class Sale {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     @PrePersist

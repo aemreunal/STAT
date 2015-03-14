@@ -36,7 +36,7 @@ public class SalesTests extends StatTest {
     @Test
     @Rollback
     public void saleCreateTest() {
-        Sale sale = saleService.createNewSale();
+        Sale sale = saleService.createNewSale("test customer");
         Set<Sale> sales = saleService.getAllSales();
         assertTrue("Sale is not persisted!", sales.contains(sale));
     }
@@ -44,7 +44,7 @@ public class SalesTests extends StatTest {
     @Test
     @Rollback
     public void saleFindTest() {
-        Sale createdSale = saleService.createNewSale();
+        Sale createdSale = saleService.createNewSale("test customer");
         Sale retrievedSale = saleService.getSaleWithId(createdSale.getSaleId());
         assertEquals("Stored and retrieved sales are not equal!", createdSale, retrievedSale);
     }
@@ -53,7 +53,7 @@ public class SalesTests extends StatTest {
     @Rollback
     public void amountTest() throws ProductNameException {
         Product product = productService.createNewProduct("test product", 1.0);
-        Sale sale = saleService.createNewSale();
+        Sale sale = saleService.createNewSale("test customer");
         int amount = 4;
         sale = saleService.addProduct(sale, product, amount);
 
@@ -66,7 +66,7 @@ public class SalesTests extends StatTest {
     @Test
     @Rollback
     public void saleDeleteTest() {
-        Sale sale = saleService.createNewSale();
+        Sale sale = saleService.createNewSale("test customer");
         Set<Sale> sales = saleService.getAllSales();
         assertTrue("Sale is not persisted!", sales.contains(sale));
 
@@ -88,22 +88,22 @@ public class SalesTests extends StatTest {
         Date date6 = formatter.parse("2009-02-01"); // 1 February 2009 - 00h00
 
         // Sale from 2011-02-01 - 00h00
-        Sale sale1 = new Sale();
+        Sale sale1 = new Sale("test customer");
         sale1.setDate(date1);
         sale1 = saleRepo.save(sale1);
 
         // Sale from 2011-06-01 - 00h00
-        Sale sale2 = new Sale();
+        Sale sale2 = new Sale("test customer");
         sale2.setDate(date2);
         sale2 = saleRepo.save(sale2);
 
         // Sale from 2012-01-01 - 00h00
-        Sale sale3 = new Sale();
+        Sale sale3 = new Sale("test customer");
         sale3.setDate(date3);
         sale3 = saleRepo.save(sale3);
 
         // Sale from 2013-01-01 - 00h00
-        Sale sale4 = new Sale();
+        Sale sale4 = new Sale("test customer");
         sale4.setDate(date4);
         sale4 = saleRepo.save(sale4);
 

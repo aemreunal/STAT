@@ -37,8 +37,8 @@ public class SaleService {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     private ProductService productService;
 
-    public Sale createNewSale() {
-        Sale sale = new Sale();
+    public Sale createNewSale(String customerName) {
+        Sale sale = new Sale(customerName);
         sale = this.save(sale);
         return sale;
     }
