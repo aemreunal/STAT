@@ -33,8 +33,8 @@ public class MiscTests extends StatTest{
     @Test
     @Rollback
     public void generalFunctionalityTest() {
-        Product product1 = productService.createNewProduct();
-        Product product2 = productService.createNewProduct();
+        Product product1 = productService.createNewProduct("test product");
+        Product product2 = productService.createNewProduct("test product");
 
         Sale sale1 = saleService.createNewSale();
         Sale sale2 = saleService.createNewSale();

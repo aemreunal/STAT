@@ -19,19 +19,40 @@ package stat.domain;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 //@SuppressWarnings("UnusedDeclaration")
 @Entity
 @Table(name = "products")
 public class Product {
+    public static final int NAME_MAX_LENGTH        = 50;
+    public static final int DESCRIPTION_MAX_LENGTH = 200;
+
     // Empty constructor, required by Hibernate
     public Product() {}
+
+    public Product(String name) {
+        this(name, "");
+    }
+
+    public Product(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
     @Id
     @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @OrderColumn
     private Integer productId;
+
+    @Column(name = "name", nullable = false, length = NAME_MAX_LENGTH)
+    @Size(min = 1, max = NAME_MAX_LENGTH)
+    private String name = "";
+
+    @Column(name = "description", nullable = false, length = DESCRIPTION_MAX_LENGTH)
+    @Size(max = DESCRIPTION_MAX_LENGTH)
+    private String description = "";
 
     @ManyToMany(targetEntity = Sale.class,
             mappedBy = "products",
@@ -55,6 +76,22 @@ public class Product {
 
     public void setSales(Set<Sale> sales) {
         this.sales = sales;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productCreateTest() {
-        Product product = productService.createNewProduct();
+        Product product = productService.createNewProduct("test product");
         Set<Product> products = productService.getAllProducts();
         assertTrue("Product is not persisted!", products.contains(product));
     }
@@ -41,7 +41,7 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productFindTest() {
-        Product createdProduct = productService.createNewProduct();
+        Product createdProduct = productService.createNewProduct("test product");
         Product retrievedProduct = productService.getProductWithId(createdProduct.getProductId());
         assertEquals("Stored and retrieved products are not equal!", createdProduct, retrievedProduct);
     }
@@ -49,7 +49,7 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productSalesTest() {
-        Product product = productService.createNewProduct();
+        Product product = productService.createNewProduct("test product");
         Sale sale1 = saleService.createNewSale();
         Sale sale2 = saleService.createNewSale();
         int amount = 1;
@@ -67,7 +67,7 @@ public class ProductTests extends StatTest {
     @Test
     @Rollback
     public void productDeleteTest() {
-        Product product = productService.createNewProduct();
+        Product product = productService.createNewProduct("test product");
         Set<Product> products = productService.getAllProducts();
         assertTrue("Product is not persisted!", products.contains(product));
 

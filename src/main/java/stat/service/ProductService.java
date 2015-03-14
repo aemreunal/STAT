@@ -34,8 +34,13 @@ public class ProductService {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     private ProductRepo productRepo;
 
-    public Product createNewProduct() {
-        Product product = new Product();
+
+    public Product createNewProduct(String name) {
+        return this.createNewProduct(name, "");
+    }
+
+    public Product createNewProduct(String name, String description) {
+        Product product = new Product(name, description);
         product = this.save(product);
         return product;
     }

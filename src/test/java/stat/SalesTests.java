@@ -51,7 +51,7 @@ public class SalesTests extends StatTest {
     @Test
     @Rollback
     public void amountTest() {
-        Product product = productService.createNewProduct();
+        Product product = productService.createNewProduct("test product");
         Sale sale = saleService.createNewSale();
         int amount = 4;
         sale = saleService.addProduct(sale, product, amount);
