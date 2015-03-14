@@ -18,29 +18,35 @@ package stat;
 
 import stat.domain.Product;
 import stat.domain.Sale;
+import stat.exception.ProductNameException;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.*;
 
 public class ProductTests extends StatTest {
 
     @Test
     @Rollback
-    public void productCreateTest() {
+    public void productCreateTest1() throws ProductNameException {
         Product product = productService.createNewProduct("test product");
         Set<Product> products = productService.getAllProducts();
         assertTrue("Product is not persisted!", products.contains(product));
     }
 
+    @Test(expected = ProductNameException.class)
+    @Rollback
+    public void productCreateTest2() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product");
+        Product product2 = productService.createNewProduct("test product");
+    }
+
     @Test
     @Rollback
-    public void productFindTest() {
+    public void productFindTest() throws ProductNameException {
         Product createdProduct = productService.createNewProduct("test product");
         Product retrievedProduct = productService.getProductWithId(createdProduct.getProductId());
         assertEquals("Stored and retrieved products are not equal!", createdProduct, retrievedProduct);
@@ -48,7 +54,7 @@ public class ProductTests extends StatTest {
 
     @Test
     @Rollback
-    public void productSalesTest() {
+    public void productSalesTest() throws ProductNameException {
         Product product = productService.createNewProduct("test product");
         Sale sale1 = saleService.createNewSale();
         Sale sale2 = saleService.createNewSale();
@@ -66,7 +72,85 @@ public class ProductTests extends StatTest {
 
     @Test
     @Rollback
-    public void productDeleteTest() {
+    public void productNameSearchTest1() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1");
+        Product product2 = productService.createNewProduct("test 2");
+        Product product3 = productService.createNewProduct("test product 2");
+
+        Set<Product> products = productService.getProductsWithNameContaining("test");
+        assertTrue("Search result does not contain the product!", products.contains(product1));
+        assertTrue("Search result does not contain the product!", products.contains(product2));
+        assertTrue("Search result does not contain the product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productNameSearchTest2() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1");
+        Product product2 = productService.createNewProduct("test 2");
+        Product product3 = productService.createNewProduct("test product 2");
+
+        Set<Product> products = productService.getProductsWithNameContaining("product");
+        assertTrue("Search result does not contain the searched product!", products.contains(product1));
+        assertFalse("Search result contains a product not searched for!", products.contains(product2));
+        assertTrue("Search result does not contain the searched product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productNameSearchTest3() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1");
+        Product product2 = productService.createNewProduct("test 2");
+        Product product3 = productService.createNewProduct("test product 2");
+
+        Set<Product> products = productService.getProductsWithNameContaining("2");
+        assertFalse("Search result contains a product not searched for!", products.contains(product1));
+        assertTrue("Search result does not contain the searched product!", products.contains(product2));
+        assertTrue("Search result does not contain the searched product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productNameSearchTest4() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1");
+        Product product2 = productService.createNewProduct("test 2");
+        Product product3 = productService.createNewProduct("test product 2");
+
+        Set<Product> products = productService.getProductsWithNameContaining("ST");
+        assertTrue("Search result does not contain the product!", products.contains(product1));
+        assertTrue("Search result does not contain the product!", products.contains(product2));
+        assertTrue("Search result does not contain the product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productDescriptionSearchTest1() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1", "test product 1");
+        Product product2 = productService.createNewProduct("test product 2", "test 2");
+        Product product3 = productService.createNewProduct("test product 3", "test product 2");
+
+        Set<Product> products = productService.getProductsWithDescriptionContaining("2");
+        assertFalse("Search result contains a product not searched for!", products.contains(product1));
+        assertTrue("Search result does not contain the searched product!", products.contains(product2));
+        assertTrue("Search result does not contain the searched product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productDescriptionSearchTest2() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product1", "test product 1");
+        Product product2 = productService.createNewProduct("test product2", "test 2");
+        Product product3 = productService.createNewProduct("test product3", "test product 2");
+
+        Set<Product> products = productService.getProductsWithDescriptionContaining("ST");
+        assertTrue("Search result does not contain the product!", products.contains(product1));
+        assertTrue("Search result does not contain the product!", products.contains(product2));
+        assertTrue("Search result does not contain the product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productDeleteTest() throws ProductNameException {
         Product product = productService.createNewProduct("test product");
         Set<Product> products = productService.getAllProducts();
         assertTrue("Product is not persisted!", products.contains(product));

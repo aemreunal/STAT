@@ -29,7 +29,8 @@ public class Product {
     public static final int DESCRIPTION_MAX_LENGTH = 200;
 
     // Empty constructor, required by Hibernate
-    public Product() {}
+    public Product() {
+    }
 
     public Product(String name) {
         this(name, "");
@@ -46,7 +47,7 @@ public class Product {
     @OrderColumn
     private Integer productId;
 
-    @Column(name = "name", nullable = false, length = NAME_MAX_LENGTH)
+    @Column(name = "name", nullable = false, unique = true, length = NAME_MAX_LENGTH)
     @Size(min = 1, max = NAME_MAX_LENGTH)
     private String name = "";
 

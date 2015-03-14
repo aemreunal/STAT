@@ -18,6 +18,7 @@ package stat;
 
 import stat.domain.Product;
 import stat.domain.Sale;
+import stat.exception.ProductNameException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,7 +51,7 @@ public class SalesTests extends StatTest {
 
     @Test
     @Rollback
-    public void amountTest() {
+    public void amountTest() throws ProductNameException {
         Product product = productService.createNewProduct("test product");
         Sale sale = saleService.createNewSale();
         int amount = 4;

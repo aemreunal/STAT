@@ -25,4 +25,19 @@ public interface ProductRepo extends CrudRepository<Product, Integer> {
 
     Set<Product> findAll();
 
+    /**
+     * Matches the name exactly
+     *
+     * @param name
+     *         The name of the {@link stat.domain.Product Product}.
+     *
+     * @return A {@link java.util.Set Set}<{@link stat.domain.Product Product}> containing
+     * the products with the matched name.
+     */
+    Set<Product> findByNameLike(String name);
+
+    Set<Product> findByNameContaining(String name);
+
+    Set<Product> findByDescriptionContaining(String description);
+
 }

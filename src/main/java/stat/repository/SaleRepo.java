@@ -27,6 +27,7 @@ public interface SaleRepo extends CrudRepository<Sale, Integer>, JpaSpecificatio
 
     Set<Sale> findAll();
 
+    // http://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
     Set<Sale> findByDateBetween(Date begin, Date end);
 
 //    Sale findByCustomerName(String customerName);

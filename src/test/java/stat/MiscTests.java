@@ -2,6 +2,7 @@ package stat;
 
 import stat.domain.Product;
 import stat.domain.Sale;
+import stat.exception.ProductNameException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,9 +33,9 @@ public class MiscTests extends StatTest{
 
     @Test
     @Rollback
-    public void generalFunctionalityTest() {
-        Product product1 = productService.createNewProduct("test product");
-        Product product2 = productService.createNewProduct("test product");
+    public void generalFunctionalityTest() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1");
+        Product product2 = productService.createNewProduct("test product 2");
 
         Sale sale1 = saleService.createNewSale();
         Sale sale2 = saleService.createNewSale();

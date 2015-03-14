@@ -18,6 +18,7 @@ package stat.service;
 
 import stat.domain.Product;
 import stat.domain.Sale;
+import stat.exception.ProductNameException;
 import stat.repository.ProductRepo;
 
 import java.util.LinkedHashSet;
@@ -35,14 +36,22 @@ public class ProductService {
     private ProductRepo productRepo;
 
 
-    public Product createNewProduct(String name) {
+    public Product createNewProduct(String name) throws ProductNameException {
         return this.createNewProduct(name, "");
     }
 
-    public Product createNewProduct(String name, String description) {
+    public Product createNewProduct(String name, String description) throws ProductNameException {
+        if (nameExists(name)) {
+            throw new ProductNameException(name);
+        }
         Product product = new Product(name, description);
         product = this.save(product);
         return product;
+    }
+
+    private boolean nameExists(String name) {
+        Set<Product> products = productRepo.findByNameLike(name);
+        return products.size() != 0;
     }
 
     private Product save(Product product) {
@@ -57,6 +66,16 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Product getProductWithId(Integer productId) {
         return productRepo.findOne(productId);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<Product> getProductsWithNameContaining(String productName) {
+        return productRepo.findByNameContaining(productName);
+    }
+
+    @Transactional(readOnly = true)
+    public Set<Product> getProductsWithDescriptionContaining(String productDescription) {
+        return productRepo.findByDescriptionContaining(productDescription);
     }
 
     @Transactional(readOnly = true)
