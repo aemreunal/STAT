@@ -1,4 +1,6 @@
-package stat;/*
+package stat;
+
+/*
  ***************************
  * Copyright (c) 2015      *
  *                         *
