@@ -20,12 +20,11 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.repository.SaleRepo;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.*;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
@@ -83,6 +82,13 @@ public class SaleService {
         return productsAndAmounts;
     }
 
+    @Transactional(readOnly = true)
+    // Both dates included
+    public LinkedHashSet<Sale> getSalesBetween(Date from, Date until) {
+        Set<Sale> sales = saleRepo.findByDateBetween(from, until);
+        return sales.stream().map(sale -> sale).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
     public void deleteSale(Sale sale) {
         saleRepo.delete(sale);
     }
@@ -90,4 +96,5 @@ public class SaleService {
     public void deleteSale(Integer saleId) {
         saleRepo.delete(saleId);
     }
+
 }

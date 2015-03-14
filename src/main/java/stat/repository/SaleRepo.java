@@ -18,12 +18,16 @@ package stat.repository;
 
 import stat.domain.Sale;
 
+import java.util.Date;
 import java.util.Set;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
-public interface SaleRepo extends CrudRepository<Sale, Integer> {
+public interface SaleRepo extends CrudRepository<Sale, Integer>, JpaSpecificationExecutor {
 
     Set<Sale> findAll();
 
-//    Sale findByUsername(String username);
+    Set<Sale> findByDateBetween(Date begin, Date end);
+
+//    Sale findByCustomerName(String customerName);
 }

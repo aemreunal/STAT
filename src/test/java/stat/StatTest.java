@@ -16,6 +16,7 @@ package stat;
  ***************************
  */
 
+import stat.repository.SaleRepo;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
@@ -38,6 +39,10 @@ public abstract class StatTest {
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")
     protected SaleService saleService;
+
+    @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
+    protected SaleRepo saleRepo;
 
 
     @Before
