@@ -1,6 +1,5 @@
 package stat.controllers;
 
-import stat.domain.Product;
 import stat.exception.ProductNameException;
 import stat.graphics.NewProductPage;
 import stat.service.ProductService;
@@ -27,19 +26,14 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    public void saveProduct() {
-        String productName = productPage.getProductName();
-        String productDescription = productPage.getProductDescription();
-        BigDecimal productPrice = productPage.getProductPrice();
-
+    public void saveProduct(String productName, String productDescription, BigDecimal productPrice) {
         try {
-            Product product = productService.createNewProduct(productName, productDescription, productPrice);
+            productService.createNewProduct(productName, productDescription, productPrice);
         } catch (ProductNameException pne) {
             System.out.println("productController pne ");
         }
 
         productPage.clearInputFields();
-
     }
 
 }
