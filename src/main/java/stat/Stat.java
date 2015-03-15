@@ -17,6 +17,8 @@ package stat;
  */
 
 import stat.controllers.ApplicationController;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -25,10 +27,12 @@ import org.springframework.stereotype.Component;
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class Stat implements CommandLineRunner {
+    @Autowired
+    private ApplicationController applicationController;
 
     @Override
     public void run(String... args) throws Exception {
         System.out.println("<------MAIN------>");
-        new ApplicationController();
+        applicationController.startGui();
     }
 }

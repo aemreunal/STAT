@@ -1,32 +1,39 @@
 package stat.graphics;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import stat.service.ProductService;
-
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 /**
- * Created by
- * Eray Tuncer
- * S000926
- * eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
  */
 
+@Component
+// Required to not run this class in a test environment
+@ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class NewProductPage extends Page {
 
-    private JPanel fieldHolder;
+    @Autowired
+    private MenuPage menuPage;
 
+    private JPanel     fieldHolder;
     private JTextField nameField;
     private JTextField descriptionField;
     private JTextField priceField;
+    private JButton    saveButton;
+    private JButton    backButton;
+
+    private ButtonListener buttonListener;
 
     public NewProductPage() {
+        buttonListener = new ButtonListener();
         initializePageDesign();
         initializeFields();
         initializeButtons();
@@ -100,38 +107,25 @@ public class NewProductPage extends Page {
     }
 
     private void initializeSaveButton() {
-        JButton buttonSave = new JButton("SAVE");
-        buttonSave.setForeground(new Color(0, 153, 51));
-        buttonSave.setBackground(new Color(245, 245, 245));
-        buttonSave.setBounds(50, 210, 311, 50);
-        buttonSave.setFont(new Font("Tahoma", Font.BOLD, 16));
-        buttonSave.addActionListener(getSaveAction());
+        saveButton = new JButton("SAVE");
+        saveButton.setForeground(new Color(0, 153, 51));
+        saveButton.setBackground(new Color(245, 245, 245));
+        saveButton.setBounds(50, 210, 311, 50);
+        saveButton.setFont(new Font("Tahoma", Font.BOLD, 16));
+        saveButton.addActionListener(buttonListener);
 
-        add(buttonSave);
+        add(saveButton);
     }
 
     private void initializeBackButton() {
-        JButton buttonBack = new JButton("Back");
-        buttonBack.setForeground(new Color(204, 51, 51));
-        buttonBack.setFont(new Font("Tahoma", Font.BOLD, 16));
-        buttonBack.setBackground(new Color(245, 245, 245));
-        buttonBack.setBounds(50, 263, 311, 50);
-        buttonBack.addActionListener(getBackAction());
+        backButton = new JButton("Back");
+        backButton.setForeground(new Color(204, 51, 51));
+        backButton.setFont(new Font("Tahoma", Font.BOLD, 16));
+        backButton.setBackground(new Color(245, 245, 245));
+        backButton.setBounds(50, 263, 311, 50);
+        backButton.addActionListener(buttonListener);
 
-        add(buttonBack);
-    }
-
-    private ActionListener getSaveAction() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (validateFields()) {
-                    displaySuccess();
-                } else {
-                    displayValidationError();
-                }
-            }
-        };
+        add(backButton);
     }
 
     private boolean validateFields() {
@@ -146,26 +140,15 @@ public class NewProductPage extends Page {
     }
 
     public void displaySuccess() {
-        JOptionPane.showMessageDialog(this, "The Product successfully saved.");
+        JOptionPane.showMessageDialog(this, "The Product was successfully saved.");
     }
 
     public void displayValidationError() {
         JOptionPane.showMessageDialog(this,
-                "Enter the fields correctly.",
-                "Validation Error",
-                JOptionPane.ERROR_MESSAGE);
+                                      "Enter the fields correctly.",
+                                      "Validation Error",
+                                      JOptionPane.ERROR_MESSAGE);
     }
-
-    private ActionListener getBackAction() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ApplicationWindow appWindow = getApplicationWindow();
-                appWindow.setCurrentPage(new MenuPage());
-            }
-        };
-    }
-
 
     public String getProductName() {
         return nameField.getText();
@@ -177,5 +160,24 @@ public class NewProductPage extends Page {
 
     public BigDecimal getProductPrice() {
         return new BigDecimal(priceField.getText());
+    }
+
+    private class ButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ApplicationWindow appWindow = getApplicationWindow();
+            Object sourceOfAction = e.getSource();
+            if (sourceOfAction instanceof JButton) {
+                if (sourceOfAction.equals(saveButton)) {
+                    if (validateFields()) {
+                        displaySuccess();
+                    } else {
+                        displayValidationError();
+                    }
+                } else if (sourceOfAction.equals(backButton)) {
+                    appWindow.setCurrentPage(menuPage);
+                }
+            }
+        }
     }
 }

@@ -4,21 +4,29 @@ import stat.graphics.ApplicationWindow;
 import stat.graphics.MenuPage;
 import stat.graphics.Page;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
+
 /**
  * Created by Uğur Özkan.
  *
  * ugur.ozkan@ozu.edu.tr
  */
+
+@Component
+// Required to not run this class in a test environment
+@ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ApplicationController {
 
-    private final Page INITIAL_PAGE = new MenuPage();
+    @Autowired
+    private ApplicationWindow applicationWindow;
 
-    public ApplicationController() {
-        startGui();
-    }
+    @Autowired
+    private MenuPage menuPage;
 
-    private void startGui() {
-        ApplicationWindow appWindow = new ApplicationWindow(INITIAL_PAGE);
-        appWindow.setVisible(true);
+    public void startGui() {
+        applicationWindow.setCurrentPage(menuPage);
+        applicationWindow.setVisible(true);
     }
 }
