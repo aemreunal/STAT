@@ -13,7 +13,10 @@ import org.springframework.stereotype.Component;
 import stat.controllers.ProductController;
 
 /**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer
+ * S000926
+ * eray.tuncer@ozu.edu.tr
+ *
  */
 
 @Component
@@ -131,44 +134,39 @@ public class NewProductPage extends Page {
         add(backButton);
     }
 
-    private boolean validateFields() {
-        String price = priceField.getText();
-        // TODO: implement
-        boolean valid = true;
-        valid = valid && (nameField.getText().length() > 0);
-        valid = valid && (descriptionField.getText().length() > 0);
-        valid = valid && (price.length() > 0);
-        valid = valid && ((price.contains(".")) ? (price.substring(price.indexOf(".") + 1).length() <= 4) : true);
-        return valid;
-    }
-
-    public void displaySuccess() {
-        JOptionPane.showMessageDialog(this, "The Product was successfully saved.");
-    }
-
-    public void displayValidationError() {
-        JOptionPane.showMessageDialog(this,
-                                      "Enter the fields correctly.",
-                                      "Validation Error",
-                                      JOptionPane.ERROR_MESSAGE);
-    }
-
-    public String getProductName() {
-        return nameField.getText();
-    }
-
-    public String getProductDescription() {
-        return descriptionField.getText();
-    }
-
-    public BigDecimal getProductPrice() {
-        return new BigDecimal(priceField.getText());
-    }
-
     public void clearInputFields(){
         nameField.setText(null);
         descriptionField.setText(null);
         priceField.setText(null);
+    }
+
+    private boolean validateFields() {
+        String price = priceField.getText();
+        // TODO: implement
+        boolean valid = true;
+        valid &= (nameField.getText().length() > 0);
+        valid &= (descriptionField.getText().length() > 0);
+        valid &= (price.length() > 0);
+        valid &= ((price.contains(".")) ? (price.substring(price.indexOf(".") + 1).length() <= 4) : true);
+        return valid;
+    }
+
+    private void saveProduct() {
+        String productName = nameField.getText();
+        String productDescription = descriptionField.getText();
+        BigDecimal productPrice = new BigDecimal(priceField.getText());
+        productController.saveProduct(productName, productDescription, productPrice);
+    }
+
+    private void displaySuccess() {
+        JOptionPane.showMessageDialog(this, "The Product was successfully saved.");
+    }
+
+    private void displayValidationError() {
+        JOptionPane.showMessageDialog(this,
+                "Enter the fields correctly.",
+                "Validation Error",
+                JOptionPane.ERROR_MESSAGE);
     }
 
     private class ButtonListener implements ActionListener {
@@ -179,7 +177,7 @@ public class NewProductPage extends Page {
             if (sourceOfAction instanceof JButton) {
                 if (sourceOfAction.equals(saveButton)) {
                     if (validateFields()) {
-                        productController.saveProduct();
+                        saveProduct();
                         displaySuccess();
                     } else {
                         displayValidationError();
@@ -190,4 +188,5 @@ public class NewProductPage extends Page {
             }
         }
     }
+
 }
