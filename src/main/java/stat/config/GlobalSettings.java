@@ -17,15 +17,6 @@ package stat.config;
  */
 
 public class GlobalSettings {
-    public static final String DEBUGGING = "true";
-
-
-    /**
-     * This regex matches if the given string contains a non-ASCII character. It, however,
-     * does not match punctuation, so while "Hellö" matches this regex, "Hello!" won't.
-     */
-    public static final String NON_ASCII_REGEX = ".*[^\\p{ASCII}].*";
-
     /**
      * These strings provide package names for annotation-based scanning.
      */
@@ -36,6 +27,8 @@ public class GlobalSettings {
     public static final String ENTITY_PACKAGE_NAME     = BASE_PACKAGE_NAME + ".domain";
     public static final String REPOSITORY_PACKAGE_NAME = BASE_PACKAGE_NAME + ".repository";
 
+    public static final String APP_DB_PROPERTY_SOURCE  = "file:db.properties";
+    public static final String TEST_DB_PROPERTY_SOURCE = "file:test.properties";
 
     //-------------------------------------------------------------------------------------------
     // Property name: "hibernate.hbm2ddl.auto"
@@ -60,7 +53,7 @@ public class GlobalSettings {
     // Property name: "hibernate.show_sql"
     //----------------------------------------
     public static final String SHOW_SQL_KEY      = "hibernate.show_sql";
-    public static final String SHOW_SQL_PROPERTY = DEBUGGING;
+    public static final String SHOW_SQL_PROPERTY = "false";
     //-------------------------------------------------------------------------------------------
 
 
@@ -77,5 +70,28 @@ public class GlobalSettings {
     //----------------------------------------
     public static final String DB_DIALECT_KEY      = "hibernate.dialect";
     public static final String DB_DIALECT_PROPERTY = "org.hibernate.dialect.MySQL5InnoDBDialect";
+    //-------------------------------------------------------------------------------------------
+
+    //-------------------------------------------------------------------------------------------
+    // Default database properties
+    //----------------------------------------
+    public static final String DB_PROPERTY_USERNAME_KEY = "db.username";
+    public static final String DB_DEFAULT_USERNAME      = "stat";
+
+    public static final String DB_PROPERTY_PASSWORD_KEY = "db.password";
+    public static final String DB_DEFAULT_PASSWORD      = "stat";
+
+    public static final String DB_PROPERTY_IP_KEY = "db.ip";
+    public static final String DB_DEFAULT_IP      = "localhost";
+
+    public static final String DB_PROPERTY_PORT_KEY = "db.port";
+    public static final String DB_DEFAULT_PORT      = "3306";
+
+    public static final String DB_PROPERTY_NAME_KEY = "db.name";
+    public static final String DB_DEFAULT_NAME      = "stat";
+
+    public static final String DB_PROPERTY_DDL_KEY = "db.hbm2_ddl";
+
+    public static final String DB_PROPERTY_SHOW_SQL_KEY = "db.show_sql";
     //-------------------------------------------------------------------------------------------
 }

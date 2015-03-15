@@ -29,22 +29,28 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import com.mysql.jdbc.Driver;
 
 @Configuration
-@PropertySource("file:db.properties")
+@PropertySource(value = GlobalSettings.APP_DB_PROPERTY_SOURCE, ignoreResourceNotFound = true)
 public class DatabaseSettings {
-    @Value("${db.username}")
+    @Value("${" + GlobalSettings.DB_PROPERTY_USERNAME_KEY + ":" + GlobalSettings.DB_DEFAULT_USERNAME + "}")
     private String dbUsername;
 
-    @Value("${db.password}")
+    @Value("${" + GlobalSettings.DB_PROPERTY_PASSWORD_KEY + ":" + GlobalSettings.DB_DEFAULT_PASSWORD + "}")
     private String dbPassword;
 
-    @Value("${db.ip}")
+    @Value("${" + GlobalSettings.DB_PROPERTY_IP_KEY + ":" + GlobalSettings.DB_DEFAULT_IP + "}")
     private String dbIp;
 
-    @Value("${db.port}")
+    @Value("${" + GlobalSettings.DB_PROPERTY_PORT_KEY + ":" + GlobalSettings.DB_DEFAULT_PORT + "}")
     private String dbPort;
 
-    @Value("${db.name}")
+    @Value("${" + GlobalSettings.DB_PROPERTY_NAME_KEY + ":" + GlobalSettings.DB_DEFAULT_NAME + "}")
     private String dbName;
+
+    @Value("${" + GlobalSettings.DB_PROPERTY_DDL_KEY + ":" + GlobalSettings.HBM2DDL_PROPERTY + "}")
+    private String ddlSetting;
+
+    @Value("${" + GlobalSettings.DB_PROPERTY_SHOW_SQL_KEY + ":" + GlobalSettings.SHOW_SQL_PROPERTY + "}")
+    private String showSqlQueries;
 
     @Bean
     public HibernateJpaVendorAdapter vendorAdapter() {
@@ -73,9 +79,9 @@ public class DatabaseSettings {
     public Properties jpaProperties() {
         Properties properties = new Properties();
         properties.put(GlobalSettings.DB_DIALECT_KEY, GlobalSettings.DB_DIALECT_PROPERTY);
-        properties.put(GlobalSettings.SHOW_SQL_KEY, GlobalSettings.SHOW_SQL_PROPERTY);
+        properties.put(GlobalSettings.SHOW_SQL_KEY, showSqlQueries);
         properties.put(GlobalSettings.FORMAT_SQL_KEY, GlobalSettings.FORMAT_SQL_PROPERTY);
-        properties.put(GlobalSettings.HBM2DDL_KEY, GlobalSettings.HBM2DDL_PROPERTY);
+        properties.put(GlobalSettings.HBM2DDL_KEY, ddlSetting);
         return properties;
     }
 
