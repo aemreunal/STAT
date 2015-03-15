@@ -44,7 +44,7 @@ public class MenuPage extends Page {
         buttonSaleProduct.setFont(new Font("Tahoma", Font.BOLD, 15));
         buttonSaleProduct.setBackground(new Color(255, 255, 204));
         buttonSaleProduct.setBounds(70, 91, 250, 50);
-        buttonSaleProduct.addActionListener(getNextPageAction(new NewProductPage())); // TODO: fix
+        buttonSaleProduct.addActionListener(getNextPageAction(new SalePage()));
         add(buttonSaleProduct);
     }
 
