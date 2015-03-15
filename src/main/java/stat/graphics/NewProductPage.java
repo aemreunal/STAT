@@ -10,6 +10,7 @@ import javax.swing.border.TitledBorder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import stat.controllers.ProductController;
 
 /**
  * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
@@ -19,6 +20,9 @@ import org.springframework.stereotype.Component;
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class NewProductPage extends Page {
+
+    @Autowired
+    private ProductController productController;
 
     @Autowired
     private MenuPage menuPage;
@@ -87,7 +91,6 @@ public class NewProductPage extends Page {
         fieldHolder.add(descriptionField);
     }
 
-
     private void initializePriceField() {
         JLabel priceLabel = new JLabel("Unit Price :");
         priceLabel.setBounds(6, 66, 108, 19);
@@ -132,10 +135,10 @@ public class NewProductPage extends Page {
         String price = priceField.getText();
         // TODO: implement
         boolean valid = true;
-        valid &= nameField.getText().length() > 0;
-        valid &= descriptionField.getText().length() > 0;
-        valid &= price.length() > 0;
-        valid &= (price.contains(".")) ? price.substring(price.indexOf(".") + 1).length() <= 4 : true;
+        valid = valid && (nameField.getText().length() > 0);
+        valid = valid && (descriptionField.getText().length() > 0);
+        valid = valid && (price.length() > 0);
+        valid = valid && ((price.contains(".")) ? (price.substring(price.indexOf(".") + 1).length() <= 4) : true);
         return valid;
     }
 
@@ -162,6 +165,12 @@ public class NewProductPage extends Page {
         return new BigDecimal(priceField.getText());
     }
 
+    public void clearInputFields(){
+        nameField.setText(null);
+        descriptionField.setText(null);
+        priceField.setText(null);
+    }
+
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -170,6 +179,7 @@ public class NewProductPage extends Page {
             if (sourceOfAction instanceof JButton) {
                 if (sourceOfAction.equals(saveButton)) {
                     if (validateFields()) {
+                        productController.saveProduct();
                         displaySuccess();
                     } else {
                         displayValidationError();

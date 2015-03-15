@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Created by Uğur Özkan.
- * <p>
+ *
  * ugur.ozkan@ozu.edu.tr
  */
 
@@ -34,10 +34,12 @@ public class ProductController {
 
         try {
             Product product = productService.createNewProduct(productName, productDescription, productPrice);
-            productPage.displaySuccess();
         } catch (ProductNameException pne) {
-            productPage.displayValidationError();
+            System.out.println("productController pne ");
         }
+
+        productPage.clearInputFields();
+
     }
 
 }
