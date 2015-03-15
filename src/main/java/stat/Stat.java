@@ -16,9 +16,7 @@ package stat;
  ***************************
  */
 
-import stat.graphics.ApplicationWindow;
-import stat.graphics.MenuPage;
-
+import stat.controllers.ApplicationController;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -31,11 +29,6 @@ public class Stat implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("<------MAIN------>");
-        startGui();
-    }
-
-    private void startGui() {
-        ApplicationWindow appWindow = new ApplicationWindow(new MenuPage());
-        appWindow.setVisible(true);
+        new ApplicationController();
     }
 }
