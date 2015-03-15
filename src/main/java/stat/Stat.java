@@ -16,6 +16,7 @@ package stat;
  ***************************
  */
 
+import stat.controllers.ApplicationController;
 import stat.graphics.ApplicationWindow;
 import stat.graphics.MenuPage;
 
@@ -31,13 +32,8 @@ public class Stat implements CommandLineRunner {
         // The if-check is added as a temporary work-around for the HeadlessException
         // experienced when running tests.
         if (!envIsHeadless()) {
-            startGui();
+            new ApplicationController();
         }
-    }
-
-    private void startGui() {
-        ApplicationWindow appWindow = new ApplicationWindow(new MenuPage());
-        appWindow.setVisible(true);
     }
 
     private boolean envIsHeadless() {

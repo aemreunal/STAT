@@ -20,10 +20,6 @@ import java.math.BigDecimal;
 
 public class NewProductPage extends Page {
 
-    @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
-    protected ProductService productService;
-
     private JPanel fieldHolder;
 
     private JTextField nameField;
@@ -130,7 +126,6 @@ public class NewProductPage extends Page {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (validateFields()) {
-                    saveProduct();
                     displaySuccess();
                 } else {
                     displayValidationError();
@@ -146,37 +141,15 @@ public class NewProductPage extends Page {
         valid &= nameField.getText().length() > 0;
         valid &= descriptionField.getText().length() > 0;
         valid &= price.length() > 0;
-        valid &= (price.contains("."))? price.substring(price.indexOf(".") + 1).length() <= 4 : true;
+        valid &= (price.contains(".")) ? price.substring(price.indexOf(".") + 1).length() <= 4 : true;
         return valid;
     }
 
-    private void saveProduct() {
-        String name = nameField.getText();
-        String description = descriptionField.getText();
-        BigDecimal price = new BigDecimal(priceField.getText());
-
-        ///////// TODO: REMOVE ////////
-        System.out.println("Product Saved:");
-        System.out.println(name);
-        System.out.println(description);
-        System.out.println(price);
-        ///////////////////////////////
-
-
-//        try {
-//            productService.createNewProduct(name, description, price);
-//        } catch (ProductNameException e) {
-//            // TODO: inform user
-//            e.printStackTrace();
-//        }
-
-    }
-
-    private void displaySuccess() {
+    public void displaySuccess() {
         JOptionPane.showMessageDialog(this, "The Product successfully saved.");
     }
 
-    private void displayValidationError() {
+    public void displayValidationError() {
         JOptionPane.showMessageDialog(this,
                 "Enter the fields correctly.",
                 "Validation Error",
@@ -193,4 +166,16 @@ public class NewProductPage extends Page {
         };
     }
 
+
+    public String getProductName() {
+        return nameField.getText();
+    }
+
+    public String getProductDescription() {
+        return descriptionField.getText();
+    }
+
+    public BigDecimal getProductPrice() {
+        return new BigDecimal(priceField.getText());
+    }
 }
