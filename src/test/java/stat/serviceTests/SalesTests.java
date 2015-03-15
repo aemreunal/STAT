@@ -1,4 +1,4 @@
-package stat;
+package stat.serviceTests;
 
 /*
  ***************************
@@ -16,6 +16,7 @@ package stat;
  ***************************
  */
 
+import stat.StatTest;
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNameException;

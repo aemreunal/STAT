@@ -1,5 +1,6 @@
-package stat;
+package stat.serviceTests;
 
+import stat.StatTest;
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNameException;
@@ -24,7 +25,7 @@ import org.springframework.test.annotation.Rollback;
  ***************************
  */
 
-public class MiscTests extends StatTest{
+public class MiscTests extends StatTest {
 
     @Before
     public void setUpTest() {
