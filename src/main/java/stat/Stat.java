@@ -20,27 +20,22 @@ import stat.graphics.ApplicationWindow;
 import stat.graphics.MenuPage;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
+// Required to not run this class in a test environment
+@ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class Stat implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("<------TEST------>");
-        // The if-check is added as a temporary work-around for the HeadlessException
-        // experienced when running tests.
-        if (!envIsHeadless()) {
-            startGui();
-        }
+        System.out.println("<------MAIN------>");
+        startGui();
     }
 
     private void startGui() {
         ApplicationWindow appWindow = new ApplicationWindow(new MenuPage());
         appWindow.setVisible(true);
-    }
-
-    private boolean envIsHeadless() {
-        return System.getProperty("java.awt.headless", "false").equals("true");
     }
 }
