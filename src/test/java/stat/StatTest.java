@@ -36,15 +36,12 @@ import org.springframework.transaction.annotation.Transactional;
 public abstract class StatTest {
 
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected ProductService productService;
 
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected SaleService saleService;
 
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected SaleRepo saleRepo;
 
 

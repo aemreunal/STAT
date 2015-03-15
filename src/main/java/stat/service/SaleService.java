@@ -30,11 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class SaleService {
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     private SaleRepo saleRepo;
 
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     private ProductService productService;
 
     public Sale createNewSale(String customerName) {
