@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -98,18 +100,21 @@ public class NewSalePage extends Page {
         productTable = new JTable(getProductTableModel());
         productListPane = new JScrollPane(productTable);
         productListPane.setBounds(10, 155, 125, 145);
+        fillProducts();
         add(productListPane);
     }
 
     private TableModel getProductTableModel() {
         String[] columnNames = {"Product"};
-        // TODO: Remove static data
-        Object[][] data = { {"Elma"}, {"Armut"}, {"Avokado"} };
-        return new DefaultTableModel(data, columnNames) {
+        return new DefaultTableModel(new Object[][]{}, columnNames) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+    }
+
+    private void fillProducts() {
+
     }
 
     private void initSaleProductTable() {
@@ -121,19 +126,18 @@ public class NewSalePage extends Page {
 
     private TableModel getSaleTableModel() {
         String[] columnNames = {"Product", "Amount", "Price"};
-        // TODO: Remove static data
-        Object[][] data = { { "Elma", new Integer(5), "Remove" }, { "Armut",new Integer(5), "Remove" }, { "Avokado", new Integer(5), "Remove" } };
-
-        return new DefaultTableModel(data, columnNames) {
+        return new DefaultTableModel(new Object[][]{}, columnNames) {
             public boolean isCellEditable(int row, int column) {
                 return (column == 1);
             }
+
             public void setValueAt(Object aValue, int row, int column) {
                 if (isCellEditable(row, column)) {
                     String regex = "[0-9]+";
                     String value = (String) aValue;
                     if (value.matches(regex)) {
                         super.setValueAt(aValue, row, column);
+                        updateTotalPrice();
                     }
                 }
             }
@@ -182,6 +186,14 @@ public class NewSalePage extends Page {
         add(confirmButton);
     }
 
+    private void updateTotalPrice() {
+        double totalPrice = 0;
+        for(int row = 0; row < saleProductTable.getRowCount(); row++) {
+            totalPrice += (double) saleProductTable.getValueAt(row, 2);
+        }
+        textfieldTotalPrice.setText("" + totalPrice);
+    }
+
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -208,6 +220,7 @@ public class NewSalePage extends Page {
                 double unitPrice = saleController.calculatePrice(productName, 1);
                 ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[]{productName, 1, unitPrice});
             }
+            updateTotalPrice();
         }
 
         private void removeProductFromSale() {
@@ -217,6 +230,7 @@ public class NewSalePage extends Page {
                 ((DefaultTableModel) saleProductTable.getModel()).removeRow(row);
                 ((DefaultTableModel) productTable.getModel()).addRow(new Object[]{productName});
             }
+            updateTotalPrice();
         }
 
     }
