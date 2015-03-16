@@ -1,7 +1,6 @@
 package stat.controllers;
 
 import stat.graphics.ApplicationWindow;
-import stat.graphics.MenuPage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -21,12 +20,7 @@ public class ApplicationController {
     @Autowired
     private ApplicationWindow applicationWindow;
 
-    @Autowired
-    private MenuPage menuPage;
-
     public void startGui() {
-        // TODO: remove
-        //applicationWindow.setCurrentPage(menuPage);
-        applicationWindow.setVisible(true);
+        applicationWindow.display();
     }
 }
