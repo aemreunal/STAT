@@ -19,9 +19,10 @@ package stat.repository;
 import stat.domain.Product;
 
 import java.util.Set;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ProductRepo extends CrudRepository<Product, Integer> {
+public interface ProductRepo extends CrudRepository<Product, Integer>, JpaSpecificationExecutor {
 
     Set<Product> findAll();
 

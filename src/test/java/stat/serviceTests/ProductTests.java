@@ -62,15 +62,6 @@ public class ProductTests extends StatTest {
         assertTrue("Product price is not stored properly!", productService.getProductWithId(product1.getProductId()).getPrice().equals(price));
     }
 
-//    @Test
-//    @Rollback
-//    public void productPriceTest3() throws ProductNameException {
-//        BigDecimal price = BigDecimal.valueOf(1.1234567);
-//        Product product1 = productService.createNewProduct("test product 1", price);
-//        // The stored price must be bigger because it would be rounded
-//        assertEquals("Product price is not stored properly!", productService.getProductWithId(product1.getProductId()).getPrice().compareTo(price), 1);
-//    }
-
     @Test
     @Rollback
     public void productFindTest() throws ProductNameException {
@@ -172,6 +163,58 @@ public class ProductTests extends StatTest {
         Set<Product> products = productService.getProductsWithDescriptionContaining("ST");
         assertTrue("Search result does not contain the product!", products.contains(product1));
         assertTrue("Search result does not contain the product!", products.contains(product2));
+        assertTrue("Search result does not contain the product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productGeneralSearchTest1() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1", "test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test 2", "test 2", 1.5);
+        Product product3 = productService.createNewProduct("test product 2", "test product 2", 2.0);
+
+        Set<Product> products = productService.searchForProducts("teST", null, null, null);
+        assertTrue("Search result does not contain the product!", products.contains(product1));
+        assertTrue("Search result does not contain the product!", products.contains(product2));
+        assertTrue("Search result does not contain the product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productGeneralSearchTest2() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1", "test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test 2", "test 2", 1.5);
+        Product product3 = productService.createNewProduct("test product 2", "test product 2", 2.0);
+
+        Set<Product> products = productService.searchForProducts("2", "pro", null, null);
+        assertFalse("Search result contains a product not searched for!", products.contains(product1));
+        assertFalse("Search result contains a product not searched for!", products.contains(product2));
+        assertTrue("Search result does not contain the product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productGeneralPriceSearchTest1() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1", "test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test 2", "test 2", 1.5);
+        Product product3 = productService.createNewProduct("test product 2", "test product 2", 2.0);
+
+        Set<Product> products = productService.searchForProducts(null, null, 1.2, 1.5);
+        assertFalse("Search result contains a product not searched for!", products.contains(product1));
+        assertTrue("Search result does not contain the product!", products.contains(product2));
+        assertFalse("Search result contains a product not searched for!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productGeneralPriceSearchTest2() throws ProductNameException {
+        Product product1 = productService.createNewProduct("test product 1", "test product 1", 1.0);
+        Product product2 = productService.createNewProduct("test 2", "test 2", 1.5);
+        Product product3 = productService.createNewProduct("test product 2", "test product 2", 2.0);
+
+        Set<Product> products = productService.searchForProducts(null, "PRO", 1.2, null);
+        assertFalse("Search result contains a product not searched for!", products.contains(product1));
+        assertFalse("Search result contains a product not searched for!", products.contains(product2));
         assertTrue("Search result does not contain the product!", products.contains(product3));
     }
 
