@@ -87,15 +87,60 @@ public class SaleService {
         return productsAndAmounts;
     }
 
+    /**
+     * Returns the {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale sales}
+     * between the given dates. Both dates are included in the restriction (which means
+     * that a sale at the exact same date as either of the dates provided as the parameter
+     * values will also be included in the returned set).
+     *
+     * @param from
+     *         The starting date to search sales from. The specified date is also included
+     *         (so a sale at the exact same date will also be returned).
+     * @param until
+     *         The ending date to search sales until. The specified date is also included
+     *         (so a sale at the exact same date will also be returned).
+     *
+     * @return The {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale sales}
+     * with dates between (and including) the sepcified dates.
+     */
     @Transactional(readOnly = true)
-    // Both dates included
     public LinkedHashSet<Sale> getSalesBetween(Date from, Date until) {
         Set<Sale> sales = saleRepo.findByDateBetween(from, until);
         return sales.stream().map(sale -> sale).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    /**
+     * Searches sales with the given criteria. If a {@code null} value is provided for any
+     * criteria parameter, that criteria won't be included in the search. For example:
+     * <pre>
+     *   searchForSales(null, &lt;some date&gt;, null);</pre>
+     * will return all sales with dates later than (and including) the given {@link
+     * java.util.Date Date}. Another example would be that:
+     * <pre>
+     *   searchForSales("jack", null, &lt;some date&gt;);</pre>
+     * will return all sales with customer names including the string 'jack' (e.g.
+     * 'Michael Jackson', 'Jack Johnson') and with dates prior to (and including) the
+     * given {@link java.util.Date Date}.
+     *
+     * @param customerName
+     *         The customer name to limit the search to. Could be a substring of the name.
+     *         Case-insensitive. If a {@code null} value is provided, the search won't be
+     *         restricted to a specific customer name.
+     * @param from
+     *         Limits the date of the sale search to begin with the specified 'from' date.
+     *         The specified date is also included (so a sale at the exact same date will
+     *         also be returned). If a {@code null} value is provided, the search won't be
+     *         restricted to a specific starting date.
+     * @param until
+     *         Limits the date of the sale search to end with the specified 'until' date.
+     *         The specified date is also included (so a sale at the exact same date will
+     *         also be returned). If a {@code null} value is provided, the search won't be
+     *         restricted to a specific ending date.
+     *
+     * @return The {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale sales}
+     * which match the given criteria.
+     */
     @Transactional(readOnly = true)
-    // Both dates are included
     public LinkedHashSet<Sale> searchForSales(String customerName, Date from, Date until) {
         List searchResult = saleRepo.findAll(saleWithSpecification(customerName, from, until));
 
@@ -114,7 +159,7 @@ public class SaleService {
         saleRepo.delete(saleId);
     }
 
-    public Specification<Sale> saleWithSpecification(String customerName, Date from, Date until) {
+    private Specification<Sale> saleWithSpecification(String customerName, Date from, Date until) {
         return (root, query, builder) -> {
             ArrayList<Predicate> predicates = new ArrayList<Predicate>();
 
