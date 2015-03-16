@@ -1,7 +1,9 @@
 package stat.controllers;
 
 import stat.domain.Sale;
+import stat.exception.ProductNotFoundException;
 import stat.graphics.NewSalePage;
+import stat.service.ProductService;
 import stat.service.SaleService;
 
 import java.util.Set;
@@ -26,6 +28,9 @@ public class SaleController implements PageController{
     @Autowired
     private SaleService saleService;
 
+    @Autowired
+    private ProductService productService;
+
     public Set<Sale> getAllSales() {
         return saleService.getAllSales();
     }
@@ -43,7 +48,13 @@ public class SaleController implements PageController{
     }
 
     public double calculatePrice(String productName, int amount) {
-        return 0.0;
+        double productPrice = 0.0;
+        try {
+            productPrice = productService.getProductWithName(productName).getPrice().doubleValue();
+        }catch (ProductNotFoundException pnfe){
+            System.out.println("SaleController pnfe");
+        }
+        return productPrice * amount;
     }
 
     @Override
@@ -51,6 +62,5 @@ public class SaleController implements PageController{
         //TODO implement
     }
 
-    //TODO Waiting for NewSalePage to be completed.
 }
 
