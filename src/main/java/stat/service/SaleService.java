@@ -22,7 +22,9 @@ import stat.repository.SaleRepo;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import javax.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,6 +94,18 @@ public class SaleService {
         return sales.stream().map(sale -> sale).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    @Transactional(readOnly = true)
+    // Both dates are included
+    public LinkedHashSet<Sale> searchForSales(String customerName, Date from, Date until) {
+        List searchResult = saleRepo.findAll(saleWithSpecification(customerName, from, until));
+
+        LinkedHashSet<Sale> sales = new LinkedHashSet<Sale>();
+        for (Object saleObject : searchResult) {
+            sales.add(((Sale) saleObject));
+        }
+        return sales;
+    }
+
     public void deleteSale(Sale sale) {
         saleRepo.delete(sale);
     }
@@ -100,4 +114,23 @@ public class SaleService {
         saleRepo.delete(saleId);
     }
 
+    public static Specification<Sale> saleWithSpecification(String customerName, Date from, Date until) {
+        return (root, query, builder) -> {
+            ArrayList<Predicate> predicates = new ArrayList<Predicate>();
+
+            if (customerName != null && !customerName.equals("")) {
+                predicates.add(builder.like(builder.lower(root.get("customerName").as(String.class)), "%" + customerName.toLowerCase() + "%"));
+            }
+
+            if (from != null) {
+                predicates.add(builder.greaterThanOrEqualTo(root.get("date").as(Date.class), from));
+            }
+
+            if (until != null) {
+                predicates.add(builder.lessThanOrEqualTo(root.get("date").as(Date.class), until));
+            }
+
+            return builder.and(predicates.toArray(new Predicate[predicates.size()]));
+        };
+    }
 }

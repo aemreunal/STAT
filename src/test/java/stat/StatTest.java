@@ -21,6 +21,7 @@ import stat.repository.SaleRepo;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
+import java.text.SimpleDateFormat;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ public abstract class StatTest {
     @Autowired
     protected SaleService saleService;
 
+    protected final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
     @Before
     public void setUpTest() {

@@ -78,15 +78,14 @@ public class SalesTests extends StatTest {
 
     @Test
     @Rollback
-    public void saleDateSearchTest() throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    public void saleDateSearchWithSpecificSearchTest() throws ParseException {
 
-        Date date1 = formatter.parse("2011-02-01"); // 1 February 2011 - 00h00
-        Date date2 = formatter.parse("2011-06-01"); // 1 June 2011 - 00h00
-        Date date3 = formatter.parse("2012-01-01"); // 1 January 2012 - 00h00
-        Date date4 = formatter.parse("2013-01-01"); // 1 January 2013 - 00h00
-        Date date5 = formatter.parse("2009-01-01"); // 1 January 2009 - 00h00
-        Date date6 = formatter.parse("2009-02-01"); // 1 February 2009 - 00h00
+        Date date1 = dateFormatter.parse("2011-02-01"); // 1 February 2011 - 00h00
+        Date date2 = dateFormatter.parse("2011-06-01"); // 1 June 2011 - 00h00
+        Date date3 = dateFormatter.parse("2012-01-01"); // 1 January 2012 - 00h00
+        Date date4 = dateFormatter.parse("2013-01-01"); // 1 January 2013 - 00h00
+        Date date5 = dateFormatter.parse("2009-01-01"); // 1 January 2009 - 00h00
+        Date date6 = dateFormatter.parse("2009-02-01"); // 1 February 2009 - 00h00
 
         // Sale from 2011-02-01 - 00h00
         Sale sale1 = saleService.createNewSale("test customer", date1);
@@ -113,6 +112,100 @@ public class SalesTests extends StatTest {
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
 
         sales = saleService.getSalesBetween(date5, date6);
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale2));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
+    }
+
+    @Test
+    @Rollback
+    public void saleDateSearchWithGeneralSearchTest() throws ParseException {
+
+        Date date1 = dateFormatter.parse("2011-02-01"); // 1 February 2011 - 00h00
+        Date date2 = dateFormatter.parse("2011-06-01"); // 1 June 2011 - 00h00
+        Date date3 = dateFormatter.parse("2012-01-01"); // 1 January 2012 - 00h00
+        Date date4 = dateFormatter.parse("2013-01-01"); // 1 January 2013 - 00h00
+        Date date5 = dateFormatter.parse("2009-01-01"); // 1 January 2009 - 00h00
+        Date date6 = dateFormatter.parse("2009-02-01"); // 1 February 2009 - 00h00
+
+        // Sale from 2011-02-01 - 00h00
+        Sale sale1 = saleService.createNewSale("test customer", date1);
+
+        // Sale from 2011-06-01 - 00h00
+        Sale sale2 = saleService.createNewSale("test customer", date2);
+
+        // Sale from 2012-01-01 - 00h00
+        Sale sale3 = saleService.createNewSale("test customer", date3);
+
+        // Sale from 2013-01-01 - 00h00
+        Sale sale4 = saleService.createNewSale("test customer", date4);
+
+        LinkedHashSet<Sale> sales = saleService.searchForSales(null, date1, date2);
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
+
+        sales = saleService.searchForSales(null, date2, null);
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale3));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale4));
+
+        sales = saleService.searchForSales(null, null, date3);
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale3));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
+
+        sales = saleService.searchForSales(null, date5, date6);
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale2));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
+    }
+
+    @Test
+    @Rollback
+    public void saleSearchTest() throws ParseException {
+
+        Date date1 = dateFormatter.parse("2011-02-01"); // 1 February 2011 - 00h00
+        Date date2 = dateFormatter.parse("2011-06-01"); // 1 June 2011 - 00h00
+        Date date3 = dateFormatter.parse("2012-01-01"); // 1 January 2012 - 00h00
+        Date date4 = dateFormatter.parse("2013-01-01"); // 1 January 2013 - 00h00
+
+        // Sale from 2011-02-01 - 00h00
+        Sale sale1 = saleService.createNewSale("test customer 1", date1);
+
+        // Sale from 2011-06-01 - 00h00
+        Sale sale2 = saleService.createNewSale("test customer 2", date2);
+
+        // Sale from 2012-01-01 - 00h00
+        Sale sale3 = saleService.createNewSale("3_test", date3);
+
+        // Sale from 2013-01-01 - 00h00
+        Sale sale4 = saleService.createNewSale("test customer 3", date4);
+
+        LinkedHashSet<Sale> sales = saleService.searchForSales("test", null, null);
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale3));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale4));
+
+        sales = saleService.searchForSales("test", date1, date2);
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
+
+        sales = saleService.searchForSales("customer", null, null);
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale4));
+
+        sales = saleService.searchForSales("3", date1, date2);
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale2));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
