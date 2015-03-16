@@ -184,7 +184,7 @@ public class SalesTests extends StatTest {
         Sale sale3 = saleService.createNewSale("3_test", date3);
 
         // Sale from 2013-01-01 - 00h00
-        Sale sale4 = saleService.createNewSale("test customer 3", date4);
+        Sale sale4 = saleService.createNewSale("test CUstomer 3", date4);
 
         LinkedHashSet<Sale> sales = saleService.searchForSales("test", null, null);
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
@@ -198,7 +198,7 @@ public class SalesTests extends StatTest {
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
 
-        sales = saleService.searchForSales("customer", null, null);
+        sales = saleService.searchForSales("custOMER", null, null);
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
