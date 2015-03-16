@@ -114,7 +114,7 @@ public class SaleService {
         saleRepo.delete(saleId);
     }
 
-    public static Specification<Sale> saleWithSpecification(String customerName, Date from, Date until) {
+    public Specification<Sale> saleWithSpecification(String customerName, Date from, Date until) {
         return (root, query, builder) -> {
             ArrayList<Predicate> predicates = new ArrayList<Predicate>();
 
