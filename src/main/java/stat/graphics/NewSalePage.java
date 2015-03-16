@@ -100,7 +100,6 @@ public class NewSalePage extends Page {
         productTable = new JTable(getProductTableModel());
         productListPane = new JScrollPane(productTable);
         productListPane.setBounds(10, 155, 125, 145);
-        fillProducts();
         add(productListPane);
     }
 
@@ -113,8 +112,10 @@ public class NewSalePage extends Page {
         };
     }
 
-    private void fillProducts() {
-
+    public void fillProducts(Set<String> productNames) {
+        for(String productName : productNames) {
+            ((DefaultTableModel) productTable.getModel()).addRow(new Object[]{productName});
+        }
     }
 
     private void initSaleProductTable() {
