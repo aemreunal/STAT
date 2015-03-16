@@ -1,18 +1,19 @@
 package stat.graphics;
 
-import stat.controllers.SaleController;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import stat.controllers.SaleController;
+import stat.domain.Sale;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
@@ -30,21 +31,24 @@ public class NewSalePage extends Page {
     private Page menuPage;
 
     private JTextField     textfieldCustomerName;
-    private JTable         productTable;
+    private JTable         productTable, saleProductTable;
     private JTextField     textfieldTotalPrice;
-    private JComboBox      productBox;
-    private JButton        backButton;
+    private JTextField     dateField;
+    private JButton        backButton, confirmButton;
     private ButtonListener buttonListener;
-    private JButton        addButton;
-    private JButton confirmButton;
+    private JButton		   buttonAdd, buttonRemove;
+    private JScrollPane    productListPane, saleProductListPane;
 
     public NewSalePage() {
         buttonListener = new ButtonListener();
         initPageDesign();
         initBackButton();
         initCustomerNameField();
-        initSelectProductField();
+        initDateField();
         initProductTable();
+        initAddButton();
+        initRemoveButton();
+        initSaleProductTable();
         initTotalPrice();
         initConfirmButton();
     }
@@ -67,6 +71,7 @@ public class NewSalePage extends Page {
 
     private void initCustomerNameField() {
         JLabel labelCustomerName = new JLabel("Customer Name : ");
+        labelCustomerName.setHorizontalAlignment(SwingConstants.RIGHT);
         labelCustomerName.setFont(new Font("Tahoma", Font.BOLD, 13));
         labelCustomerName.setBounds(29, 74, 125, 24);
 
@@ -78,45 +83,42 @@ public class NewSalePage extends Page {
         add(textfieldCustomerName);
     }
 
-    private void initSelectProductField() {
-        JLabel labelSelectProduct = new JLabel("Select Product :");
-        labelSelectProduct.setFont(new Font("Tahoma", Font.BOLD, 13));
-        labelSelectProduct.setBounds(29, 109, 125, 24);
+    private void initDateField() {
+        JLabel labelDate = new JLabel("Date : ");
+        labelDate.setHorizontalAlignment(SwingConstants.RIGHT);
+        labelDate.setFont(new Font("Tahoma", Font.BOLD, 13));
+        labelDate.setBounds(29, 109, 125, 24);
 
-        productBox = new JComboBox(new String[0]);
-        productBox.setBounds(164, 111, 201, 22);
-        fillProducts();
+        dateField = new JTextField("dd.mm.yyyy");
+        dateField.setBounds(164, 111, 201, 22);
 
-        addButton = new JButton("ADD");
-        addButton.setForeground(new Color(94, 52, 231));
-        addButton.setBackground(new Color(245, 245, 245));
-        addButton.setFont(new Font("Tahoma", Font.BOLD, 11));
-        addButton.setBounds(375, 111, 91, 23);
-        addButton.addActionListener(buttonListener);
-
-        add(labelSelectProduct);
-        add(productBox);
-        add(addButton);
-    }
-
-    private void fillProducts() {
-        //productBox.addItem(saleController.getAllSales().toArray());
-        // TODO: implement
+        add(labelDate);
+        add(dateField);
     }
 
     private void initProductTable() {
-        productTable = new JTable(getTableModel());
-        productTable.setBounds(29, 155, 437, 145);
-        productTable.addMouseListener(getMouseAdapter());
-        JScrollPane scrollPane = new JScrollPane(productTable);
-        scrollPane.setBounds(29, 155, 437, 145);
-        add(scrollPane);
+        String[] columnNames = {"Product"};
+        // TODO: Remove static data
+        Object[][] data = { {"Elma"}, {"Armut"}, {"Avokado"} };
+
+        productTable = new JTable(data, columnNames);
+        productListPane = new JScrollPane(productTable);
+        productListPane.setBounds(10, 155, 125, 145);
+        add(productListPane);
+    }
+
+    private void initSaleProductTable() {
+        saleProductTable = new JTable(getTableModel());
+        saleProductListPane = new JScrollPane(saleProductTable);
+        saleProductListPane.setBounds(224, 155, 266, 145);
+        add(saleProductListPane);
     }
 
     private TableModel getTableModel() {
-        String[] columnNames = { "Product", "Amount", "Delete" };
+        String[] columnNames = {"Product", "Amount", "Price"};
         // TODO: Remove static data
-        Object[][] data = { { "Elma", 5, "Remove" }, { "Armut", 5, "Remove" }, { "Avokado", 5, "Remove" } };
+        Object[][] data = { { "Elma", new Integer(5), "Remove" }, { "Armut",new Integer(5), "Remove" }, { "Avokado", new Integer(5), "Remove" } };
+
         return new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {
                 return (column == 1);
@@ -132,6 +134,24 @@ public class NewSalePage extends Page {
                 }
             }
         };
+    }
+
+    private void initAddButton() {
+        buttonAdd = new JButton("ADD");
+        buttonAdd.setFont(new Font("Tahoma", Font.BOLD, 11));
+        buttonAdd.setForeground(new Color(106, 90, 205));
+        buttonAdd.setBounds(145, 190, 69, 23);
+        buttonAdd.addActionListener(buttonListener);
+        add(buttonAdd);
+    }
+
+    private void initRemoveButton() {
+        buttonRemove = new JButton("DEL");
+        buttonRemove.setForeground(new Color(165, 42, 42));
+        buttonRemove.setFont(new Font("Tahoma", Font.BOLD, 11));
+        buttonRemove.setBounds(145, 224, 69, 23);
+        buttonRemove.addActionListener(buttonListener);
+        add(buttonRemove);
     }
 
     private MouseAdapter getMouseAdapter() {
@@ -152,10 +172,10 @@ public class NewSalePage extends Page {
     private void initTotalPrice() {
         JLabel labelTotal = new JLabel("Total :");
         labelTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelTotal.setBounds(29, 327, 49, 24);
+        labelTotal.setBounds(292, 311, 49, 24);
 
         textfieldTotalPrice = new JTextField();
-        textfieldTotalPrice.setBounds(78, 331, 125, 20);
+        textfieldTotalPrice.setBounds(341, 315, 125, 20);
         textfieldTotalPrice.setColumns(10);
         textfieldTotalPrice.setEditable(false);
 
@@ -181,7 +201,9 @@ public class NewSalePage extends Page {
             if (sourceOfAction instanceof JButton) {
                 if (sourceOfAction.equals(backButton)) {
                     appWindow.setCurrentPage(menuPage);
-                } else if (sourceOfAction.equals(addButton)) {
+                } else if (sourceOfAction.equals(buttonAdd)) {
+                    // TODO: implement
+                } else if (sourceOfAction.equals(buttonRemove)) {
                     // TODO: implement
                 } else if (sourceOfAction.equals(confirmButton)) {
                     // TODO: implement
