@@ -2,7 +2,6 @@ package stat.controllers;
 
 import stat.graphics.ApplicationWindow;
 import stat.graphics.MenuPage;
-import stat.graphics.Page;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

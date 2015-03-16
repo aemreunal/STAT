@@ -1,5 +1,7 @@
 package stat.graphics;
 
+import stat.controllers.ProductController;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +12,6 @@ import javax.swing.border.TitledBorder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import stat.controllers.ProductController;
 
 /**
  * Created by Eray Tuncer

@@ -1,19 +1,18 @@
 package stat.graphics;
 
+import stat.controllers.SaleController;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import stat.controllers.SaleController;
-import stat.domain.Sale;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr

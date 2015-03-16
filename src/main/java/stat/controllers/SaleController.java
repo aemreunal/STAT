@@ -1,14 +1,13 @@
 package stat.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
-import stat.domain.Product;
 import stat.domain.Sale;
 import stat.graphics.NewSalePage;
 import stat.service.SaleService;
 
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by Uğur Özkan.

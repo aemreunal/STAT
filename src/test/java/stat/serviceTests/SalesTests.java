@@ -22,7 +22,6 @@ import stat.domain.Sale;
 import stat.exception.ProductNameException;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;

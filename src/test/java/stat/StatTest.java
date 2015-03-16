@@ -17,7 +17,6 @@ package stat;
  */
 
 import stat.config.GlobalSettings;
-import stat.repository.SaleRepo;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
