@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import javafx.embed.swing.JFXPanel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,11 @@ public class ApplicationWindow extends JFrame {
     @Autowired
     private SaleController saleController;
 
+    @Autowired
+    private SaleMainPage saleMainPage;
+
     private JPanel contentPane;
+    private JTabbedPane pageTab;
 
     public ApplicationWindow() {
         initWindow();
@@ -50,7 +55,7 @@ public class ApplicationWindow extends JFrame {
     }
 
     private void initTabs() {
-        JTabbedPane pageTab = new JTabbedPane(JTabbedPane.TOP);
+        pageTab = new JTabbedPane(JTabbedPane.TOP);
         pageTab.addTab(TAB_SALES  , new JPanel());
         pageTab.addTab(TAB_PRODUCT, new JPanel());
         pageTab.addChangeListener(createChangeListener());
@@ -79,6 +84,11 @@ public class ApplicationWindow extends JFrame {
         } else {
             return null;
         }
+    }
+
+    public void display() {
+        setVisible(true);
+        pageTab.setComponentAt(pageTab.indexOfTab(TAB_SALES), saleMainPage);
     }
 
 }
