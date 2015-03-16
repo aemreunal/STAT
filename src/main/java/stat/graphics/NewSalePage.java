@@ -189,7 +189,8 @@ public class NewSalePage extends Page {
             Object sourceOfAction = e.getSource();
             if (sourceOfAction instanceof JButton) {
                 if (sourceOfAction.equals(backButton)) {
-                    appWindow.setCurrentPage(menuPage);
+                    // TODO: change the functionality
+                    //appWindow.setCurrentPage(menuPage);
                 } else if (sourceOfAction.equals(buttonAdd)) {
                     addProductToSale();
                 } else if (sourceOfAction.equals(buttonRemove)) {

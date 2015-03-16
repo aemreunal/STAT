@@ -25,7 +25,8 @@ public class ApplicationController {
     private MenuPage menuPage;
 
     public void startGui() {
-        applicationWindow.setCurrentPage(menuPage);
+        // TODO: remove
+        //applicationWindow.setCurrentPage(menuPage);
         applicationWindow.setVisible(true);
     }
 }
