@@ -80,9 +80,11 @@ public class MenuPage extends Page {
             Object sourceOfAction = e.getSource();
             if (sourceOfAction instanceof JButton) {
                 if (sourceOfAction.equals(createProductButton)) {
-                    appWindow.setCurrentPage(newProductPage);
+                    // TODO: change the functionality
+                    //appWindow.setCurrentPage(newProductPage);
                 } else if (sourceOfAction.equals(createSaleButton)) {
-                    appWindow.setCurrentPage(newSalePage);
+                    // TODO: change the functionality
+                    //appWindow.setCurrentPage(newSalePage);
                 } else if (sourceOfAction.equals(exitButton)) {
                     System.exit(0);
                 }

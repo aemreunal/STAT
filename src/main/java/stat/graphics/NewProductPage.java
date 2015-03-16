@@ -184,7 +184,8 @@ public class NewProductPage extends Page {
                         displayValidationError();
                     }
                 } else if (sourceOfAction.equals(backButton)) {
-                    appWindow.setCurrentPage(menuPage);
+                    // TODO: change the functionality
+                    //appWindow.setCurrentPage(menuPage);
                 }
             }
         }

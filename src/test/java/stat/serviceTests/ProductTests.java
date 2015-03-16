@@ -20,6 +20,7 @@ import stat.StatTest;
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNameException;
+import stat.exception.ProductNotFoundException;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
@@ -138,6 +139,31 @@ public class ProductTests extends StatTest {
         assertTrue("Search result does not contain the product!", products.contains(product1));
         assertTrue("Search result does not contain the product!", products.contains(product2));
         assertTrue("Search result does not contain the product!", products.contains(product3));
+    }
+
+    @Test
+    @Rollback
+    public void productExactNameSearchTest1() throws ProductNameException, ProductNotFoundException {
+        String productName = "test product";
+        Product newProduct = productService.createNewProduct(productName, 1.0);
+        Product product = productService.getProductWithName(productName);
+        assertEquals("The retrieved product is not the same as the stored one!", newProduct, product);
+    }
+
+    @Test(expected = ProductNotFoundException.class)
+    @Rollback
+    public void productExactNameSearchTest2() throws ProductNameException, ProductNotFoundException {
+        String productName = "test product";
+        productService.createNewProduct(productName + "1", 1.0);
+        productService.createNewProduct(productName + "2", 1.0);
+        productService.getProductWithName(productName);
+    }
+
+    @Test(expected = ProductNotFoundException.class)
+    @Rollback
+    public void productExactNameSearchTest3() throws ProductNameException, ProductNotFoundException {
+        String productName = "test product";
+        productService.getProductWithName(productName);
     }
 
     @Test

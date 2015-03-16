@@ -19,6 +19,7 @@ package stat.service;
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNameException;
+import stat.exception.ProductNotFoundException;
 import stat.repository.ProductRepo;
 
 import java.math.BigDecimal;
@@ -83,6 +84,15 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Set<Product> getProductsWithNameContaining(String productName) {
         return productRepo.findByNameContaining(productName);
+    }
+
+    @Transactional(readOnly = true)
+    public Product getProductWithName(String productName) throws ProductNotFoundException {
+        Set<Product> products = productRepo.findByNameLike(productName);
+        if (products.size() != 1) {
+            throw new ProductNotFoundException(productName);
+        }
+        return ((Product) products.toArray()[0]);
     }
 
     @Transactional(readOnly = true)

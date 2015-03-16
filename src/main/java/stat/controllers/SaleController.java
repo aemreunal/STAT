@@ -1,10 +1,16 @@
 package stat.controllers;
 
+import stat.domain.Product;
 import stat.domain.Sale;
+import stat.exception.ProductNotFoundException;
 import stat.graphics.NewSalePage;
+import stat.service.ProductService;
 import stat.service.SaleService;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -26,6 +32,9 @@ public class SaleController implements PageController{
     @Autowired
     private SaleService saleService;
 
+    @Autowired
+    private ProductService productService;
+
     public Set<Sale> getAllSales() {
         return saleService.getAllSales();
     }
@@ -43,7 +52,17 @@ public class SaleController implements PageController{
     }
 
     public double calculatePrice(String productName, int amount) {
-        return 0.0;
+        double productPrice = 0.0;
+        try {
+            productPrice = productService.getProductWithName(productName).getPrice().doubleValue();
+        }catch (ProductNotFoundException pnfe){
+            System.out.println("SaleController pnfe");
+        }
+        return productPrice * amount;
+    }
+
+    public LinkedHashSet<String> getProductNames() {
+        return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override
@@ -51,6 +70,5 @@ public class SaleController implements PageController{
         //TODO implement
     }
 
-    //TODO Waiting for NewSalePage to be completed.
 }
 
