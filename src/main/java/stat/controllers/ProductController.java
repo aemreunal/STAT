@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
-public class ProductController {
+public class ProductController implements PageController{
 
     @Autowired
     private NewProductPage productPage;
@@ -36,4 +36,8 @@ public class ProductController {
         productPage.clearInputFields();
     }
 
+    @Override
+    public void refreshPage() {
+        //TODO implements
+    }
 }

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
-public class SaleController {
+public class SaleController implements PageController{
 
     @Autowired
     private NewSalePage salePage;
@@ -40,6 +40,15 @@ public class SaleController {
         saleService.createNewSale("Customer Name");
         saleService.addProduct()
         */
+    }
+
+    public double calculatePrice(String productName, int amount) {
+        return 0.0;
+    }
+
+    @Override
+    public void refreshPage() {
+        //TODO implement
     }
 
     //TODO Waiting for NewSalePage to be completed.
