@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import stat.controllers.SaleController;
-import stat.domain.Sale;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
@@ -97,24 +95,31 @@ public class NewSalePage extends Page {
     }
 
     private void initProductTable() {
-        String[] columnNames = {"Product"};
-        // TODO: Remove static data
-        Object[][] data = { {"Elma"}, {"Armut"}, {"Avokado"} };
-
-        productTable = new JTable(data, columnNames);
+        productTable = new JTable(getProductTableModel());
         productListPane = new JScrollPane(productTable);
         productListPane.setBounds(10, 155, 125, 145);
         add(productListPane);
     }
 
+    private TableModel getProductTableModel() {
+        String[] columnNames = {"Product"};
+        // TODO: Remove static data
+        Object[][] data = { {"Elma"}, {"Armut"}, {"Avokado"} };
+        return new DefaultTableModel(data, columnNames) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+    }
+
     private void initSaleProductTable() {
-        saleProductTable = new JTable(getTableModel());
+        saleProductTable = new JTable(getSaleTableModel());
         saleProductListPane = new JScrollPane(saleProductTable);
         saleProductListPane.setBounds(224, 155, 266, 145);
         add(saleProductListPane);
     }
 
-    private TableModel getTableModel() {
+    private TableModel getSaleTableModel() {
         String[] columnNames = {"Product", "Amount", "Price"};
         // TODO: Remove static data
         Object[][] data = { { "Elma", new Integer(5), "Remove" }, { "Armut",new Integer(5), "Remove" }, { "Avokado", new Integer(5), "Remove" } };
@@ -123,7 +128,6 @@ public class NewSalePage extends Page {
             public boolean isCellEditable(int row, int column) {
                 return (column == 1);
             }
-
             public void setValueAt(Object aValue, int row, int column) {
                 if (isCellEditable(row, column)) {
                     String regex = "[0-9]+";
@@ -152,21 +156,6 @@ public class NewSalePage extends Page {
         buttonRemove.setBounds(145, 224, 69, 23);
         buttonRemove.addActionListener(buttonListener);
         add(buttonRemove);
-    }
-
-    private MouseAdapter getMouseAdapter() {
-        return new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                JTable table = (JTable) e.getSource();
-                int row = table.getSelectedRow();
-                int column = table.getSelectedColumn();
-                if (column == 2) {
-                    ((DefaultTableModel) table.getModel()).removeRow(row);
-                }
-                // TODO: ADD TOTAL UPDATE
-            }
-        };
     }
 
     private void initTotalPrice() {
@@ -202,13 +191,33 @@ public class NewSalePage extends Page {
                 if (sourceOfAction.equals(backButton)) {
                     appWindow.setCurrentPage(menuPage);
                 } else if (sourceOfAction.equals(buttonAdd)) {
-                    // TODO: implement
+                    addProductToSale();
                 } else if (sourceOfAction.equals(buttonRemove)) {
-                    // TODO: implement
+                    removeProductFromSale();
                 } else if (sourceOfAction.equals(confirmButton)) {
                     // TODO: implement
                 }
             }
         }
+
+        private void addProductToSale() {
+            int row = productTable.getSelectedRow();
+            if(row != -1) {
+                String productName = (String) productTable.getValueAt(row, 0);
+                ((DefaultTableModel) productTable.getModel()).removeRow(row);
+                double unitPrice = saleController.calculatePrice(productName, 1);
+                ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[]{productName, 1, unitPrice});
+            }
+        }
+
+        private void removeProductFromSale() {
+            int row = saleProductTable.getSelectedRow();
+            if(row != -1) {
+                String productName = (String) saleProductTable.getValueAt(row, 0);
+                ((DefaultTableModel) saleProductTable.getModel()).removeRow(row);
+                ((DefaultTableModel) productTable.getModel()).addRow(new Object[]{productName});
+            }
+        }
+
     }
 }
