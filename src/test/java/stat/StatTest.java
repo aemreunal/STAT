@@ -41,9 +41,6 @@ public abstract class StatTest {
     @Autowired
     protected SaleService saleService;
 
-    @Autowired
-    protected SaleRepo saleRepo;
-
 
     @Before
     public void setUpTest() {

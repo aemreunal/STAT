@@ -21,7 +21,6 @@ import java.util.Set;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class SaleController {
 
-
     @Autowired
     private NewSalePage salePage;
 

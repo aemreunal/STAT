@@ -89,24 +89,16 @@ public class SalesTests extends StatTest {
         Date date6 = formatter.parse("2009-02-01"); // 1 February 2009 - 00h00
 
         // Sale from 2011-02-01 - 00h00
-        Sale sale1 = new Sale("test customer");
-        sale1.setDate(date1);
-        sale1 = saleRepo.save(sale1);
+        Sale sale1 = saleService.createNewSale("test customer", date1);
 
         // Sale from 2011-06-01 - 00h00
-        Sale sale2 = new Sale("test customer");
-        sale2.setDate(date2);
-        sale2 = saleRepo.save(sale2);
+        Sale sale2 = saleService.createNewSale("test customer", date2);
 
         // Sale from 2012-01-01 - 00h00
-        Sale sale3 = new Sale("test customer");
-        sale3.setDate(date3);
-        sale3 = saleRepo.save(sale3);
+        Sale sale3 = saleService.createNewSale("test customer", date3);
 
         // Sale from 2013-01-01 - 00h00
-        Sale sale4 = new Sale("test customer");
-        sale4.setDate(date4);
-        sale4 = saleRepo.save(sale4);
+        Sale sale4 = saleService.createNewSale("test customer", date4);
 
         LinkedHashSet<Sale> sales = saleService.getSalesBetween(date1, date2);
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));

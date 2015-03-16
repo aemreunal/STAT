@@ -37,8 +37,13 @@ public class SaleService {
 
     public Sale createNewSale(String customerName) {
         Sale sale = new Sale(customerName);
-        sale = this.save(sale);
-        return sale;
+        return this.save(sale);
+    }
+
+    public Sale createNewSale(String customerName, Date dateOfSale) {
+        Sale sale = new Sale(customerName);
+        sale.setDate(dateOfSale);
+        return this.save(sale);
     }
 
     private Sale save(Sale sale) {
