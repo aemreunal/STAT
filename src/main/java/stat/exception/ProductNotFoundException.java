@@ -22,6 +22,6 @@ public class ProductNotFoundException extends Throwable {
     }
 
     public ProductNotFoundException(String name) {
-        super("There are no products with the name: \'" + name + "\'!", null, true, false);
+        super("There are no products (or more than one product) with the name: \'" + name + "\'!", null, true, false);
     }
 }
