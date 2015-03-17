@@ -90,7 +90,18 @@ public class SaleMainPage extends Page {
 
     private JButton createButtonView() {
         JButton buttonRemoveSale = new JButton("View Sale");
-        // TODO: add Listener
+        buttonRemoveSale.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (saleTable.getSelectedRowCount() > 0) {
+                    int rowIndex = saleTable.getSelectedRow();
+
+                    SaleViewPage viewPage = new SaleViewPage();
+                    viewPage.setSale(saleController.getSale(saleIDList.get(rowIndex)));
+                    showPopup(viewPage);
+                }
+            }
+        });
         return buttonRemoveSale;
     }
 
@@ -99,14 +110,18 @@ public class SaleMainPage extends Page {
         buttonRemoveSale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame popupWindow = new JFrame();
-                popupWindow.setContentPane(pageNewSale);
-                popupWindow.setSize(pageNewSale.getSize());
-                popupWindow.setResizable(false);
-                popupWindow.setVisible(true);
+                showPopup(pageNewSale);
             }
         });
         return buttonRemoveSale;
+    }
+
+    private void showPopup(Page page) {
+        JFrame popupWindow = new JFrame();
+        popupWindow.setContentPane(page);
+        popupWindow.setSize(page.getSize());
+        popupWindow.setResizable(false);
+        popupWindow.setVisible(true);
     }
 
     public void emptySales() {

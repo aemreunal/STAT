@@ -74,5 +74,10 @@ public class SaleController implements PageController{
         //TODO implement
     }
 
+    public Sale getSale(int saleID) {
+        //TODO implement
+        return null;
+    }
+
 }
 
