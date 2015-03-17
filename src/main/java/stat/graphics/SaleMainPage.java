@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import stat.controllers.SaleController;
+import stat.domain.Sale;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -11,6 +12,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 /**
  * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
@@ -48,9 +50,7 @@ public class SaleMainPage extends Page {
 
     private TableModel getSaleTableModel() {
         // TODO: Remove static data
-        Object[][] data = { {"Eray Tuncer"         , "16:07:1992", "199.99"},
-                            {"Burcu Basak Sarikaya", "01:09:1992", "0.99"  }};
-        //////////////////////////////////////////////////////////////////////
+        Object[][] data = {};
         String[] columnNames = {"Customer Name", "Date", "Total Price"};
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {
@@ -95,6 +95,26 @@ public class SaleMainPage extends Page {
             }
         });
         return buttonRemoveSale;
+    }
+
+    public void emptySales() {
+        DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
+        int numberRows = tableModel.getRowCount();
+        for (int i = 0; i < numberRows; i++) {
+            tableModel.removeRow(i);
+        }
+    }
+
+    public void addSales(Set<Sale> saleSet) {
+        DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
+        for (Sale sale : saleSet) {
+            Object[] saleRow = new Object[3];
+            saleRow[0] = sale.getCustomerName();
+            saleRow[1] = sale.getDate();
+            saleRow[2] = 0.0; // TODO: find way to calculate total amount
+
+            tableModel.addRow(saleRow);
+        }
     }
 
 }
