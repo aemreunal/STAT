@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
@@ -21,6 +23,9 @@ public class SaleMainPage extends Page {
 
     @Autowired
     private SaleController saleController; // TODO: make use of
+
+    @Autowired
+    private NewSalePage pageNewSale;
 
     private JTable saleTable;
 
@@ -79,7 +84,16 @@ public class SaleMainPage extends Page {
 
     private JButton createButtonAdd() {
         JButton buttonRemoveSale = new JButton("Add Sale");
-        // TODO: add Listener
+        buttonRemoveSale.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame popupWindow = new JFrame();
+                popupWindow.setContentPane(pageNewSale);
+                popupWindow.setSize(pageNewSale.getSize());
+                popupWindow.setResizable(false);
+                popupWindow.setVisible(true);
+            }
+        });
         return buttonRemoveSale;
     }
 
