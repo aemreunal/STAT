@@ -12,6 +12,7 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Set;
 
 /**
@@ -30,6 +31,7 @@ public class SaleMainPage extends Page {
     private NewSalePage pageNewSale;
 
     private JTable saleTable;
+    private ArrayList<Integer> saleIDList = new ArrayList<Integer>();
 
     public SaleMainPage() {
         initPage();
@@ -44,13 +46,15 @@ public class SaleMainPage extends Page {
 
     private void initSaleTable() {
         saleTable = new JTable(getSaleTableModel());
+        saleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane tableScrollPane = new JScrollPane(saleTable);
         add(tableScrollPane, BorderLayout.CENTER);
     }
 
     private TableModel getSaleTableModel() {
         // TODO: Remove static data
-        Object[][] data = {};
+        Object[][] data = { {"Eray Tuncer", "11.11.1111", "599.99"},
+                            {"Burcu sarikyaa", "11.11.1111", "599.99"}};
         String[] columnNames = {"Customer Name", "Date", "Total Price"};
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {
@@ -72,7 +76,15 @@ public class SaleMainPage extends Page {
 
     private JButton createButtonRemove() {
         JButton buttonRemoveSale = new JButton("Delete Sale");
-        // TODO: add Listener
+        buttonRemoveSale.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (saleTable.getSelectedRowCount() > 0) {
+                    int rowIndex = saleTable.getSelectedRow();
+                    removeRow(rowIndex);
+                }
+            }
+        });
         return buttonRemoveSale;
     }
 
@@ -100,21 +112,36 @@ public class SaleMainPage extends Page {
     public void emptySales() {
         DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
         int numberRows = tableModel.getRowCount();
-        for (int i = 0; i < numberRows; i++) {
-            tableModel.removeRow(i);
+        for (int rowIndex = 0; rowIndex < numberRows; rowIndex++) {
+            tableModel.removeRow(rowIndex);
+            saleIDList = new ArrayList<Integer>();
         }
     }
 
-    public void addSales(Set<Sale> saleSet) {
+    public void removeRow(int rowIndex) {
+        int saleID = saleIDList.get(rowIndex);
         DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
-        for (Sale sale : saleSet) {
-            Object[] saleRow = new Object[3];
-            saleRow[0] = sale.getCustomerName();
-            saleRow[1] = sale.getDate();
-            saleRow[2] = 0.0; // TODO: find way to calculate total amount
 
-            tableModel.addRow(saleRow);
+        tableModel.removeRow(rowIndex);
+        saleIDList.remove(rowIndex);
+        saleController.removeSale(saleID);
+    }
+
+    public void addSales(Set<Sale> saleSet) {
+        for (Sale sale : saleSet) {
+            addSale(sale);
         }
+    }
+
+    public void addSale(Sale sale) {
+        DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
+        Object[] saleRow = new Object[3];
+        saleRow[0] = sale.getCustomerName();
+        saleRow[1] = sale.getDate();
+        saleRow[2] = 0.0; // TODO: find way to calculate total amount
+
+        tableModel.addRow(saleRow);
+        saleIDList.add(sale.getSaleId());
     }
 
 }
