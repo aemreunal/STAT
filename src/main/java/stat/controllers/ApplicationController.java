@@ -23,4 +23,10 @@ public class ApplicationController {
     public void startGui() {
         applicationWindow.display();
     }
+
+    public void changedTab(String tabName) {
+        // TODO: implement
+        // Tab names can be found in the class ApplicationWindow as fields.
+    }
+
 }

@@ -5,13 +5,10 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import javafx.embed.swing.JFXPanel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import stat.controllers.PageController;
-import stat.controllers.ProductController;
-import stat.controllers.SaleController;
+import stat.controllers.ApplicationController;
 
 import java.awt.*;
 
@@ -24,14 +21,11 @@ import java.awt.*;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ApplicationWindow extends JFrame {
 
-    private static final String TAB_SALES   = "Sales";
-    private static final String TAB_PRODUCT = "Product";
+    public static final String TAB_SALES   = "Sales";
+    public static final String TAB_PRODUCT = "Product";
 
     @Autowired
-    private ProductController productController;
-
-    @Autowired
-    private SaleController saleController;
+    private ApplicationController applicationController;
 
     @Autowired
     private SaleMainPage saleMainPage;
@@ -69,21 +63,9 @@ public class ApplicationWindow extends JFrame {
             public void stateChanged(ChangeEvent e) {
                 JTabbedPane tab = (JTabbedPane) e.getSource();
                 String tabName = tab.getTitleAt(tab.getSelectedIndex());
-
-                PageController controller = getControllerByTabName(tabName);
-                controller.refreshPage();
+                applicationController.changedTab(tabName);
             }
         };
-    }
-
-    private PageController getControllerByTabName(String tabName) {
-        if (tabName.equals(TAB_SALES)) {
-            return saleController;
-        } else if (tabName.equals(TAB_PRODUCT)) {
-            return productController;
-        } else {
-            return null;
-        }
     }
 
     public void display() {
