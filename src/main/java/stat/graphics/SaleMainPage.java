@@ -89,8 +89,8 @@ public class SaleMainPage extends Page {
     }
 
     private JButton createButtonView() {
-        JButton buttonRemoveSale = new JButton("View Sale");
-        buttonRemoveSale.addActionListener(new ActionListener() {
+        JButton buttonViewSale = new JButton("View Sale");
+        buttonViewSale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (saleTable.getSelectedRowCount() > 0) {
@@ -102,18 +102,18 @@ public class SaleMainPage extends Page {
                 }
             }
         });
-        return buttonRemoveSale;
+        return buttonViewSale;
     }
 
     private JButton createButtonAdd() {
-        JButton buttonRemoveSale = new JButton("Add Sale");
-        buttonRemoveSale.addActionListener(new ActionListener() {
+        JButton buttonAddSale = new JButton("Add Sale");
+        buttonAddSale.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showPopup(pageNewSale);
             }
         });
-        return buttonRemoveSale;
+        return buttonAddSale;
     }
 
     private void showPopup(Page page) {
@@ -129,8 +129,8 @@ public class SaleMainPage extends Page {
         int numberRows = tableModel.getRowCount();
         for (int rowIndex = 0; rowIndex < numberRows; rowIndex++) {
             tableModel.removeRow(rowIndex);
-            saleIDList = new ArrayList<Integer>();
         }
+        saleIDList = new ArrayList<Integer>();
     }
 
     public void removeRow(int rowIndex) {
