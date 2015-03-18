@@ -36,6 +36,10 @@ public class ProductController implements PageController{
         productPage.clearInputFields();
     }
 
+    public void removeProduct(int productID) {
+        // TODO: implement
+    }
+
     @Override
     public void refreshPage() {
         //TODO implements

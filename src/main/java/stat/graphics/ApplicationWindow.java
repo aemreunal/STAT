@@ -30,6 +30,9 @@ public class ApplicationWindow extends JFrame {
     @Autowired
     private SaleMainPage saleMainPage;
 
+    @Autowired
+    private ProductMainPage productMainPage;
+
     private JPanel contentPane;
     private JTabbedPane pageTab;
 
@@ -71,6 +74,7 @@ public class ApplicationWindow extends JFrame {
     public void display() {
         setVisible(true);
         pageTab.setComponentAt(pageTab.indexOfTab(TAB_SALES), saleMainPage);
+        pageTab.setComponentAt(pageTab.indexOfTab(TAB_PRODUCT), productMainPage);
     }
 
 }
