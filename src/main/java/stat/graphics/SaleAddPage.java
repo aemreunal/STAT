@@ -19,7 +19,7 @@ import stat.controllers.SaleController;
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
-public class NewSalePage extends Page {
+public class SaleAddPage extends Page {
 
     @Autowired
     private SaleController saleController;
@@ -36,7 +36,7 @@ public class NewSalePage extends Page {
     private JButton		   buttonAdd, buttonRemove;
     private JScrollPane    productListPane, saleProductListPane;
 
-    public NewSalePage() {
+    public SaleAddPage() {
         buttonListener = new ButtonListener();
         initPageDesign();
         initBackButton();

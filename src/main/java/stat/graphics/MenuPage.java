@@ -18,10 +18,10 @@ import org.springframework.stereotype.Component;
 public class MenuPage extends Page {
 
     @Autowired
-    private NewSalePage newSalePage;
+    private SaleAddPage newSalePage;
 
     @Autowired
-    private NewProductPage newProductPage;
+    private ProductAddPage newProductPage;
 
     private JButton        createProductButton;
     private JButton        createSaleButton;

@@ -28,7 +28,7 @@ public class SaleMainPage extends Page {
     private SaleController saleController; // TODO: make use of
 
     @Autowired
-    private NewSalePage pageNewSale;
+    private SaleAddPage pageNewSale;
 
     private JTable saleTable;
     private ArrayList<Integer> saleIDList = new ArrayList<Integer>();

@@ -28,7 +28,7 @@ public class ProductMainPage extends Page {
     private ProductController productController; // TODO: make use of
 
     @Autowired
-    private NewProductPage pageNewProduct;
+    private ProductAddPage pageNewProduct;
 
     private JTable productTable;
     private ArrayList<Integer> productIDList = new ArrayList<Integer>();

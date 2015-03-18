@@ -1,7 +1,7 @@
 package stat.controllers;
 
 import stat.exception.ProductNameException;
-import stat.graphics.NewProductPage;
+import stat.graphics.ProductAddPage;
 import stat.service.ProductService;
 
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 public class ProductController implements PageController{
 
     @Autowired
-    private NewProductPage productPage;
+    private ProductAddPage productPage;
 
     @Autowired
     private ProductService productService;

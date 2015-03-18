@@ -3,7 +3,7 @@ package stat.controllers;
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNotFoundException;
-import stat.graphics.NewSalePage;
+import stat.graphics.SaleAddPage;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 public class SaleController implements PageController{
 
     @Autowired
-    private NewSalePage salePage;
+    private SaleAddPage salePage;
 
     @Autowired
     private SaleService saleService;

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
-public class NewProductPage extends Page {
+public class ProductAddPage extends Page {
 
     @Autowired
     private ProductController productController;
@@ -40,7 +40,7 @@ public class NewProductPage extends Page {
 
     private ButtonListener buttonListener;
 
-    public NewProductPage() {
+    public ProductAddPage() {
         buttonListener = new ButtonListener();
         initializePageDesign();
         initializeFields();
