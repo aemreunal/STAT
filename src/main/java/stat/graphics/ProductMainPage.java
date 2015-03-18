@@ -90,7 +90,15 @@ public class ProductMainPage extends Page {
         buttonRemoveProduct.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO: implement
+                int row = productTable.getSelectedRow();
+                if(row != -1) {
+                    ProductViewPage view = new ProductViewPage();
+                    String productName = (String) productTable.getValueAt(row, 0);
+                    String description = (String) productTable.getValueAt(row, 1);
+                    String unitPrice = (String) productTable.getValueAt(row, 2);
+                    view.setFields(productName, description, unitPrice);
+                    showPopup(view);
+                }
             }
         });
         return buttonRemoveProduct;
