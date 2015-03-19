@@ -7,7 +7,10 @@ import stat.graphics.ProductMainPage;
 import stat.service.ProductService;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -57,6 +60,11 @@ public class ProductController implements PageController{
 
     public Product getProduct(int productId) {
         return productService.getProductWithId(productId);
+    }
+
+    public HashSet<Product> getSortedProducts() {
+        //TODO improve
+        return getAllProducts().stream().sorted().collect(Collectors.toCollection(HashSet<Product>::new));
     }
 
     @Override

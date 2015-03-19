@@ -103,6 +103,11 @@ public class SaleController implements PageController{
         return saleService.getSaleWithId(saleID);
     }
 
+    public HashSet<Sale> getSortedSales() {
+        //TODO improve
+        return getAllSales().stream().sorted().collect(Collectors.toCollection(HashSet<Sale>::new));
+    }
+
     @Override
     public void refreshPage() {
         //TODO implement
