@@ -231,7 +231,7 @@ public class SaleAddPage extends Page {
                 } else if (sourceOfAction.equals(confirmButton)) {
                     boolean isDateValid = saleController.validateDate(dateField.getText());
                     if (isDateValid) {
-                        //saveSale(); //TODO Fix LazyInitializationException
+                        saveSale(); //TODO Fix LazyInitializationException
                         //TODO close
                     } else {
                         //TODO invalid date. Show wrong format popup

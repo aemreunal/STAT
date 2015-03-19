@@ -4,6 +4,7 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNotFoundException;
 import stat.graphics.SaleAddPage;
+import stat.graphics.SaleMainPage;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
@@ -28,19 +29,18 @@ import org.springframework.stereotype.Component;
 public class SaleController implements PageController{
 
     @Autowired
-    private SaleAddPage saleAddPage;
-
-    @Autowired
     private SaleService saleService;
 
     @Autowired
     private ProductService productService;
 
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+    @Autowired
+    private SaleAddPage saleAddPage;
 
-    public Set<Sale> getAllSales() {
-        return saleService.getAllSales();
-    }
+    @Autowired
+    private SaleMainPage saleMainPage;
+
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public boolean validateDate(String date) {
         String dateRegex = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
@@ -79,17 +79,20 @@ public class SaleController implements PageController{
         return productPrice * amount;
     }
 
-    public LinkedHashSet<String> getProductNames() {
-        return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
     public void populateWithProductNames() {
         saleAddPage.fillProducts(getProductNames());
     }
 
-    @Override
-    public void refreshPage() {
-        //TODO implement
+    private LinkedHashSet<String> getProductNames() {
+        return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public void populateWithSales() {
+        saleMainPage.addSales(getAllSales());
+    }
+
+    private Set<Sale> getAllSales() {
+        return saleService.getAllSales();
     }
 
     public void removeSale(int saleID) {
@@ -100,5 +103,9 @@ public class SaleController implements PageController{
         return saleService.getSaleWithId(saleID);
     }
 
+    @Override
+    public void refreshPage() {
+        //TODO implement
+    }
 }
 

@@ -107,12 +107,9 @@ public class SaleMainPage extends Page {
 
     private JButton createButtonAdd() {
         JButton buttonAddSale = new JButton("Add Sale");
-        buttonAddSale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showPopup(pageNewSale);
-                saleController.populateWithProductNames();
-            }
+        buttonAddSale.addActionListener(e -> {
+            showPopup(pageNewSale);
+            saleController.populateWithProductNames();
         });
         return buttonAddSale;
     }
@@ -144,9 +141,7 @@ public class SaleMainPage extends Page {
     }
 
     public void addSales(Set<Sale> saleSet) {
-        for (Sale sale : saleSet) {
-            addSale(sale);
-        }
+        saleSet.forEach(this::addSale);
     }
 
     public void addSale(Sale sale) {
