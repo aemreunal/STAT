@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.DateFormatter;
-
 /**
  * Created by Uğur Özkan.
  *
@@ -95,7 +93,7 @@ public class SaleController implements PageController{
     }
 
     public void removeSale(int saleID) {
-        //TODO implement
+        saleService.deleteSale(saleID);
     }
 
     public Sale getSale(int saleID) {
