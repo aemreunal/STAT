@@ -55,7 +55,7 @@ public class SalesTests extends StatTest {
         Product product = productService.createNewProduct("test product", 1.0);
         Sale sale = saleService.createNewSale("test customer");
         int amount = 4;
-        sale = saleService.addProduct(sale, product, amount);
+        sale = saleService.addProduct(sale, product.getProductId(), amount);
 
         LinkedHashMap<Product, Integer> productsOfSale = saleService.getProductsOfSale(sale.getSaleId());
 

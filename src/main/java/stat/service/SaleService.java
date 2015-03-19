@@ -62,12 +62,8 @@ public class SaleService {
         return saleRepo.findOne(saleId);
     }
 
-    public Sale addProduct(Integer saleId, Product product, int amount) {
-        Sale sale = this.getSaleWithId(saleId);
-        return this.addProduct(sale, product, amount);
-    }
-
-    public Sale addProduct(Sale sale, Product product, int amount) {
+    public Sale addProduct(Sale sale, Integer productId, int amount) {
+        Product product = productService.getProductWithId(productId);
         sale.addProductToSale(product, amount);
         productService.addSale(product, sale);
         return this.save(sale);

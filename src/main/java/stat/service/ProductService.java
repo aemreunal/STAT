@@ -96,6 +96,11 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public Integer getIdOfProductWithName(String productName) throws ProductNotFoundException {
+        return this.getProductWithName(productName).getProductId();
+    }
+
+    @Transactional(readOnly = true)
     public Set<Product> getProductsWithDescriptionContaining(String productDescription) {
         return productRepo.findByDescriptionContaining(productDescription);
     }

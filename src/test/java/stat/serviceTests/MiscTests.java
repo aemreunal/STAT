@@ -41,10 +41,10 @@ public class MiscTests extends StatTest {
         Sale sale1 = saleService.createNewSale("test customer");
         Sale sale2 = saleService.createNewSale("test customer");
 
-        sale1 = saleService.addProduct(sale1, product1, 4);
-        sale1 = saleService.addProduct(sale1, product2, 4);
+        sale1 = saleService.addProduct(sale1, product1.getProductId(), 4);
+        sale1 = saleService.addProduct(sale1, product2.getProductId(), 4);
 
-        sale2 = saleService.addProduct(sale2, product1, 4);
-        sale2 = saleService.addProduct(sale2, product2, 4);
+        sale2 = saleService.addProduct(sale2, product1.getProductId(), 4);
+        sale2 = saleService.addProduct(sale2, product2.getProductId(), 4);
     }
 }

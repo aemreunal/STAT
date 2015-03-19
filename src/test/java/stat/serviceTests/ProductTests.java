@@ -78,8 +78,8 @@ public class ProductTests extends StatTest {
         Sale sale1 = saleService.createNewSale("test customer");
         Sale sale2 = saleService.createNewSale("test customer");
         int amount = 1;
-        sale1 = saleService.addProduct(sale1, product, amount);
-        sale2 = saleService.addProduct(sale2, product, amount);
+        sale1 = saleService.addProduct(sale1, product.getProductId(), amount);
+        sale2 = saleService.addProduct(sale2, product.getProductId(), amount);
 
         // Updated product object, which reflects the changes made in
         // sales, must be obtained. Therefore, sales are obtained through

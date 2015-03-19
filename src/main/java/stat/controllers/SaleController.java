@@ -12,21 +12,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by Uğur Özkan.
- *
+ * <p>
  * ugur.ozkan@ozu.edu.tr
  */
 
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
-public class SaleController implements PageController{
+public class SaleController implements PageController {
 
     @Autowired
     private SaleService saleService;
@@ -51,8 +50,8 @@ public class SaleController implements PageController{
         Sale sale = saleService.createNewSale(customerName, parseDate(date));
         for (int i = 0; i < products.size(); i++) {
             try {
-                Product product = productService.getProductWithName(products.get(i));
-                sale = saleService.addProduct(sale,product,amounts.get(i));
+                Integer productId = productService.getIdOfProductWithName(products.get(i));
+                sale = saleService.addProduct(sale, productId, amounts.get(i));
             } catch (ProductNotFoundException pnfe) {
                 System.out.println("SaleController pnfe");
             }
@@ -73,7 +72,7 @@ public class SaleController implements PageController{
         double productPrice = 0.0;
         try {
             productPrice = productService.getProductWithName(productName).getPrice().doubleValue();
-        }catch (ProductNotFoundException pnfe){
+        } catch (ProductNotFoundException pnfe) {
             System.out.println("SaleController pnfe");
         }
         return productPrice * amount;
