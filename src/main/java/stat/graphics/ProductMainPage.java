@@ -76,29 +76,23 @@ public class ProductMainPage extends Page {
 
     private JButton createButtonRemove() {
         JButton buttonRemoveProduct = new JButton("Delete Product");
-        buttonRemoveProduct.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO: implement
-            }
+        buttonRemoveProduct.addActionListener(e -> {
+            // TODO: implement
         });
         return buttonRemoveProduct;
     }
 
     private JButton createButtonView() {
         JButton buttonRemoveProduct = new JButton("View Product");
-        buttonRemoveProduct.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int row = productTable.getSelectedRow();
-                if(row != -1) {
-                    ProductViewPage view = new ProductViewPage();
-                    String productName = (String) productTable.getValueAt(row, 0);
-                    String description = (String) productTable.getValueAt(row, 1);
-                    String unitPrice = (String) productTable.getValueAt(row, 2);
-                    view.setFields(productName, description, unitPrice);
-                    showPopup(view);
-                }
+        buttonRemoveProduct.addActionListener(e -> {
+            int row = productTable.getSelectedRow();
+            if(row != -1) {
+                ProductViewPage view = new ProductViewPage();
+                String productName = (String) productTable.getValueAt(row, 0);
+                String description = (String) productTable.getValueAt(row, 1);
+                String unitPrice = (String) productTable.getValueAt(row, 2);
+                view.setFields(productName, description, unitPrice);
+                showPopup(view);
             }
         });
         return buttonRemoveProduct;
@@ -106,12 +100,7 @@ public class ProductMainPage extends Page {
 
     private JButton createButtonAdd() {
         JButton buttonAddProduct = new JButton("Add Product");
-        buttonAddProduct.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showPopup(pageNewProduct);
-            }
-        });
+        buttonAddProduct.addActionListener(e -> showPopup(pageNewProduct));
         return buttonAddProduct;
     }
 
@@ -129,7 +118,7 @@ public class ProductMainPage extends Page {
         for (int rowIndex = 0; rowIndex < numberRows; rowIndex++) {
             tableModel.removeRow(rowIndex);
         }
-        productIDList = new ArrayList<Integer>();
+        productIDList = new ArrayList<>();
     }
 
     public void removeRow(int rowIndex) {
@@ -141,9 +130,7 @@ public class ProductMainPage extends Page {
     }
 
     public void addProducts(Set<Product> productSet) {
-        for (Product product : productSet) {
-            addProduct(product);
-        }
+        productSet.forEach(this::addProduct);
     }
 
     public void addProduct(Product product) {

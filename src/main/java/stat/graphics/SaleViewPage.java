@@ -8,7 +8,9 @@ import javax.swing.table.TableModel;
 import java.awt.*;
 
 /**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer
+ * S000926
+ * eray.tuncer@ozu.edu.tr
  */
 public class SaleViewPage extends Page {
 

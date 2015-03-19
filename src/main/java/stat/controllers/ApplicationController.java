@@ -20,8 +20,16 @@ public class ApplicationController {
     @Autowired
     private ApplicationWindow applicationWindow;
 
+    @Autowired
+    private SaleController saleController;
+
+    @Autowired
+    private ProductController productController;
+
     public void startGui() {
         applicationWindow.display();
+        saleController.populateWithSales();
+        productController.populateWithProducts();
     }
 
     public void changedTab(String tabName) {

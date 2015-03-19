@@ -1,10 +1,14 @@
 package stat.controllers;
 
+import stat.domain.Product;
 import stat.exception.ProductNameException;
 import stat.graphics.ProductAddPage;
+import stat.graphics.ProductMainPage;
 import stat.service.ProductService;
 
 import java.math.BigDecimal;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -21,10 +25,13 @@ import org.springframework.stereotype.Component;
 public class ProductController implements PageController{
 
     @Autowired
-    private ProductAddPage productPage;
+    private ProductService productService;
 
     @Autowired
-    private ProductService productService;
+    private ProductAddPage productAddPage;
+
+    @Autowired
+    private ProductMainPage productMainPage;
 
     public void saveProduct(String productName, String productDescription, BigDecimal productPrice) {
         try {
@@ -33,7 +40,15 @@ public class ProductController implements PageController{
             System.out.println("productController pne ");
         }
 
-        productPage.clearInputFields();
+        productAddPage.clearInputFields();
+    }
+
+    public void populateWithProducts() {
+        productMainPage.addProducts(getAllProducts());
+    }
+
+    private Set<Product> getAllProducts() {
+        return productService.getAllProducts();
     }
 
     public void removeProduct(int productID) {

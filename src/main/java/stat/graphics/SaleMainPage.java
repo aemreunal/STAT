@@ -10,8 +10,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -25,13 +23,13 @@ import java.util.Set;
 public class SaleMainPage extends Page {
 
     @Autowired
-    private SaleController saleController; // TODO: make use of
+    private SaleController saleController;
 
     @Autowired
     private SaleAddPage pageNewSale;
 
     private JTable saleTable;
-    private ArrayList<Integer> saleIDList = new ArrayList<Integer>();
+    private ArrayList<Integer> saleIDList = new ArrayList<>();
 
     public SaleMainPage() {
         initPage();
@@ -76,13 +74,10 @@ public class SaleMainPage extends Page {
 
     private JButton createButtonRemove() {
         JButton buttonRemoveSale = new JButton("Delete Sale");
-        buttonRemoveSale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (saleTable.getSelectedRowCount() > 0) {
-                    int rowIndex = saleTable.getSelectedRow();
-                    removeRow(rowIndex);
-                }
+        buttonRemoveSale.addActionListener(e -> {
+            if (saleTable.getSelectedRowCount() > 0) {
+                int rowIndex = saleTable.getSelectedRow();
+                removeRow(rowIndex);
             }
         });
         return buttonRemoveSale;
@@ -90,16 +85,13 @@ public class SaleMainPage extends Page {
 
     private JButton createButtonView() {
         JButton buttonViewSale = new JButton("View Sale");
-        buttonViewSale.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (saleTable.getSelectedRowCount() > 0) {
-                    int rowIndex = saleTable.getSelectedRow();
+        buttonViewSale.addActionListener(e -> {
+            if (saleTable.getSelectedRowCount() > 0) {
+                int rowIndex = saleTable.getSelectedRow();
 
-                    SaleViewPage viewPage = new SaleViewPage();
-                    viewPage.setSale(saleController.getSale(saleIDList.get(rowIndex)));
-                    showPopup(viewPage);
-                }
+                SaleViewPage viewPage = new SaleViewPage();
+                viewPage.setSale(saleController.getSale(saleIDList.get(rowIndex)));
+                showPopup(viewPage);
             }
         });
         return buttonViewSale;
@@ -128,7 +120,7 @@ public class SaleMainPage extends Page {
         for (int rowIndex = 0; rowIndex < numberRows; rowIndex++) {
             tableModel.removeRow(rowIndex);
         }
-        saleIDList = new ArrayList<Integer>();
+        saleIDList = new ArrayList<>();
     }
 
     public void removeRow(int rowIndex) {
