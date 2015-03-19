@@ -17,7 +17,9 @@ import org.springframework.stereotype.Component;
 import stat.controllers.SaleController;
 
 /**
- * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
+ * Created by Burcu Basak SARIKAYA
+ * S000855
+ * burcu.sarikaya@ozu.edu.tr
  */
 
 @Component

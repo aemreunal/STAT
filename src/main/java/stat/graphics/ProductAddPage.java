@@ -148,7 +148,7 @@ public class ProductAddPage extends Page {
         valid &= (nameField.getText().length() > 0);
         valid &= (descriptionField.getText().length() > 0);
         valid &= (price.length() > 0);
-        valid &= ((price.contains(".")) ? (price.substring(price.indexOf(".") + 1).length() <= 4) : true);
+        valid &= ((!price.contains(".")) || (price.substring(price.indexOf(".") + 1).length() <= 4));
         return valid;
     }
 

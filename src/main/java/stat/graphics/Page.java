@@ -5,7 +5,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer
+ * S000926
+ * eray.tuncer@ozu.edu.tr
  */
 
 @Component

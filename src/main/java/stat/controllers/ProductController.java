@@ -51,8 +51,12 @@ public class ProductController implements PageController{
         return productService.getAllProducts();
     }
 
-    public void removeProduct(int productID) {
-        // TODO: implement
+    public void removeProduct(int productId) {
+        productService.deleteProduct(productId);
+    }
+
+    public Product getProduct(int productId) {
+        return productService.getProductWithId(productId);
     }
 
     @Override

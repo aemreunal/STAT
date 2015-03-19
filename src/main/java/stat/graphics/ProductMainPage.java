@@ -4,12 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import stat.controllers.ProductController;
 import stat.domain.Product;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -25,13 +24,13 @@ import java.util.Set;
 public class ProductMainPage extends Page {
 
     @Autowired
-    private ProductController productController; // TODO: make use of
+    private ProductController productController;
 
     @Autowired
     private ProductAddPage pageNewProduct;
 
     private JTable productTable;
-    private ArrayList<Integer> productIDList = new ArrayList<Integer>();
+    private ArrayList<Integer> productIDList = new ArrayList<>();
 
     public ProductMainPage() {
         initPage();

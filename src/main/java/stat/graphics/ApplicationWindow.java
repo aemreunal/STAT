@@ -13,7 +13,9 @@ import stat.controllers.ApplicationController;
 import java.awt.*;
 
 /**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer
+ * S000926
+ * eray.tuncer@ozu.edu.tr
  */
 
 @Component
@@ -61,13 +63,10 @@ public class ApplicationWindow extends JFrame {
     }
 
     private ChangeListener createChangeListener() {
-        return new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JTabbedPane tab = (JTabbedPane) e.getSource();
-                String tabName = tab.getTitleAt(tab.getSelectedIndex());
-                applicationController.changedTab(tabName);
-            }
+        return e -> {
+            JTabbedPane tab = (JTabbedPane) e.getSource();
+            String tabName = tab.getTitleAt(tab.getSelectedIndex());
+            applicationController.changedTab(tabName);
         };
     }
 

@@ -14,7 +14,9 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer
+ * S000926
+ * eray.tuncer@ozu.edu.tr
  */
 
 @Component
