@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 public class SaleController implements PageController{
 
     @Autowired
-    private SaleAddPage salePage;
+    private SaleAddPage saleAddPage;
 
     @Autowired
     private SaleService saleService;
@@ -37,6 +37,11 @@ public class SaleController implements PageController{
 
     public Set<Sale> getAllSales() {
         return saleService.getAllSales();
+    }
+
+    public boolean validateDate(String date) {
+
+        return false;
     }
 
     public void saveSale() {
@@ -63,6 +68,10 @@ public class SaleController implements PageController{
 
     public LinkedHashSet<String> getProductNames() {
         return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public void populateWithProductNames() {
+        saleAddPage.fillProducts(getProductNames());
     }
 
     @Override

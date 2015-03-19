@@ -111,6 +111,7 @@ public class SaleMainPage extends Page {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showPopup(pageNewSale);
+                saleController.populateWithProductNames();
             }
         });
         return buttonAddSale;
