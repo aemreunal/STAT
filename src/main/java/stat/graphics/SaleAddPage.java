@@ -3,6 +3,10 @@ package stat.graphics;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Arc2D;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -86,7 +90,7 @@ public class SaleAddPage extends Page {
         labelDate.setFont(new Font("Tahoma", Font.BOLD, 13));
         labelDate.setBounds(29, 109, 125, 24);
 
-        dateField = new JTextField("dd.mm.yyyy");
+        dateField = new JTextField("yyyy-MM-dd");
         dateField.setBounds(164, 111, 201, 22);
 
         add(labelDate);
@@ -192,7 +196,26 @@ public class SaleAddPage extends Page {
         textfieldTotalPrice.setText("" + totalPrice);
     }
 
+    private ArrayList<String> getProducts() {
+        ArrayList<String> productNames = new ArrayList<>();
+        for(int row = 0; row < saleProductTable.getRowCount(); row++) {
+            String productName = (String) saleProductTable.getValueAt(row, 0);
+            productNames.add(productName);
+        }
+        return productNames;
+    }
+
+    private ArrayList<Integer> getAmounts() {
+        ArrayList<Integer> productAmounts = new ArrayList<>();
+        for(int row = 0; row < saleProductTable.getRowCount(); row++) {
+            int productAmount = (int) saleProductTable.getValueAt(row, 1);
+            productAmounts.add(productAmount);
+        }
+        return productAmounts;
+    }
+
     private class ButtonListener implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             ApplicationWindow appWindow = getApplicationWindow();
@@ -206,7 +229,13 @@ public class SaleAddPage extends Page {
                 } else if (sourceOfAction.equals(buttonRemove)) {
                     removeProductFromSale();
                 } else if (sourceOfAction.equals(confirmButton)) {
-                    // TODO: implement
+                    boolean isDateValid = saleController.validateDate(dateField.getText());
+                    if (isDateValid) {
+                        //saveSale(); //TODO Fix LazyInitializationException
+                        //TODO close
+                    } else {
+                        //TODO invalid date. Show wrong format popup
+                    }
                 }
             }
         }
@@ -232,5 +261,8 @@ public class SaleAddPage extends Page {
             updateTotalPrice();
         }
 
+        private void saveSale() {
+            saleController.saveSale(textfieldCustomerName.getText(), dateField.getText(), getProducts(), getAmounts());
+        }
     }
 }

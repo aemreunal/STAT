@@ -7,13 +7,16 @@ import stat.graphics.SaleAddPage;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+
+import javax.swing.text.DateFormatter;
 
 /**
  * Created by Uğur Özkan.
@@ -35,25 +38,37 @@ public class SaleController implements PageController{
     @Autowired
     private ProductService productService;
 
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
     public Set<Sale> getAllSales() {
         return saleService.getAllSales();
     }
 
     public boolean validateDate(String date) {
-
-        return false;
+        String dateRegex = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
+        return date.matches(dateRegex) ? true : false;
     }
 
-    public void saveSale() {
-        //TODO fix
-       /* Product product = productService.createNewProduct("test product", 1.0);
-        Sale sale = saleService.createNewSale("test customer");
-        int amount = 4;
+    public void saveSale(String customerName, String date, ArrayList<String> products, ArrayList<Integer> amounts) {
+        Sale sale = saleService.createNewSale(customerName, parseDate(date));
+        for (int i = 0; i < products.size(); i++) {
+            try {
+                Product product = productService.getProductWithName(products.get(i));
+                sale = saleService.addProduct(sale,product,amounts.get(i));
+            } catch (ProductNotFoundException pnfe) {
+                System.out.println("SaleController pnfe");
+            }
+        }
+    }
 
-        sale = saleService.addProduct(sale, product, amount);
-        saleService.createNewSale("Customer Name");
-        saleService.addProduct()
-        */
+    private Date parseDate(String date) {
+        try {
+            return dateFormatter.parse(date);
+        } catch (ParseException pe) {
+            System.out.println("SaleController pe");
+        }
+
+        return null;
     }
 
     public double calculatePrice(String productName, int amount) {
