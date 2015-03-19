@@ -89,7 +89,7 @@ public class ProductMainPage extends Page {
                 ProductViewPage view = new ProductViewPage();
                 String productName = (String) productTable.getValueAt(row, 0);
                 String description = (String) productTable.getValueAt(row, 1);
-                String unitPrice = (String) productTable.getValueAt(row, 2);
+                String unitPrice = productTable.getValueAt(row, 2).toString();
                 view.setFields(productName, description, unitPrice);
                 showPopup(view);
             }
