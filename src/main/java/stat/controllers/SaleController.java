@@ -44,7 +44,7 @@ public class SaleController implements PageController{
 
     public boolean validateDate(String date) {
         String dateRegex = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
-        return date.matches(dateRegex) ? true : false;
+        return date.matches(dateRegex);
     }
 
     public void saveSale(String customerName, String date, ArrayList<String> products, ArrayList<Integer> amounts) {
@@ -97,8 +97,7 @@ public class SaleController implements PageController{
     }
 
     public Sale getSale(int saleID) {
-        //TODO implement
-        return null;
+        return saleService.getSaleWithId(saleID);
     }
 
 }
