@@ -8,7 +8,6 @@ import stat.service.ProductService;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -69,6 +68,6 @@ public class ProductController implements PageController{
 
     @Override
     public void refreshPage() {
-        //TODO implements
+        productMainPage.refreshTable();
     }
 }

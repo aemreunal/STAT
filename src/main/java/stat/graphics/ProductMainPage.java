@@ -51,9 +51,7 @@ public class ProductMainPage extends Page {
     }
 
     private TableModel getProductTableModel() {
-        // TODO: Remove static data
-        Object[][] data = { {"elma", "Amasya Elması", "3.5"},
-                {"armut", "Deveci armudu", "5.99"}};
+        Object[][] data = { };
         String[] columnNames = {"Product Name", "Description", "Unit Price"};
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {
@@ -77,15 +75,17 @@ public class ProductMainPage extends Page {
         JButton buttonRemoveProduct = new JButton("Delete Product");
         buttonRemoveProduct.addActionListener(e -> {
             // TODO: implement
+
+            refreshTable();
         });
         return buttonRemoveProduct;
     }
 
     private JButton createButtonView() {
-        JButton buttonRemoveProduct = new JButton("View Product");
-        buttonRemoveProduct.addActionListener(e -> {
+        JButton buttonViewProduct = new JButton("View Product");
+        buttonViewProduct.addActionListener(e -> {
             int row = productTable.getSelectedRow();
-            if(row != -1) {
+            if (row != -1) {
                 ProductViewPage view = new ProductViewPage();
                 String productName = (String) productTable.getValueAt(row, 0);
                 String description = (String) productTable.getValueAt(row, 1);
@@ -94,7 +94,7 @@ public class ProductMainPage extends Page {
                 showPopup(view);
             }
         });
-        return buttonRemoveProduct;
+        return buttonViewProduct;
     }
 
     private JButton createButtonAdd() {
@@ -113,10 +113,7 @@ public class ProductMainPage extends Page {
 
     public void emptyProducts() {
         DefaultTableModel tableModel = (DefaultTableModel) productTable.getModel();
-        int numberRows = tableModel.getRowCount();
-        for (int rowIndex = 0; rowIndex < numberRows; rowIndex++) {
-            tableModel.removeRow(rowIndex);
-        }
+        tableModel.setRowCount(0);
         productIDList = new ArrayList<>();
     }
 
@@ -143,4 +140,9 @@ public class ProductMainPage extends Page {
         productIDList.add(product.getProductId());
     }
 
+    public void refreshTable() {
+        emptyProducts();
+        productController.populateWithProducts();
+        productTable.repaint();
+    }
 }

@@ -179,6 +179,7 @@ public class ProductAddPage extends Page {
                 if (sourceOfAction.equals(saveButton)) {
                     if (validateFields()) {
                         saveProduct();
+                        productController.refreshPage();
                         displaySuccess();
                     } else {
                         displayValidationError();
