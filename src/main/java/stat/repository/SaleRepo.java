@@ -18,7 +18,6 @@ package stat.repository;
 
 import stat.domain.Sale;
 
-import java.util.Date;
 import java.util.Set;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.CrudRepository;
@@ -28,5 +27,5 @@ public interface SaleRepo extends CrudRepository<Sale, Integer>, JpaSpecificatio
     Set<Sale> findAll();
 
     // http://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
-    Set<Sale> findByDateBetween(Date begin, Date end);
+//    Set<Sale> findByDateBetweenOrderByDateAsc(Date begin, Date end);
 }
