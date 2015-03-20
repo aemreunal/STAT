@@ -74,8 +74,10 @@ public class ProductMainPage extends Page {
     private JButton createButtonRemove() {
         JButton buttonRemoveProduct = new JButton("Delete Product");
         buttonRemoveProduct.addActionListener(e -> {
-            // TODO: implement
-
+            if(productTable.getSelectedRow() != -1) {
+                //TODO: Confirm option can be added.
+                removeRow(productTable.getSelectedRow());
+            }
             refreshTable();
         });
         return buttonRemoveProduct;
