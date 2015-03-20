@@ -52,9 +52,7 @@ public class SaleMainPage extends Page {
     }
 
     private TableModel getSaleTableModel() {
-        // TODO: Remove static data
-        Object[][] data = { {"Eray Tuncer", "11.11.1111", "599.99"},
-                            {"Burcu sarikyaa", "11.11.1111", "599.99"}};
+        Object[][] data = { };
         String[] columnNames = {"Customer Name", "Date", "Total Price"};
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {
@@ -80,6 +78,7 @@ public class SaleMainPage extends Page {
             if (saleTable.getSelectedRowCount() > 0) {
                 int rowIndex = saleTable.getSelectedRow();
                 removeRow(rowIndex);
+                refreshTable();
             }
         });
         return buttonRemoveSale;
@@ -118,10 +117,7 @@ public class SaleMainPage extends Page {
 
     public void emptySales() {
         DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
-        int numberRows = tableModel.getRowCount();
-        for (int rowIndex = 0; rowIndex < numberRows; rowIndex++) {
-            tableModel.removeRow(rowIndex);
-        }
+        tableModel.setRowCount(0);
         saleIDList = new ArrayList<>();
     }
 
@@ -147,6 +143,12 @@ public class SaleMainPage extends Page {
 
         tableModel.addRow(saleRow);
         saleIDList.add(sale.getSaleId());
+    }
+
+    public void refreshTable() {
+        emptySales();
+        saleController.populateWithSales();
+        saleTable.repaint();
     }
 
 }

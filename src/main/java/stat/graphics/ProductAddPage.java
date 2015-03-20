@@ -181,8 +181,10 @@ public class ProductAddPage extends Page {
                         saveProduct();
                         productController.refreshPage();
                         displaySuccess();
+                        //TODO close maybe?
                     } else {
                         displayValidationError();
+                        //TODO ask again
                     }
                 } else if (sourceOfAction.equals(backButton)) {
                     // TODO: change the functionality

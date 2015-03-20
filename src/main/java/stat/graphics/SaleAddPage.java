@@ -216,6 +216,17 @@ public class SaleAddPage extends Page {
         return productAmounts;
     }
 
+    private void displaySuccess() {
+        JOptionPane.showMessageDialog(this, "The Sale was successfully saved.");
+    }
+
+    private void displayValidationError() {
+        JOptionPane.showMessageDialog(this,
+                "Enter the fields correctly.",
+                "Validation Error",
+                JOptionPane.ERROR_MESSAGE);
+    }
+
     private class ButtonListener implements ActionListener {
 
         @Override
@@ -233,10 +244,13 @@ public class SaleAddPage extends Page {
                 } else if (sourceOfAction.equals(confirmButton)) {
                     boolean isDateValid = saleController.validateDate(dateField.getText());
                     if (isDateValid) {
-                        saveSale(); //TODO Fix LazyInitializationException
+                        saveSale();
+                        saleController.refreshPage();
+                        displaySuccess();
                         //TODO close
                     } else {
-                        //TODO invalid date. Show wrong format popup
+                        displayValidationError();
+                        //TODO ask again
                     }
                 }
             }

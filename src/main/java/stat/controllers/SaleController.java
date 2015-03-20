@@ -109,7 +109,7 @@ public class SaleController implements PageController {
 
     @Override
     public void refreshPage() {
-        //TODO implement
+        saleMainPage.refreshTable();
     }
 }
 
