@@ -136,14 +136,17 @@ public class SaleAddPage extends Page {
             }
 
             public void setValueAt(Object aValue, int row, int column) {
-                if (isCellEditable(row, column)) {
+                if (column == 1) {
                     String regex = "[0-9]+";
                     String value = (String) aValue;
                     if (value.matches(regex)) {
                         super.setValueAt(aValue, row, column);
+                        String productName = (String) saleProductTable.getValueAt(row, 0);
+                        double price = saleController.calculatePrice(productName, Integer.parseInt((value)));
+                        saleProductTable.setValueAt("" + price, row, 2);
                         updateTotalPrice();
                     }
-                }
+                } else { super.setValueAt(aValue, row, column); }
             }
         };
     }
@@ -193,7 +196,7 @@ public class SaleAddPage extends Page {
     private void updateTotalPrice() {
         double totalPrice = 0;
         for(int row = 0; row < saleProductTable.getRowCount(); row++) {
-            totalPrice += (double) saleProductTable.getValueAt(row, 2);
+            totalPrice += Double.parseDouble((String) saleProductTable.getValueAt(row, 2));
         }
         textfieldTotalPrice.setText("" + totalPrice);
     }
@@ -262,7 +265,7 @@ public class SaleAddPage extends Page {
                 String productName = (String) productTable.getValueAt(row, 0);
                 ((DefaultTableModel) productTable.getModel()).removeRow(row);
                 double unitPrice = saleController.calculatePrice(productName, 1);
-                ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[]{productName, 1, unitPrice});
+                ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[]{productName, 1, "" + unitPrice});
             }
             updateTotalPrice();
         }
