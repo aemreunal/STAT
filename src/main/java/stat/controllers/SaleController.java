@@ -107,6 +107,10 @@ public class SaleController implements PageController {
         return getAllSales().stream().sorted().collect(Collectors.toCollection(HashSet<Sale>::new));
     }
 
+    public LinkedHashMap<Product, Integer> getProductOfSale(Integer saleId) {
+        return saleService.getProductsOfSale(saleId);
+    }
+
     @Override
     public void refreshPage() {
         saleMainPage.refreshTable();
