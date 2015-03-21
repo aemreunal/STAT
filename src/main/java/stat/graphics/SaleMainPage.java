@@ -1,22 +1,20 @@
 package stat.graphics;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 import stat.controllers.SaleController;
 import stat.domain.Sale;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Set;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 /**
- * Created by Eray Tuncer
- * S000926
- * eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
  */
 
 @Component
@@ -53,7 +51,7 @@ public class SaleMainPage extends Page {
 
     private TableModel getSaleTableModel() {
         Object[][] data = { };
-        String[] columnNames = {"Customer Name", "Date", "Total Price"};
+        String[] columnNames = { "Customer Name", "Date", "Total Price" };
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {
                 return false;

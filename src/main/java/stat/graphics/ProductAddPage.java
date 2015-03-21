@@ -14,10 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
- * Created by Eray Tuncer
- * S000926
- * eray.tuncer@ozu.edu.tr
- *
+ * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
  */
 
 @Component
@@ -135,7 +132,7 @@ public class ProductAddPage extends Page {
         add(backButton);
     }
 
-    public void clearInputFields(){
+    public void clearInputFields() {
         nameField.setText(null);
         descriptionField.setText(null);
         priceField.setText(null);
@@ -165,9 +162,9 @@ public class ProductAddPage extends Page {
 
     private void displayValidationError() {
         JOptionPane.showMessageDialog(this,
-                "Enter the fields correctly.",
-                "Validation Error",
-                JOptionPane.ERROR_MESSAGE);
+                                      "Enter the fields correctly.",
+                                      "Validation Error",
+                                      JOptionPane.ERROR_MESSAGE);
     }
 
     private class ButtonListener implements ActionListener {

@@ -1,19 +1,16 @@
 package stat.graphics;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.*;
 import stat.domain.Sale;
 
+import java.awt.*;
+import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import java.awt.*;
-import java.util.Date;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 /**
- * Created by Eray Tuncer
- * S000926
- * eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
  */
 @org.springframework.stereotype.Component
 // Required to not run this class in a test environment
@@ -91,8 +88,8 @@ public class SaleViewPage extends Page {
     }
 
     private TableModel createTableModel() {
-        Object[][] data = {};
-        String[] columnNames = {"Product Name", "Amount", "Price"};
+        Object[][] data = { };
+        String[] columnNames = { "Product Name", "Amount", "Price" };
         return new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {
                 return false;

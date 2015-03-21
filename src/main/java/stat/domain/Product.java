@@ -26,24 +26,10 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "products")
 public class Product {
-    public static final int NAME_MAX_LENGTH        = 50;
-    public static final int DESCRIPTION_MAX_LENGTH = 200;
-    public static final int PRICE_TOTAL_PRECISION = 16;
+    public static final int NAME_MAX_LENGTH         = 50;
+    public static final int DESCRIPTION_MAX_LENGTH  = 200;
+    public static final int PRICE_TOTAL_PRECISION   = 16;
     public static final int PRICE_DECIMAL_PRECISION = 4;
-
-    // Empty constructor, required by Hibernate
-    public Product() {
-    }
-
-    public Product(String name, BigDecimal price) {
-        this(name, "", price);
-    }
-
-    public Product(String name, String description, BigDecimal price) {
-        this.name = name;
-        this.description = description;
-        this.price = price;
-    }
 
     @Id
     @Column(name = "product_id")
@@ -67,6 +53,20 @@ public class Product {
             fetch = FetchType.LAZY)
     @OrderBy("saleId")
     private Set<Sale> sales = new LinkedHashSet<Sale>();
+
+    // Empty constructor, required by Hibernate
+    public Product() {
+    }
+
+    public Product(String name, BigDecimal price) {
+        this(name, "", price);
+    }
+
+    public Product(String name, String description, BigDecimal price) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+    }
 
     // Getters & Setters
 

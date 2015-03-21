@@ -1,16 +1,13 @@
 package stat.graphics;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import java.awt.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 /**
- * Created by Burcu Basak SARIKAYA on 3/18/2015.
- * S000855
- * burcu.sarikaya@ozu.edu.tr
+ * Created by Burcu Basak SARIKAYA on 3/18/2015. S000855 burcu.sarikaya@ozu.edu.tr
  */
 
 @org.springframework.stereotype.Component
@@ -18,7 +15,7 @@ import java.awt.*;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ProductViewPage extends Page {
 
-    private JPanel fieldHolder;
+    private JPanel     fieldHolder;
     private JTextField nameField;
     private JTextField descriptionField;
     private JTextField priceField;
@@ -92,7 +89,7 @@ public class ProductViewPage extends Page {
         fieldHolder.add(priceField);
     }
 
-    public void setFields(String productName, String description, String unitPrice){
+    public void setFields(String productName, String description, String unitPrice) {
         nameField.setText(productName);
         descriptionField.setText(description);
         priceField.setText(unitPrice);

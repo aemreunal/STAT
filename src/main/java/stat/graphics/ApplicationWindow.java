@@ -1,21 +1,17 @@
 package stat.graphics;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 import stat.controllers.ApplicationController;
 
 import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 /**
- * Created by Eray Tuncer
- * S000926
- * eray.tuncer@ozu.edu.tr
+ * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
  */
 
 @Component
@@ -35,7 +31,7 @@ public class ApplicationWindow extends JFrame {
     @Autowired
     private ProductMainPage productMainPage;
 
-    private JPanel contentPane;
+    private JPanel      contentPane;
     private JTabbedPane pageTab;
 
     public ApplicationWindow() {
@@ -55,7 +51,7 @@ public class ApplicationWindow extends JFrame {
 
     private void initTabs() {
         pageTab = new JTabbedPane(JTabbedPane.TOP);
-        pageTab.addTab(TAB_SALES  , new JPanel());
+        pageTab.addTab(TAB_SALES, new JPanel());
         pageTab.addTab(TAB_PRODUCT, new JPanel());
         pageTab.addChangeListener(createChangeListener());
 

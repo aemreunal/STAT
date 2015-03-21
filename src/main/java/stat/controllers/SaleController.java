@@ -9,7 +9,6 @@ import stat.graphics.SaleViewPage;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -29,23 +28,17 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class SaleController implements PageController {
 
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     @Autowired
     private SaleService saleService;
-
     @Autowired
     private ProductService productService;
-
     @Autowired
     private SaleAddPage saleAddPage;
-
     @Autowired
     private SaleMainPage saleMainPage;
-
     @Autowired
     private SaleViewPage saleViewPage;
-
-    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-
 
     // SaleAddPage methods
     public boolean validateDate(String date) {
@@ -133,7 +126,6 @@ public class SaleController implements PageController {
             saleViewPage.addProductDetailsToTable(productName, amount, price);
         }
     }
-
 
 
     public HashSet<Sale> getSortedSales() {

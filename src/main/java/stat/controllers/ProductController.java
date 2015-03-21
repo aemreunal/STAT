@@ -10,21 +10,20 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 /**
  * Created by Uğur Özkan.
- *
+ * <p>
  * ugur.ozkan@ozu.edu.tr
  */
 
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
-public class ProductController implements PageController{
+public class ProductController implements PageController {
 
     @Autowired
     private ProductService productService;

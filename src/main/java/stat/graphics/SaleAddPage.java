@@ -1,12 +1,11 @@
 package stat.graphics;
 
+import stat.controllers.SaleController;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.Arc2D;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,12 +13,9 @@ import javax.swing.table.TableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import stat.controllers.SaleController;
 
 /**
- * Created by Burcu Basak SARIKAYA
- * S000855
- * burcu.sarikaya@ozu.edu.tr
+ * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
  */
 
 @Component
@@ -33,14 +29,14 @@ public class SaleAddPage extends Page {
     @Autowired
     private Page menuPage;
 
-    private JTextField     textfieldCustomerName;
-    private JTable         productTable, saleProductTable;
-    private JTextField     textfieldTotalPrice;
-    private JTextField     dateField;
-    private JButton        backButton, confirmButton;
+    private JTextField textfieldCustomerName;
+    private JTable     productTable, saleProductTable;
+    private JTextField textfieldTotalPrice;
+    private JTextField dateField;
+    private JButton    backButton, confirmButton;
     private ButtonListener buttonListener;
-    private JButton		   buttonAdd, buttonRemove;
-    private JScrollPane    productListPane, saleProductListPane;
+    private JButton        buttonAdd, buttonRemove;
+    private JScrollPane productListPane, saleProductListPane;
 
     public SaleAddPage() {
         buttonListener = new ButtonListener();
@@ -107,8 +103,8 @@ public class SaleAddPage extends Page {
     }
 
     private TableModel getProductTableModel() {
-        String[] columnNames = {"Product"};
-        return new DefaultTableModel(new Object[][]{}, columnNames) {
+        String[] columnNames = { "Product" };
+        return new DefaultTableModel(new Object[][] { }, columnNames) {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -116,8 +112,8 @@ public class SaleAddPage extends Page {
     }
 
     public void fillProducts(Set<String> productNames) {
-        for(String productName : productNames) {
-            ((DefaultTableModel) productTable.getModel()).addRow(new Object[]{productName});
+        for (String productName : productNames) {
+            ((DefaultTableModel) productTable.getModel()).addRow(new Object[] { productName });
         }
     }
 
@@ -129,8 +125,8 @@ public class SaleAddPage extends Page {
     }
 
     private TableModel getSaleTableModel() {
-        String[] columnNames = {"Product", "Amount", "Price"};
-        return new DefaultTableModel(new Object[][]{}, columnNames) {
+        String[] columnNames = { "Product", "Amount", "Price" };
+        return new DefaultTableModel(new Object[][] { }, columnNames) {
             public boolean isCellEditable(int row, int column) {
                 return (column == 1);
             }
@@ -146,7 +142,9 @@ public class SaleAddPage extends Page {
                         saleProductTable.setValueAt("" + price, row, 2);
                         updateTotalPrice();
                     }
-                } else { super.setValueAt(aValue, row, column); }
+                } else {
+                    super.setValueAt(aValue, row, column);
+                }
             }
         };
     }
@@ -195,7 +193,7 @@ public class SaleAddPage extends Page {
 
     private void updateTotalPrice() {
         double totalPrice = 0;
-        for(int row = 0; row < saleProductTable.getRowCount(); row++) {
+        for (int row = 0; row < saleProductTable.getRowCount(); row++) {
             totalPrice += Double.parseDouble((String) saleProductTable.getValueAt(row, 2));
         }
         textfieldTotalPrice.setText("" + totalPrice);
@@ -203,7 +201,7 @@ public class SaleAddPage extends Page {
 
     private ArrayList<String> getProducts() {
         ArrayList<String> productNames = new ArrayList<>();
-        for(int row = 0; row < saleProductTable.getRowCount(); row++) {
+        for (int row = 0; row < saleProductTable.getRowCount(); row++) {
             String productName = (String) saleProductTable.getValueAt(row, 0);
             productNames.add(productName);
         }
@@ -212,7 +210,7 @@ public class SaleAddPage extends Page {
 
     private ArrayList<Integer> getAmounts() {
         ArrayList<Integer> productAmounts = new ArrayList<>();
-        for(int row = 0; row < saleProductTable.getRowCount(); row++) {
+        for (int row = 0; row < saleProductTable.getRowCount(); row++) {
             int productAmount = Integer.parseInt((String) saleProductTable.getValueAt(row, 1));
             productAmounts.add(productAmount);
         }
@@ -225,9 +223,9 @@ public class SaleAddPage extends Page {
 
     private void displayValidationError() {
         JOptionPane.showMessageDialog(this,
-                "Enter the fields correctly.",
-                "Validation Error",
-                JOptionPane.ERROR_MESSAGE);
+                                      "Enter the fields correctly.",
+                                      "Validation Error",
+                                      JOptionPane.ERROR_MESSAGE);
     }
 
     private class ButtonListener implements ActionListener {
@@ -261,21 +259,21 @@ public class SaleAddPage extends Page {
 
         private void addProductToSale() {
             int row = productTable.getSelectedRow();
-            if(row != -1) {
+            if (row != -1) {
                 String productName = (String) productTable.getValueAt(row, 0);
                 ((DefaultTableModel) productTable.getModel()).removeRow(row);
                 double unitPrice = saleController.calculatePrice(productName, 1);
-                ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[]{productName, 1, "" + unitPrice});
+                ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[] { productName, 1, "" + unitPrice });
             }
             updateTotalPrice();
         }
 
         private void removeProductFromSale() {
             int row = saleProductTable.getSelectedRow();
-            if(row != -1) {
+            if (row != -1) {
                 String productName = (String) saleProductTable.getValueAt(row, 0);
                 ((DefaultTableModel) saleProductTable.getModel()).removeRow(row);
-                ((DefaultTableModel) productTable.getModel()).addRow(new Object[]{productName});
+                ((DefaultTableModel) productTable.getModel()).addRow(new Object[] { productName });
             }
             updateTotalPrice();
         }

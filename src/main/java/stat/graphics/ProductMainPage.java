@@ -1,21 +1,19 @@
 package stat.graphics;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import stat.controllers.ProductController;
 import stat.domain.Product;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Set;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 /**
- * Created by Burcu Basak SARIKAYA on 3/18/2015.
- * S000855
- * burcu.sarikaya@ozu.edu.tr
+ * Created by Burcu Basak SARIKAYA on 3/18/2015. S000855 burcu.sarikaya@ozu.edu.tr
  */
 
 @org.springframework.stereotype.Component
@@ -52,7 +50,7 @@ public class ProductMainPage extends Page {
 
     private TableModel getProductTableModel() {
         Object[][] data = { };
-        String[] columnNames = {"Product Name", "Description", "Unit Price"};
+        String[] columnNames = { "Product Name", "Description", "Unit Price" };
         DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -74,7 +72,7 @@ public class ProductMainPage extends Page {
     private JButton createButtonRemove() {
         JButton buttonRemoveProduct = new JButton("Delete Product");
         buttonRemoveProduct.addActionListener(e -> {
-            if(productTable.getSelectedRow() != -1) {
+            if (productTable.getSelectedRow() != -1) {
                 //TODO: Confirm option can be added.
                 removeRow(productTable.getSelectedRow());
             }

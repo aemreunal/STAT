@@ -27,13 +27,6 @@ import javax.validation.constraints.Size;
 public class Sale {
     public static final int CUSTOMER_NAME_MAX_LENGTH = 150;
 
-    // Empty constructor, required by Hibernate
-    public Sale() {}
-
-    public Sale(String customerName) {
-        this.customerName = customerName;
-    }
-
     @Id
     @Column(name = "sale_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -61,6 +54,14 @@ public class Sale {
 
     @Column(name = "date", nullable = false)
     private Date date = null;
+
+    // Empty constructor, required by Hibernate
+    public Sale() {
+    }
+
+    public Sale(String customerName) {
+        this.customerName = customerName;
+    }
 
     // Helper methods
 
