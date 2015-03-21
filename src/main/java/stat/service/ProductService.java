@@ -20,6 +20,7 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNameException;
 import stat.exception.ProductNotFoundException;
+import stat.exception.SoldProductDeletionException;
 import stat.repository.ProductRepo;
 
 import java.math.BigDecimal;
@@ -101,6 +102,24 @@ public class ProductService {
         return product.getSales().stream().collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    /**
+     * WARNING: DO NOT USE THIS METHOD.
+     * <p>
+     * This method is public only be used by the {@link stat.service.SaleService#addProduct(stat.domain.Sale,
+     * Integer, int) addProduct} method of the {@link stat.service.SaleService
+     * SaleService}. It is otherwise an internal and private method.
+     * <p>
+     * To add products to a sale, please use the {@link stat.service.SaleService#addProduct(stat.domain.Sale,
+     * Integer, int) addProduct} method of the {@link stat.service.SaleService
+     * SaleService}.
+     *
+     * @param product
+     *         The product to add to the sale.
+     * @param sale
+     *         The sale to add the product to.
+     *
+     * @return The updated {@link stat.domain.Product Product}.
+     */
     public Product addSale(Product product, Sale sale) {
         product.getSales().add(sale);
         return this.save(product);
@@ -153,12 +172,13 @@ public class ProductService {
         return products;
     }
 
-    public void deleteProduct(Integer productId) {
+    public void deleteProduct(Integer productId) throws SoldProductDeletionException {
+        LinkedHashSet<Sale> salesOfProduct = this.getSalesOfProduct(productId);
+        if (salesOfProduct.size() != 0) {
+            Sale sale = salesOfProduct.stream().findAny().get();
+            throw new SoldProductDeletionException(productId, sale);
+        }
         productRepo.delete(productId);
-    }
-
-    public void deleteProduct(Product product) {
-        productRepo.delete(product);
     }
 
     private Specification<Product> productWithSpecification(String name, String description, Double minPrice, Double maxPrice) {

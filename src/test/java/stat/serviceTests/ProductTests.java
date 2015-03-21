@@ -21,6 +21,7 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.exception.ProductNameException;
 import stat.exception.ProductNotFoundException;
+import stat.exception.SoldProductDeletionException;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
@@ -42,14 +43,30 @@ public class ProductTests extends StatTest {
 
     @Test
     @Rollback
-    public void productDeleteTest() throws ProductNameException {
+    public void deleteUnsoldProductTest() throws ProductNameException, SoldProductDeletionException {
         Product product = productService.createNewProduct("test product", 1.0);
         Set<Product> products = productService.getAllProducts();
         assertTrue("Product is not persisted!", products.contains(product));
 
-        productService.deleteProduct(product);
+        productService.deleteProduct(product.getProductId());
         products = productService.getAllProducts();
         assertFalse("Product is not deleted!", products.contains(product));
+    }
+
+    @Test(expected = SoldProductDeletionException.class)
+    @Rollback
+    public void deleteSoldProductTest() throws ProductNameException, SoldProductDeletionException {
+        Product product = productService.createNewProduct("test product", 1.0);
+        Integer productId = product.getProductId();
+        Set<Product> products = productService.getAllProducts();
+        assertTrue("Product is not persisted!", products.contains(product));
+
+        Sale sale = saleService.createNewSale("test customer");
+        saleService.addProduct(sale, productId, 1);
+        LinkedHashSet<Sale> salesOfProduct = productService.getSalesOfProduct(productId);
+        assertTrue("Product is not added to sale!", salesOfProduct.contains(sale));
+
+        productService.deleteProduct(productId);
     }
 
     @Test(expected = ProductNameException.class)

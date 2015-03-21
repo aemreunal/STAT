@@ -2,6 +2,7 @@ package stat.controllers;
 
 import stat.domain.Product;
 import stat.exception.ProductNameException;
+import stat.exception.SoldProductDeletionException;
 import stat.graphics.ProductAddPage;
 import stat.graphics.ProductMainPage;
 import stat.service.ProductService;
@@ -40,7 +41,6 @@ public class ProductController implements PageController {
         } catch (ProductNameException pne) {
             System.out.println("productController pne ");
         }
-
         productAddPage.clearInputFields();
     }
 
@@ -53,7 +53,11 @@ public class ProductController implements PageController {
     }
 
     public void removeProduct(int productId) {
-        productService.deleteProduct(productId);
+        try {
+            productService.deleteProduct(productId);
+        } catch (SoldProductDeletionException e) {
+            // TODO handle this exception and show details of it to the user.
+        }
     }
 
     public Product getProduct(int productId) {
