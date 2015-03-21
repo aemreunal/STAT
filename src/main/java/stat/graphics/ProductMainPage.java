@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
@@ -27,7 +26,8 @@ public class ProductMainPage extends Page {
     @Autowired
     private ProductAddPage pageNewProduct;
 
-    private JTable productTable;
+    private JTable            productTable;
+    private ProductTableModel tableModel;
     private ArrayList<Integer> productIDList = new ArrayList<>();
 
     public ProductMainPage() {
@@ -42,21 +42,11 @@ public class ProductMainPage extends Page {
     }
 
     private void initProductTable() {
-        productTable = new JTable(getProductTableModel());
+        tableModel = new ProductTableModel(new Object[0][0], ProductColType.getColNameList());
+        productTable = new JTable(tableModel);
         productTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane tableScrollPane = new JScrollPane(productTable);
         add(tableScrollPane, BorderLayout.CENTER);
-    }
-
-    private TableModel getProductTableModel() {
-        Object[][] data = { };
-        String[] columnNames = { "Product Name", "Description", "Unit Price" };
-        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        return tableModel;
     }
 
     private void initButtons() {
