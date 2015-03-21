@@ -4,10 +4,11 @@ import stat.controllers.ProductController;
 import stat.domain.Product;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
@@ -29,8 +30,14 @@ public class ProductMainPage extends Page {
     private JTable            productTable;
     private ProductTableModel tableModel;
     private ArrayList<Integer> productIDList = new ArrayList<>();
+    private ProductPageButtonListener buttonListener;
+
+    private JButton removeProductButton;
+    private JButton viewProductButton;
+    private JButton addProductButton;
 
     public ProductMainPage() {
+        buttonListener = new ProductPageButtonListener();
         initPage();
         initProductTable();
         initButtons();
@@ -45,74 +52,34 @@ public class ProductMainPage extends Page {
         tableModel = new ProductTableModel(new Object[0][0], ProductColType.getColNameList());
         productTable = new JTable(tableModel);
         productTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane tableScrollPane = new JScrollPane(productTable);
-        add(tableScrollPane, BorderLayout.CENTER);
+        add(new JScrollPane(productTable), BorderLayout.CENTER);
     }
 
     private void initButtons() {
-        JPanel buttonHolder = new JPanel();
-        buttonHolder.setLayout(new GridLayout(0, 3, 0, 0));
-        buttonHolder.add(createButtonRemove());
-        buttonHolder.add(createButtonView());
-        buttonHolder.add(createButtonAdd());
-
-        add(buttonHolder, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(0, 3, 0, 0));
+        createRemoveButton(buttonPanel);
+        createViewDetailButton(buttonPanel);
+        createAddButton(buttonPanel);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    private JButton createButtonRemove() {
-        JButton buttonRemoveProduct = new JButton("Delete Product");
-        buttonRemoveProduct.addActionListener(e -> {
-            if (productTable.getSelectedRow() != -1) {
-                //TODO: Confirm option can be added.
-                removeRow(productTable.getSelectedRow());
-            }
-            refreshTable();
-        });
-        return buttonRemoveProduct;
+    private void createRemoveButton(JPanel buttonPanel) {
+        removeProductButton = new JButton("Delete Product");
+        removeProductButton.addActionListener(buttonListener);
+        buttonPanel.add(removeProductButton);
     }
 
-    private JButton createButtonView() {
-        JButton buttonViewProduct = new JButton("View Product");
-        buttonViewProduct.addActionListener(e -> {
-            int row = productTable.getSelectedRow();
-            if (row != -1) {
-                ProductViewPage view = new ProductViewPage();
-                String productName = (String) productTable.getValueAt(row, 0);
-                String description = (String) productTable.getValueAt(row, 1);
-                String unitPrice = productTable.getValueAt(row, 2).toString();
-                view.setFields(productName, description, unitPrice);
-                showPopup(view);
-            }
-        });
-        return buttonViewProduct;
+    private void createViewDetailButton(JPanel buttonPanel) {
+        viewProductButton = new JButton("View Product");
+        viewProductButton.addActionListener(buttonListener);
+        buttonPanel.add(viewProductButton);
     }
 
-    private JButton createButtonAdd() {
-        JButton buttonAddProduct = new JButton("Add Product");
-        buttonAddProduct.addActionListener(e -> showPopup(pageNewProduct));
-        return buttonAddProduct;
-    }
-
-    private void showPopup(Page page) {
-        JFrame popupWindow = new JFrame();
-        popupWindow.setContentPane(page);
-        popupWindow.setSize(page.getSize());
-        popupWindow.setResizable(false);
-        popupWindow.setVisible(true);
-    }
-
-    public void emptyProducts() {
-        DefaultTableModel tableModel = (DefaultTableModel) productTable.getModel();
-        tableModel.setRowCount(0);
-        productIDList = new ArrayList<>();
-    }
-
-    public void removeRow(int rowIndex) {
-        int productID = productIDList.get(rowIndex);
-        DefaultTableModel tableModel = (DefaultTableModel) productTable.getModel();
-        tableModel.removeRow(rowIndex);
-        productIDList.remove(rowIndex);
-        productController.removeProduct(productID);
+    private void createAddButton(JPanel buttonPanel) {
+        addProductButton = new JButton("Add Product");
+        addProductButton.addActionListener(buttonListener);
+        buttonPanel.add(addProductButton);
     }
 
     public void addProducts(Set<Product> productSet) {
@@ -120,19 +87,64 @@ public class ProductMainPage extends Page {
     }
 
     public void addProduct(Product product) {
-        DefaultTableModel tableModel = (DefaultTableModel) productTable.getModel();
-        Object[] productRow = new Object[3];
-        productRow[0] = product.getName();
-        productRow[1] = product.getDescription();
-        productRow[2] = product.getPrice();
-
+        Object[] productRow = { product.getName(), product.getDescription(), product.getPrice() };
         tableModel.addRow(productRow);
         productIDList.add(product.getProductId());
     }
 
+    private class ProductPageButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int row = productTable.getSelectedRow();
+            Object sourceOfAction = e.getSource();
+            if (sourceOfAction.equals(addProductButton)) {
+                showAddProductWindow();
+            } else if (sourceOfAction.equals(removeProductButton)) {
+                removeProduct(row);
+            } else if (sourceOfAction.equals(viewProductButton)) {
+                showProductDetailsWindow(row);
+            }
+        }
+    }
+
+    private void showAddProductWindow() {
+        showPopup(pageNewProduct);
+    }
+
+    private void removeProduct(int row) {
+        if (row != -1) {
+            //TODO: Confirm option must be added.
+            this.removeProductRow(row);
+        }
+        this.repaint();
+        this.validate();
+    }
+
+    private void removeProductRow(int rowIndex) {
+        tableModel.removeRow(rowIndex);
+        int removedProductId = productIDList.remove(rowIndex);
+        productController.removeProduct(removedProductId);
+    }
+
     public void refreshTable() {
-        emptyProducts();
+        // Clear product list
+        tableModel.setRowCount(0);
+        productIDList.clear();
+        // Tell controller that product list should be refreshed
         productController.populateWithProducts();
-        productTable.repaint();
+        // Display populated product list
+        this.repaint();
+        this.validate();
+    }
+
+    private void showProductDetailsWindow(int row) {
+        if (row != -1) {
+            String productName = (String) productTable.getValueAt(row, ProductColType.NAME.getColIndex());
+            String description = (String) productTable.getValueAt(row, ProductColType.DESCRIPTION.getColIndex());
+            String unitPrice = productTable.getValueAt(row, ProductColType.PRICE.getColIndex()).toString();
+            ProductViewPage view = new ProductViewPage(productName, description, unitPrice);
+            showPopup(view);
+        }
     }
 }

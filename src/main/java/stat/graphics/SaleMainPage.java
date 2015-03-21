@@ -106,14 +106,6 @@ public class SaleMainPage extends Page {
         return buttonAddSale;
     }
 
-    private void showPopup(Page page) {
-        JFrame popupWindow = new JFrame();
-        popupWindow.setContentPane(page);
-        popupWindow.setSize(page.getSize());
-        popupWindow.setResizable(false);
-        popupWindow.setVisible(true);
-    }
-
     public void emptySales() {
         DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
         tableModel.setRowCount(0);
