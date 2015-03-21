@@ -93,6 +93,7 @@ public class SaleMainPage extends Page {
                 SaleViewPage viewPage = new SaleViewPage();
                 viewPage.setSale(saleController.getSale(saleIDList.get(rowIndex)));
                 showPopup(viewPage);
+                saleController.fillSaleDetails(saleIDList.get(rowIndex));
             }
         });
         return buttonViewSale;

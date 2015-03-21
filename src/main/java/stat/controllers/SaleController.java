@@ -5,9 +5,11 @@ import stat.domain.Sale;
 import stat.exception.ProductNotFoundException;
 import stat.graphics.SaleAddPage;
 import stat.graphics.SaleMainPage;
+import stat.graphics.SaleViewPage;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -38,6 +40,9 @@ public class SaleController implements PageController {
 
     @Autowired
     private SaleMainPage saleMainPage;
+
+    @Autowired
+    private SaleViewPage saleViewPage;
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -107,9 +112,29 @@ public class SaleController implements PageController {
         return getAllSales().stream().sorted().collect(Collectors.toCollection(HashSet<Sale>::new));
     }
 
-    public LinkedHashMap<Product, Integer> getProductOfSale(Integer saleId) {
+    public void fillSaleDetails(Integer saleId) {
+        LinkedHashMap<Product, Integer> productsAndAmounts = getProductsAndAmounts(saleId);
+
+        populateProductTable(productsAndAmounts);
+        saleViewPage.setCustomerNameField(saleService.getSaleWithId(saleId).getCustomerName());
+        saleViewPage.setDateField(saleService.getSaleWithId(saleId).getDate());
+        saleViewPage.setTotalPriceField(productsAndAmounts.values().stream().mapToInt(Integer::intValue).sum());
+    }
+
+    private LinkedHashMap<Product, Integer> getProductsAndAmounts(Integer saleId) {
         return saleService.getProductsOfSale(saleId);
     }
+
+    private void populateProductTable(LinkedHashMap<Product, Integer> productsAndAmounts) {
+        for (Product product : productsAndAmounts.keySet()) {
+            String productName = product.getName();
+            int amount = productsAndAmounts.get(product);
+            double price = product.getPrice().doubleValue() * amount;
+
+            saleViewPage.addProductDetailsToTable(productName, amount, price);
+        }
+    }
+
 
     @Override
     public void refreshPage() {
