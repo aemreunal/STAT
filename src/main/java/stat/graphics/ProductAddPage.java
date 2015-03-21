@@ -25,9 +25,6 @@ public class ProductAddPage extends Page {
     @Autowired
     private ProductController productController;
 
-    @Autowired
-    private MenuPage menuPage;
-
     private JPanel     fieldHolder;
     private JTextField nameField;
     private JTextField descriptionField;

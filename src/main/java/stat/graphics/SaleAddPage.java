@@ -26,9 +26,6 @@ public class SaleAddPage extends Page {
     @Autowired
     private SaleController saleController;
 
-    @Autowired
-    private Page menuPage;
-
     private JTextField textfieldCustomerName;
     private JTable     productTable, saleProductTable;
     private JTextField textfieldTotalPrice;
