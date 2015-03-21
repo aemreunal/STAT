@@ -46,6 +46,8 @@ public class SaleController implements PageController {
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
+
+    // SaleAddPage methods
     public boolean validateDate(String date) {
         String dateRegex = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
         return date.matches(dateRegex);
@@ -83,6 +85,8 @@ public class SaleController implements PageController {
         return productPrice * amount;
     }
 
+
+    // SaleMainPage methods
     public void populateWithProductNames() {
         saleAddPage.fillProducts(getProductNames());
     }
@@ -105,11 +109,6 @@ public class SaleController implements PageController {
 
     public Sale getSale(int saleID) {
         return saleService.getSaleWithId(saleID);
-    }
-
-    public HashSet<Sale> getSortedSales() {
-        //TODO improve
-        return getAllSales().stream().sorted().collect(Collectors.toCollection(HashSet<Sale>::new));
     }
 
     public void fillSaleDetails(Integer saleId) {
@@ -135,6 +134,12 @@ public class SaleController implements PageController {
         }
     }
 
+
+
+    public HashSet<Sale> getSortedSales() {
+        //TODO improve
+        return getAllSales().stream().sorted().collect(Collectors.toCollection(HashSet<Sale>::new));
+    }
 
     @Override
     public void refreshPage() {
