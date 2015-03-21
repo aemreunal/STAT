@@ -21,7 +21,6 @@ import stat.domain.Sale;
 import stat.repository.SaleRepo;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import javax.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -81,28 +80,6 @@ public class SaleService {
             productsAndAmounts.put(product, amountOfProduct);
         }
         return productsAndAmounts;
-    }
-
-    /**
-     * Returns the {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale sales}
-     * between the given dates. Both dates are included in the restriction (which means
-     * that a sale at the exact same date as either of the dates provided as the parameter
-     * values will also be included in the returned set).
-     *
-     * @param from
-     *         The starting date to search sales from. The specified date is also included
-     *         (so a sale at the exact same date will also be returned).
-     * @param until
-     *         The ending date to search sales until. The specified date is also included
-     *         (so a sale at the exact same date will also be returned).
-     *
-     * @return The {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale sales}
-     * with dates between (and including) the sepcified dates.
-     */
-    @Transactional(readOnly = true)
-    public LinkedHashSet<Sale> getSalesBetween(Date from, Date until) {
-        Set<Sale> sales = saleRepo.findByDateBetween(from, until);
-        return sales.stream().map(sale -> sale).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**

@@ -82,11 +82,6 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Set<Product> getProductsWithNameContaining(String productName) {
-        return productRepo.findByNameContaining(productName);
-    }
-
-    @Transactional(readOnly = true)
     public Product getProductWithName(String productName) throws ProductNotFoundException {
         Set<Product> products = productRepo.findByNameLike(productName);
         if (products.size() != 1) {
@@ -98,11 +93,6 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Integer getIdOfProductWithName(String productName) throws ProductNotFoundException {
         return this.getProductWithName(productName).getProductId();
-    }
-
-    @Transactional(readOnly = true)
-    public Set<Product> getProductsWithDescriptionContaining(String productDescription) {
-        return productRepo.findByDescriptionContaining(productDescription);
     }
 
     @Transactional(readOnly = true)
