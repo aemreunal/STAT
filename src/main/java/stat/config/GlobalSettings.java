@@ -93,5 +93,7 @@ public class GlobalSettings {
     public static final String DB_PROPERTY_DDL_KEY = "db.hbm2_ddl";
 
     public static final String DB_PROPERTY_SHOW_SQL_KEY = "db.show_sql";
+    public static final int PRICE_TOTAL_PRECISION   = 16;
+    public static final int PRICE_DECIMAL_PRECISION = 4;
     //-------------------------------------------------------------------------------------------
 }
