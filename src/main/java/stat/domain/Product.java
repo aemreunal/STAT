@@ -16,6 +16,8 @@ package stat.domain;
  ***************************
  */
 
+import stat.config.GlobalSettings;
+
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -26,10 +28,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "products")
 public class Product implements Comparable {
-    public static final int NAME_MAX_LENGTH         = 50;
-    public static final int DESCRIPTION_MAX_LENGTH  = 200;
-    public static final int PRICE_TOTAL_PRECISION   = 16;
-    public static final int PRICE_DECIMAL_PRECISION = 4;
+    public static final int NAME_MAX_LENGTH        = 50;
+    public static final int DESCRIPTION_MAX_LENGTH = 200;
 
     @Id
     @Column(name = "product_id")
@@ -45,7 +45,7 @@ public class Product implements Comparable {
     @Size(max = DESCRIPTION_MAX_LENGTH)
     private String description = "";
 
-    @Column(name = "price", nullable = false, precision = PRICE_TOTAL_PRECISION, scale = PRICE_DECIMAL_PRECISION)
+    @Column(name = "price", nullable = false, precision = GlobalSettings.PRICE_TOTAL_PRECISION, scale = GlobalSettings.PRICE_DECIMAL_PRECISION)
     private BigDecimal price;
 
     @ManyToMany(targetEntity = Sale.class,

@@ -17,6 +17,9 @@ package stat.domain;
  */
 
 
+import stat.config.GlobalSettings;
+
+import java.math.BigDecimal;
 import java.util.*;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -55,6 +58,9 @@ public class Sale implements Comparable {
     @Column(name = "date", nullable = false)
     private Date date = null;
 
+    @Column(name = "total_price", nullable = false, precision = GlobalSettings.PRICE_TOTAL_PRECISION, scale = GlobalSettings.PRICE_DECIMAL_PRECISION)
+    private BigDecimal totalPrice = BigDecimal.ZERO;
+
     // Empty constructor, required by Hibernate
     public Sale() {
     }
@@ -68,6 +74,7 @@ public class Sale implements Comparable {
     public void addProductToSale(Product product, int amount) {
         getProducts().add(product);
         getAmounts().put(product.getProductId(), amount);
+        addToPrice(product.getPrice().multiply(BigDecimal.valueOf(amount)));
     }
 
     public int getAmountSold(Product product) {
@@ -114,6 +121,18 @@ public class Sale implements Comparable {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(BigDecimal totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    private void addToPrice(BigDecimal value) {
+        setTotalPrice(getTotalPrice().add(value));
     }
 
     @PrePersist
