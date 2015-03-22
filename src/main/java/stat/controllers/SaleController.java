@@ -94,13 +94,11 @@ public class SaleController implements PageController {
     }
 
     private BigDecimal calculateTotalPrice(Integer saleId) {
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        for (Map.Entry<Product, Integer> productsAndAmounts : getProductsAndAmounts(saleId).entrySet()) {
-            Product product = productsAndAmounts.getKey();
-            Integer amount = productsAndAmounts.getValue();
-            totalPrice = totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(amount)));
-        }
-        return totalPrice;
+        return BigDecimal.valueOf(getProductsAndAmounts(saleId).values().stream().mapToDouble(Integer::doubleValue).sum());
+    }
+
+    private LinkedHashMap<Product, Integer> getProductsAndAmounts(Integer saleId) {
+        return saleService.getProductsOfSale(saleId);
     }
 
     private Set<Sale> getAllSales() {
@@ -116,26 +114,30 @@ public class SaleController implements PageController {
     }
 
     public void fillSaleDetails(Integer saleId) {
-        LinkedHashMap<Product, Integer> productsAndAmounts = getProductsAndAmounts(saleId);
+        Sale sale = saleService.getSaleWithId(saleId);
+        String customerName = sale.getCustomerName();
+        Date date = sale.getDate();
+        BigDecimal totalPrice = calculateTotalPrice(saleId);
 
-        populateProductTable(productsAndAmounts);
-        saleViewPage.setCustomerNameField(saleService.getSaleWithId(saleId).getCustomerName());
-        saleViewPage.setDateField(saleService.getSaleWithId(saleId).getDate());
-        saleViewPage.setTotalPriceField(productsAndAmounts.values().stream().mapToInt(Integer::intValue).sum());
+        populateSaleInfo(customerName, date, totalPrice);
+        populateProductTable(saleId);
     }
 
-    private LinkedHashMap<Product, Integer> getProductsAndAmounts(Integer saleId) {
-        return saleService.getProductsOfSale(saleId);
+    private void populateSaleInfo(String customerName, Date date, BigDecimal totalPrice) {
+        saleViewPage.setCustomerNameField(customerName);
+        saleViewPage.setDateField(date);
+        saleViewPage.setTotalPriceField(totalPrice);
     }
 
-    private void populateProductTable(LinkedHashMap<Product, Integer> productsAndAmounts) {
-        for (Product product : productsAndAmounts.keySet()) {
-            String productName = product.getName();
-            int amount = productsAndAmounts.get(product);
-            double price = product.getPrice().doubleValue() * amount;
+    private void populateProductTable(Integer saleId) {
+        getProductsAndAmounts(saleId).entrySet().forEach(this::addProduct);
+    }
 
-            saleViewPage.addProductDetailsToTable(productName, amount, price);
-        }
+    private void addProduct(Map.Entry<Product, Integer> productsAndAmountEntry) {
+        Product product = productsAndAmountEntry.getKey();
+        Integer amount = productsAndAmountEntry.getValue();
+        BigDecimal price = product.getPrice().multiply(BigDecimal.valueOf(amount));
+        saleViewPage.addProductDetailsToTable(product.getName(), amount, price);
     }
 
     public void populateWithProductNames() {

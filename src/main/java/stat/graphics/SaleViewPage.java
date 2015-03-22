@@ -3,6 +3,7 @@ package stat.graphics;
 import stat.domain.Sale;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -104,7 +105,7 @@ public class SaleViewPage extends Page {
         }
     }
 
-    public void addProductDetailsToTable(String productName, int amount, double price) {
+    public void addProductDetailsToTable(String productName, int amount, BigDecimal price) {
         //TODO implement. Auto-generated for SaleController.java
     }
 
@@ -116,7 +117,7 @@ public class SaleViewPage extends Page {
         //TODO implement. Auto-generated for SaleController.java
     }
 
-    public void setTotalPriceField(int sum) {
+    public void setTotalPriceField(BigDecimal sum) {
         //TODO implement. Auto-generated for SaleController.java
     }
 }
