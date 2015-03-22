@@ -136,13 +136,13 @@ public class ProductAddPage extends Page {
     }
 
     private boolean validateFields() {
+        String regex = "^([0-9]+)([.]?)([0-9]{4})$";
         String price = priceField.getText();
         // TODO: implement
         boolean valid = true;
         valid &= (nameField.getText().length() > 0);
         valid &= (descriptionField.getText().length() > 0);
-        valid &= (price.length() > 0);
-        valid &= ((!price.contains(".")) || (price.substring(price.indexOf(".") + 1).length() <= 4));
+        valid &= price.matches(regex);
         return valid;
     }
 
