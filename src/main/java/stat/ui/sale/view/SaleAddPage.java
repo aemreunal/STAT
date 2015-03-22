@@ -55,7 +55,7 @@ public class SaleAddPage extends Page {
     private void initPageDesign() {
         setLayout(null);
         setBackground(new Color(204, 204, 0));
-        setSize(500, 450);
+        setMinimumSize(new Dimension(500, 450));
     }
 
     private void initBackButton() {
@@ -240,8 +240,8 @@ public class SaleAddPage extends Page {
             Object sourceOfAction = e.getSource();
             if (sourceOfAction instanceof JButton) {
                 if (sourceOfAction.equals(backButton)) {
-                    // TODO: change the functionality
-                    //appWindow.setCurrentPage(menuPage);
+                    JFrame parentFrame = (JFrame) getRootPane().getParent();
+                    parentFrame.dispose();
                 } else if (sourceOfAction.equals(buttonAdd)) {
                     addProductToSale();
                 } else if (sourceOfAction.equals(buttonRemove)) {
