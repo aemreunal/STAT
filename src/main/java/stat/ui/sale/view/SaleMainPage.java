@@ -26,9 +26,6 @@ public class SaleMainPage extends Page {
     @Autowired
     private SaleController saleController;
 
-    @Autowired
-    private SaleAddPage pageNewSale;
-
     private JTable saleTable;
     private JButton                removeSaleButton;
     private SalePageButtonListener buttonListener;
@@ -95,11 +92,11 @@ public class SaleMainPage extends Page {
             Object sourceOfAction = e.getSource();
             int selectedRow = getRow();
             if (sourceOfAction.equals(addSaleButton)) {
-                showAddSaleWindow();
+                saleController.showAddSaleWindow();
             } else if (sourceOfAction.equals(removeSaleButton)) {
                 removeSale(selectedRow);
             } else if (sourceOfAction.equals(viewSaleButton)) {
-                showSaleDetailsWindow(selectedRow);
+                showSaleDetails(selectedRow);
             }
         }
 
@@ -113,15 +110,14 @@ public class SaleMainPage extends Page {
         }
     }
 
-    private void showAddSaleWindow() {
-        showPopup(pageNewSale);
-        saleController.populateWithProductNames();
-    }
-
-    private void showSaleDetailsWindow(int row) {
+    private void showSaleDetails(int row) {
         if (row != -1) {
             saleController.showSaleDetails(row);
         }
+    }
+
+    public void displayAddSaleWindow(SaleAddPage saleAddPage){
+        showPopup(saleAddPage);
     }
 
     public void displaySaleDetailsWindow(SaleViewPage saleViewPage) {

@@ -32,15 +32,15 @@ import org.springframework.stereotype.Component;
 public class SaleController implements PageController {
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
     @Autowired
     private SaleService    saleService;
+
     @Autowired
     private ProductService productService;
-    @Autowired
-    private SaleAddPage    saleAddPage;
+
     @Autowired
     private SaleMainPage   saleMainPage;
-
 
     private ArrayList<Integer> saleIDList = new ArrayList<>();
 
@@ -50,14 +50,14 @@ public class SaleController implements PageController {
         return date.matches(dateRegex);
     }
 
-    public void saveSale(String customerName, String date, ArrayList<String> products, ArrayList<Integer> amounts) {
+    public void saveSale(String customerName, String date, ArrayList<String> productNames, ArrayList<Integer> amounts) {
         Sale sale = saleService.createNewSale(customerName, parseDate(date));
-        for (int i = 0; i < products.size(); i++) {
+        for (int i = 0; i < productNames.size(); i++) {
             try {
-                Integer productId = productService.getIdOfProductWithName(products.get(i));
+                Integer productId = productService.getIdOfProductWithName(productNames.get(i));
                 sale = saleService.addProduct(sale, productId, amounts.get(i));
-            } catch (ProductNotFoundException pnfe) {
-                System.out.println("SaleController pnfe");
+            } catch (ProductNotFoundException e) {
+                System.out.println("Product not found exception");
             }
         }
     }
@@ -102,19 +102,11 @@ public class SaleController implements PageController {
         refreshSaleListTable();
     }
 
-    private BigDecimal calculateTotalPrice(Integer saleId) {
-        return BigDecimal.valueOf(getProductsAndAmounts(saleId).values().stream().mapToDouble(Integer::doubleValue).sum());
-    }
-
     private LinkedHashMap<Product, Integer> getProductsAndAmounts(Integer saleId) {
         return saleService.getProductsOfSale(saleId);
     }
 
-    private Set<Sale> getAllSales() {
-        return saleService.getAllSales();
-    }
-
-    public void populateWithProductNames() {
+    public void populateWithProductNames(SaleAddPage saleAddPage) {
         saleAddPage.fillProducts(getProductNames());
     }
 
@@ -127,6 +119,13 @@ public class SaleController implements PageController {
         refreshSaleListTable();
     }
 
+
+    public void showAddSaleWindow() {
+        SaleAddPage saleAddPage = new SaleAddPage(this);
+        populateWithProductNames(saleAddPage);
+        saleMainPage.displayAddSaleWindow(saleAddPage);
+    }
+
     public void showSaleDetails(int row) {
         SaleViewPage saleViewPage = new SaleViewPage();
         saleViewPage.setSale(saleService.getSaleWithId(saleIDList.get(row)));
@@ -135,18 +134,20 @@ public class SaleController implements PageController {
         Sale sale = saleService.getSaleWithId(saleId);
         String customerName = sale.getCustomerName();
         Date date = sale.getDate();
-        BigDecimal totalPrice = calculateTotalPrice(saleId);
+        BigDecimal totalPrice = sale.getTotalPrice();
 
         saleViewPage.setCustomerNameField(customerName);
         saleViewPage.setDateField(date);
         saleViewPage.setTotalPriceField(totalPrice);
         LinkedHashMap<Product, Integer> productsAndAmounts = getProductsAndAmounts(saleId);
+
         for (Map.Entry<Product, Integer> entry : productsAndAmounts.entrySet()) {
             Product product = entry.getKey();
             Integer amount = entry.getValue();
             BigDecimal price = product.getPrice().multiply(BigDecimal.valueOf(amount));
             saleViewPage.addProductDetailsToTable(product.getName(), amount, price);
         }
+
         saleMainPage.displaySaleDetailsWindow(saleViewPage);
     }
 }

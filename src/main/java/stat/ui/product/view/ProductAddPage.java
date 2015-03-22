@@ -1,7 +1,7 @@
 package stat.ui.product.view;
 
-import stat.ui.mainApp.view.ApplicationWindow;
 import stat.ui.Page;
+import stat.ui.mainApp.view.ApplicationWindow;
 import stat.ui.product.ProductController;
 
 import java.awt.*;
@@ -178,21 +178,18 @@ public class ProductAddPage extends Page {
         public void actionPerformed(ActionEvent e) {
             ApplicationWindow appWindow = getApplicationWindow();
             Object sourceOfAction = e.getSource();
-            if (sourceOfAction instanceof JButton) {
-                if (sourceOfAction.equals(saveButton)) {
-                    if (validateFields()) {
-                        saveProduct();
-                        //TODO close maybe?
-                    } else {
-                        displayValidationError();
-                        //TODO ask again
-                    }
-                } else if (sourceOfAction.equals(backButton)) {
-                    JFrame parentFrame = (JFrame) getRootPane().getParent();
-                    parentFrame.dispose();
+            if (sourceOfAction.equals(saveButton)) {
+                if (validateFields()) {
+                    saveProduct();
+                    //TODO close maybe?
+                } else {
+                    displayValidationError();
+                    //TODO ask again
                 }
+            } else if (sourceOfAction.equals(backButton)) {
+                JFrame parentFrame = (JFrame) getRootPane().getParent();
+                parentFrame.dispose();
             }
         }
     }
-
 }

@@ -1,7 +1,7 @@
 package stat.ui.sale.view;
 
-import stat.ui.mainApp.view.ApplicationWindow;
 import stat.ui.Page;
+import stat.ui.mainApp.view.ApplicationWindow;
 import stat.ui.sale.SaleController;
 
 import java.awt.*;
@@ -13,20 +13,13 @@ import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
  */
 
-@Component
-// Required to not run this class in a test environment
-@ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class SaleAddPage extends Page {
 
-    @Autowired
     private SaleController saleController;
 
     private JTextField textfieldCustomerName;
@@ -38,7 +31,8 @@ public class SaleAddPage extends Page {
     private JButton        buttonAdd, buttonRemove;
     private JScrollPane productListPane, saleProductListPane;
 
-    public SaleAddPage() {
+    public SaleAddPage(SaleController saleController) {
+        this.saleController = saleController;
         buttonListener = new ButtonListener();
         initPageDesign();
         initBackButton();
