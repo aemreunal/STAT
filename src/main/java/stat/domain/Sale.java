@@ -24,7 +24,7 @@ import javax.validation.constraints.Size;
 //@SuppressWarnings("UnusedDeclaration")
 @Entity
 @Table(name = "sales")
-public class Sale {
+public class Sale implements Comparable {
     public static final int CUSTOMER_NAME_MAX_LENGTH = 150;
 
     @Id
@@ -131,5 +131,19 @@ public class Sale {
             return sale.getSaleId().intValue() == this.getSaleId().intValue();
         }
         return false;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (o instanceof Sale) {
+            int otherId = ((Sale) o).getSaleId();
+            int thisId = this.getSaleId();
+            if (otherId > thisId) {
+                return -1;
+            } else if (otherId < thisId) {
+                return 1;
+            }
+        }
+        return 0;
     }
 }
