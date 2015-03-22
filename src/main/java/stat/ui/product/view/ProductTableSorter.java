@@ -1,4 +1,4 @@
-package stat.controllers;
+package stat.ui.product.view;
 
 /*
  ***************************
@@ -17,7 +17,7 @@ package stat.controllers;
  */
 
 import stat.domain.Product;
-import stat.graphics.ProductColType;
+import stat.ui.product.view.ProductColType;
 
 import java.util.Comparator;
 import javax.swing.table.TableModel;

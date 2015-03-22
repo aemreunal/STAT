@@ -1,6 +1,7 @@
-package stat.graphics;
+package stat.ui.sale.view;
 
 import stat.domain.Sale;
+import stat.ui.Page;
 
 import java.awt.*;
 import java.math.BigDecimal;

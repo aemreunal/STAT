@@ -16,7 +16,7 @@ package stat;
  ***************************
  */
 
-import stat.controllers.ApplicationController;
+import stat.ui.mainApp.ApplicationController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

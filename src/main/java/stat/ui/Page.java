@@ -1,4 +1,6 @@
-package stat.graphics;
+package stat.ui;
+
+import stat.ui.mainApp.view.ApplicationWindow;
 
 import javax.swing.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

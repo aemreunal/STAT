@@ -1,13 +1,12 @@
-package stat.graphics;
+package stat.ui.sale.view;
 
-import stat.controllers.SaleController;
-import stat.domain.Sale;
+import stat.ui.Page;
+import stat.ui.sale.SaleController;
 
 import java.awt.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;

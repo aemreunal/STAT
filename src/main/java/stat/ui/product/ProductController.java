@@ -1,11 +1,12 @@
-package stat.controllers;
+package stat.ui.product;
 
+import stat.ui.PageController;
 import stat.domain.Product;
-import stat.exception.ProductNameException;
-import stat.exception.SoldProductDeletionException;
-import stat.graphics.ProductAddPage;
-import stat.graphics.ProductColType;
-import stat.graphics.ProductMainPage;
+import stat.service.exception.ProductNameException;
+import stat.service.exception.SoldProductDeletionException;
+import stat.ui.product.view.ProductAddPage;
+import stat.ui.product.view.ProductColType;
+import stat.ui.product.view.ProductMainPage;
 import stat.service.ProductService;
 
 import java.math.BigDecimal;

@@ -18,10 +18,10 @@ package stat.service;
 
 import stat.domain.Product;
 import stat.domain.Sale;
-import stat.exception.ProductNameException;
-import stat.exception.ProductNotFoundException;
-import stat.exception.SoldProductDeletionException;
-import stat.repository.ProductRepo;
+import stat.service.exception.ProductNameException;
+import stat.service.exception.ProductNotFoundException;
+import stat.service.exception.SoldProductDeletionException;
+import stat.service.repository.ProductRepo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

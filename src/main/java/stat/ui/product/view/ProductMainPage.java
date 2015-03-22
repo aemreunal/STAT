@@ -1,8 +1,8 @@
-package stat.graphics;
+package stat.ui.product.view;
 
-import stat.controllers.ProductController;
-import stat.controllers.ProductTableSorter;
-import stat.exception.SoldProductDeletionException;
+import stat.service.exception.SoldProductDeletionException;
+import stat.ui.Page;
+import stat.ui.product.ProductController;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

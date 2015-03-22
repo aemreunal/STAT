@@ -25,7 +25,7 @@ public class GlobalSettings {
     // The Entity Manager Factory scans the package designated by this string
     // to map entities.
     public static final String ENTITY_PACKAGE_NAME     = BASE_PACKAGE_NAME + ".domain";
-    public static final String REPOSITORY_PACKAGE_NAME = BASE_PACKAGE_NAME + ".repository";
+    public static final String REPOSITORY_PACKAGE_NAME = BASE_PACKAGE_NAME + ".service.repository";
 
     public static final String APP_DB_PROPERTY_SOURCE  = "file:db.properties";
     public static final String TEST_DB_PROPERTY_SOURCE = "file:test.properties";

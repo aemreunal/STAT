@@ -1,13 +1,14 @@
-package stat.controllers;
+package stat.ui.sale;
 
+import stat.ui.PageController;
 import stat.domain.Product;
 import stat.domain.Sale;
-import stat.exception.ProductNotFoundException;
-import stat.graphics.SaleAddPage;
-import stat.graphics.SaleMainPage;
-import stat.graphics.SaleViewPage;
+import stat.service.exception.ProductNotFoundException;
 import stat.service.ProductService;
 import stat.service.SaleService;
+import stat.ui.sale.view.SaleAddPage;
+import stat.ui.sale.view.SaleMainPage;
+import stat.ui.sale.view.SaleViewPage;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -31,15 +32,15 @@ public class SaleController implements PageController {
 
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
     @Autowired
-    private SaleService saleService;
+    private SaleService    saleService;
     @Autowired
     private ProductService productService;
     @Autowired
-    private SaleAddPage saleAddPage;
+    private SaleAddPage    saleAddPage;
     @Autowired
-    private SaleMainPage saleMainPage;
+    private SaleMainPage   saleMainPage;
     @Autowired
-    private SaleViewPage saleViewPage;
+    private SaleViewPage   saleViewPage;
 
     // SaleAddPage methods
     public boolean validateDate(String date) {

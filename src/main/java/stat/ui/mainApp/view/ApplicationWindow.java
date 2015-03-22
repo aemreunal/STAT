@@ -1,6 +1,8 @@
-package stat.graphics;
+package stat.ui.mainApp.view;
 
-import stat.controllers.ApplicationController;
+import stat.ui.mainApp.ApplicationController;
+import stat.ui.product.view.ProductMainPage;
+import stat.ui.sale.view.SaleMainPage;
 
 import java.awt.*;
 import javax.swing.*;

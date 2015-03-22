@@ -31,7 +31,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories("stat.repository")
+@EnableJpaRepositories("stat.service.repository")
 @EnableTransactionManagement
 @ComponentScan("stat")
 public class CoreConfig {

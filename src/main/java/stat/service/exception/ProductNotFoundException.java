@@ -1,4 +1,4 @@
-package stat.exception;
+package stat.service.exception;
 
 /*
  ***************************
@@ -16,9 +16,12 @@ package stat.exception;
  ***************************
  */
 
-public class ProductNameException extends Throwable {
+public class ProductNotFoundException extends Throwable {
+    public ProductNotFoundException() {
+        super("Product was not found!", null, true, false);
+    }
 
-    public ProductNameException(String name) {
-        super("A product with name \'" + name + "\' already exists!", null, true, false);
+    public ProductNotFoundException(String name) {
+        super("There are no products (or more than one product) with the name: \'" + name + "\'!", null, true, false);
     }
 }

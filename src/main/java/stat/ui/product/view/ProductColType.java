@@ -1,4 +1,4 @@
-package stat.graphics;
+package stat.ui.product.view;
 
 /*
  ***************************

@@ -1,4 +1,4 @@
-package stat.controllers;
+package stat.ui;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;

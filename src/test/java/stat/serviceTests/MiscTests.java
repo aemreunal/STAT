@@ -3,7 +3,7 @@ package stat.serviceTests;
 import stat.StatTest;
 import stat.domain.Product;
 import stat.domain.Sale;
-import stat.exception.ProductNameException;
+import stat.service.exception.ProductNameException;
 
 import org.junit.Before;
 import org.junit.Test;

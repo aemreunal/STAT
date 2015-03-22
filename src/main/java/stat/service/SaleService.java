@@ -18,7 +18,7 @@ package stat.service;
 
 import stat.domain.Product;
 import stat.domain.Sale;
-import stat.repository.SaleRepo;
+import stat.service.repository.SaleRepo;
 
 import java.util.*;
 import javax.persistence.criteria.Predicate;

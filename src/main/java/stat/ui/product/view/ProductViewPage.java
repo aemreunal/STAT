@@ -1,4 +1,6 @@
-package stat.graphics;
+package stat.ui.product.view;
+
+import stat.ui.Page;
 
 import java.awt.*;
 import javax.swing.*;

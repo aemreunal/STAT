@@ -1,6 +1,8 @@
-package stat.graphics;
+package stat.ui.product.view;
 
-import stat.controllers.ProductController;
+import stat.ui.mainApp.view.ApplicationWindow;
+import stat.ui.Page;
+import stat.ui.product.ProductController;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

@@ -1,6 +1,8 @@
-package stat.controllers;
+package stat.ui.mainApp;
 
-import stat.graphics.ApplicationWindow;
+import stat.ui.mainApp.view.ApplicationWindow;
+import stat.ui.product.ProductController;
+import stat.ui.sale.SaleController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

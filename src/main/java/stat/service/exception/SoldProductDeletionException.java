@@ -1,4 +1,4 @@
-package stat.exception;
+package stat.service.exception;
 
 /*
  ***************************

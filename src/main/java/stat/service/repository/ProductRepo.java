@@ -1,4 +1,4 @@
-package stat.repository;
+package stat.service.repository;
 
 /*
  ***************************
