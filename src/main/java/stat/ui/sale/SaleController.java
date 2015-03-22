@@ -5,6 +5,7 @@ import stat.domain.Sale;
 import stat.service.ProductService;
 import stat.service.SaleService;
 import stat.service.exception.ProductNotFoundException;
+import stat.ui.Page;
 import stat.ui.PageController;
 import stat.ui.sale.view.SaleAddPage;
 import stat.ui.sale.view.SaleMainPage;
@@ -91,7 +92,7 @@ public class SaleController implements PageController {
     public void addSaleButtonClicked() {
         SaleAddPage saleAddPage = new SaleAddPage(this);
         saleAddPage.fillProducts(getProductNames());
-        saleMainPage.displayAddSaleWindow(saleAddPage);
+        Page.showPopup(saleAddPage);
     }
 
 
@@ -112,7 +113,7 @@ public class SaleController implements PageController {
         Sale sale = saleService.getSaleWithId(saleId);
         LinkedHashMap<Product, Integer> productsAndAmounts = saleService.getProductsOfSale(saleId);
         SaleViewPage saleViewPage = new SaleViewPage(sale, productsAndAmounts);
-        saleMainPage.displaySaleDetailsWindow(saleViewPage);
+        Page.showPopup(saleViewPage);
     }
 }
 

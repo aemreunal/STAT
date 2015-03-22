@@ -25,7 +25,7 @@ public abstract class Page extends JPanel {
         this.appWindow = appWindow;
     }
 
-    protected void showPopup(Page page) {
+    public static void showPopup(Page page) {
         JFrame popupWindow = new JFrame();
         popupWindow.setContentPane(page);
         popupWindow.setSize(page.getMinimumSize());

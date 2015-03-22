@@ -109,12 +109,4 @@ public class SaleMainPage extends Page {
             return selectedRow;
         }
     }
-
-    public void displayAddSaleWindow(SaleAddPage saleAddPage) {
-        showPopup(saleAddPage);
-    }
-
-    public void displaySaleDetailsWindow(SaleViewPage saleViewPage) {
-        showPopup(saleViewPage);
-    }
 }
