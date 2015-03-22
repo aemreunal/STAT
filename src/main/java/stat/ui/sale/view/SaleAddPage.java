@@ -202,11 +202,12 @@ public class SaleAddPage extends Page {
     }
 
     private void updateTotalPrice() {
-        double totalPrice = 0;
+        BigDecimal totalPrice = BigDecimal.ZERO;
         for (int row = 0; row < saleProductTable.getRowCount(); row++) {
-            totalPrice += Double.parseDouble((String) saleProductTable.getValueAt(row, 2));
+            String productPrice = (String) saleProductTable.getValueAt(row, 2);
+            totalPrice = totalPrice.add(new BigDecimal(productPrice));
         }
-        priceField.setText("" + totalPrice);
+        priceField.setText(totalPrice.toPlainString());
     }
 
     private ArrayList<String> getProducts() {
