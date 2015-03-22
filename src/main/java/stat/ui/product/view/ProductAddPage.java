@@ -44,7 +44,7 @@ public class ProductAddPage extends Page {
     }
 
     private void initializePageDesign() {
-        setSize(420, 370);
+        setMinimumSize(new Dimension(420, 370));
         setBackground(new Color(204, 204, 0));
         setLayout(null);
     }
@@ -188,8 +188,8 @@ public class ProductAddPage extends Page {
                         //TODO ask again
                     }
                 } else if (sourceOfAction.equals(backButton)) {
-                    // TODO: change the functionality
-                    //appWindow.setCurrentPage(menuPage);
+                    JFrame parentFrame = (JFrame) getRootPane().getParent();
+                    parentFrame.dispose();
                 }
             }
         }
