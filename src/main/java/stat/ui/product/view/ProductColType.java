@@ -16,8 +16,10 @@ package stat.ui.product.view;
  ***************************
  */
 
+import java.math.BigDecimal;
+
 public enum ProductColType {
-    NAME(0, "Product Name", String.class), DESCRIPTION(1, "Description", String.class), PRICE(2, "Unit Price", Double.class);
+    NAME(0, "Product Name", String.class), DESCRIPTION(1, "Description", String.class), PRICE(2, "Unit Price", BigDecimal.class);
 
     private final int    colIndex;
     private final String colName;
