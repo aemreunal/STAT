@@ -90,10 +90,6 @@ public class ProductMainPage extends Page {
         tableModel.setRowCount(0);
     }
 
-    public void showProductDeletionError(SoldProductDeletionException exception) {
-        JOptionPane.showMessageDialog(this, exception.getErrorMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
-    }
-
     private class ProductPageButtonListener implements ActionListener {
 
         @Override
@@ -130,5 +126,9 @@ public class ProductMainPage extends Page {
     public void displayProductDetailWindow(String name, String description, String price) {
         ProductViewPage view = new ProductViewPage(name, description, price);
         showPopup(view);
+    }
+
+    public void displayProductDeletionError(SoldProductDeletionException exception) {
+        JOptionPane.showMessageDialog(this, exception.getErrorMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
     }
 }

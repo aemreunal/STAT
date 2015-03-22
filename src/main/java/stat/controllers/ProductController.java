@@ -70,7 +70,7 @@ public class ProductController implements PageController {
         try {
             productService.deleteProduct(productIdToRemove);
         } catch (SoldProductDeletionException e) {
-            productMainPage.showProductDeletionError(e);
+            productMainPage.displayProductDeletionError(e);
         }
         populateProductListTable();
     }
