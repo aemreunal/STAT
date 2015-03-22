@@ -1,4 +1,4 @@
-package stat.ui.product.view;
+package stat.ui.product.view.helper;
 
 /*
  ***************************

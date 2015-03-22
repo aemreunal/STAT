@@ -1,4 +1,4 @@
-package stat.ui.product.view;
+package stat.ui.product.view.helper;
 
 /*
  ***************************
@@ -17,7 +17,6 @@ package stat.ui.product.view;
  */
 
 import stat.domain.Product;
-import stat.ui.product.view.ProductColType;
 
 import java.util.Comparator;
 import javax.swing.table.TableModel;

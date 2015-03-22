@@ -3,6 +3,9 @@ package stat.ui.product.view;
 import stat.service.exception.SoldProductDeletionException;
 import stat.ui.Page;
 import stat.ui.product.ProductController;
+import stat.ui.product.view.helper.ProductColType;
+import stat.ui.product.view.helper.ProductTableModel;
+import stat.ui.product.view.helper.ProductTableSorter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

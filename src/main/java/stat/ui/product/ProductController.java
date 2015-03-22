@@ -5,7 +5,7 @@ import stat.domain.Product;
 import stat.service.exception.ProductNameException;
 import stat.service.exception.SoldProductDeletionException;
 import stat.ui.product.view.ProductAddPage;
-import stat.ui.product.view.ProductColType;
+import stat.ui.product.view.helper.ProductColType;
 import stat.ui.product.view.ProductMainPage;
 import stat.service.ProductService;
 
