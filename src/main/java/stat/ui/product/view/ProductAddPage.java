@@ -1,7 +1,6 @@
 package stat.ui.product.view;
 
 import stat.ui.Page;
-import stat.ui.mainApp.view.ApplicationWindow;
 import stat.ui.product.ProductController;
 
 import java.awt.*;
@@ -11,20 +10,16 @@ import java.math.BigDecimal;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
 /**
  * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
  */
 
-@Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ProductAddPage extends Page {
 
-    @Autowired
     private ProductController productController;
 
     private JPanel     fieldHolder;
@@ -36,7 +31,8 @@ public class ProductAddPage extends Page {
 
     private ButtonListener buttonListener;
 
-    public ProductAddPage() {
+    public ProductAddPage(ProductController productController) {
+        this.productController = productController;
         buttonListener = new ButtonListener();
         initializePageDesign();
         initializeFields();
@@ -137,7 +133,7 @@ public class ProductAddPage extends Page {
         priceField.setText(null);
     }
 
-    private boolean validateFields() {
+    private boolean fieldsAreValid() {
         String regex = "^([0-9]+)([.][0-9]{1,4})?$";
         String price = priceField.getText();
         // TODO: implement
@@ -152,7 +148,7 @@ public class ProductAddPage extends Page {
         String productName = nameField.getText().trim();
         String productDescription = descriptionField.getText().trim();
         BigDecimal productPrice = new BigDecimal(priceField.getText());
-        productController.saveProduct(productName, productDescription, productPrice);
+        productController.saveProduct(this, productName, productDescription, productPrice);
     }
 
     public void displaySuccess() {
@@ -176,10 +172,9 @@ public class ProductAddPage extends Page {
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            ApplicationWindow appWindow = getApplicationWindow();
             Object sourceOfAction = e.getSource();
             if (sourceOfAction.equals(saveButton)) {
-                if (validateFields()) {
+                if (fieldsAreValid()) {
                     saveProduct();
                     //TODO close maybe?
                 } else {

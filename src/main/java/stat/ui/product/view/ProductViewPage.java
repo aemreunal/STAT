@@ -1,5 +1,6 @@
 package stat.ui.product.view;
 
+import stat.domain.Product;
 import stat.ui.Page;
 
 import java.awt.*;
@@ -16,20 +17,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ProductViewPage extends Page {
 
-    private final String     productName;
-    private final String     description;
-    private final String     unitPrice;
-    private       JPanel     fieldHolder;
-    private       JTextField nameField;
-    private       JTextField descriptionField;
-    private       JTextField priceField;
+    private JPanel     fieldHolder;
 
-    public ProductViewPage(String productName, String description, String unitPrice) {
-        this.productName = productName;
-        this.description = description;
-        this.unitPrice = unitPrice;
+    public ProductViewPage(Product product) {
         initializePageDesign();
-        initializeFields();
+        initializeFields(product);
     }
 
     private void initializePageDesign() {
@@ -38,11 +30,11 @@ public class ProductViewPage extends Page {
         setLayout(null);
     }
 
-    private void initializeFields() {
+    private void initializeFields(Product product) {
         initializeFieldHolder();
-        initializeNameField();
-        initializeDescriptionField();
-        initializePriceField();
+        initializeNameField(product.getName());
+        initializeDescriptionField(product.getDescription());
+        initializePriceField(String.valueOf(product.getPrice()));
     }
 
     private void initializeFieldHolder() {
@@ -54,12 +46,12 @@ public class ProductViewPage extends Page {
         add(fieldHolder);
     }
 
-    private void initializeNameField() {
+    private void initializeNameField(String productName) {
         JLabel nameLabel = new JLabel("Name :");
         nameLabel.setBounds(6, 17, 108, 19);
         nameLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-        nameField = new JTextField(productName);
+        JTextField nameField = new JTextField(productName);
         nameField.setBounds(124, 16, 181, 20);
         nameField.setColumns(10);
         nameField.setEditable(false);
@@ -68,12 +60,12 @@ public class ProductViewPage extends Page {
         fieldHolder.add(nameField);
     }
 
-    private void initializeDescriptionField() {
+    private void initializeDescriptionField(String description) {
         JLabel descriptionLabel = new JLabel("Description :");
         descriptionLabel.setBounds(6, 42, 108, 19);
         descriptionLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-        descriptionField = new JTextField(description);
+        JTextField descriptionField = new JTextField(description);
         descriptionField.setBounds(124, 41, 181, 20);
         descriptionField.setColumns(10);
         descriptionField.setEditable(false);
@@ -82,12 +74,12 @@ public class ProductViewPage extends Page {
         fieldHolder.add(descriptionField);
     }
 
-    private void initializePriceField() {
+    private void initializePriceField(String price) {
         JLabel priceLabel = new JLabel("Unit Price :");
         priceLabel.setBounds(6, 66, 108, 19);
         priceLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-        priceField = new JTextField(unitPrice);
+        JTextField priceField = new JTextField(price);
         priceField.setBounds(124, 65, 181, 20);
         priceField.setColumns(10);
         priceField.setEditable(false);

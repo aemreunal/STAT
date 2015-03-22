@@ -1,13 +1,15 @@
 package stat.ui.product;
 
-import stat.ui.PageController;
 import stat.domain.Product;
+import stat.service.ProductService;
 import stat.service.exception.ProductNameException;
 import stat.service.exception.SoldProductDeletionException;
+import stat.ui.Page;
+import stat.ui.PageController;
 import stat.ui.product.view.ProductAddPage;
-import stat.ui.product.view.helper.ProductColType;
 import stat.ui.product.view.ProductMainPage;
-import stat.service.ProductService;
+import stat.ui.product.view.ProductViewPage;
+import stat.ui.product.view.helper.ProductColType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,14 +33,11 @@ public class ProductController implements PageController {
     private ProductService productService;
 
     @Autowired
-    private ProductAddPage productAddPage;
-
-    @Autowired
     private ProductMainPage productMainPage;
 
     private ArrayList<Integer> productIDList = new ArrayList<>();
 
-    public void saveProduct(String productName, String productDescription, BigDecimal productPrice) {
+    public void saveProduct(ProductAddPage productAddPage, String productName, String productDescription, BigDecimal productPrice) {
         if (productPrice.signum() == -1) {
             productAddPage.displayValidationError();
             return;
@@ -66,7 +65,16 @@ public class ProductController implements PageController {
         productMainPage.setProductsList(productTableObjects);
     }
 
-    public void removeProduct(int row) {
+    public void addProductButtonClicked() {
+        ProductAddPage productAddPage = new ProductAddPage(this);
+        Page.showPopup(productAddPage);
+    }
+
+    public void removeProductButtonClicked(int row) {
+        if (row == -1) { // If no row has been chosen
+            return;
+        }
+        //TODO: Confirm option must be added.
         int productIdToRemove = productIDList.remove(row);
         try {
             productService.deleteProduct(productIdToRemove);
@@ -76,9 +84,13 @@ public class ProductController implements PageController {
         }
     }
 
-    public void showProductDetails(int row) {
+    public void viewProductButtonClicked(int row) {
+        if (row == -1) { // If no row has been chosen
+            return;
+        }
         Product product = productService.getProductWithId(productIDList.get(row));
-        productMainPage.displayProductDetailWindow(product.getName(), product.getDescription(), product.getPrice().toPlainString());
+        ProductViewPage productViewPage = new ProductViewPage(product);
+        Page.showPopup(productViewPage);
     }
 
     @Override

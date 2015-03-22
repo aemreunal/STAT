@@ -12,22 +12,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 /**
  * Created by Burcu Basak SARIKAYA on 3/18/2015. S000855 burcu.sarikaya@ozu.edu.tr
  */
 
-@org.springframework.stereotype.Component
+@Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ProductMainPage extends Page {
 
     @Autowired
     private ProductController productController;
-
-    @Autowired
-    private ProductAddPage pageNewProduct;
 
     private JTable                    productTable;
     private ProductTableModel         tableModel;
@@ -97,11 +95,11 @@ public class ProductMainPage extends Page {
             int selectedRow = getRow();
             Object sourceOfAction = e.getSource();
             if (sourceOfAction.equals(addProductButton)) {
-                showAddProductWindow();
+                productController.addProductButtonClicked();
             } else if (sourceOfAction.equals(removeProductButton)) {
-                removeProduct(selectedRow);
+                productController.removeProductButtonClicked(selectedRow);
             } else if (sourceOfAction.equals(viewProductButton)) {
-                showProductDetailsWindow(selectedRow);
+                productController.viewProductButtonClicked(selectedRow);
             }
         }
 
@@ -113,28 +111,6 @@ public class ProductMainPage extends Page {
             }
             return selectedRow;
         }
-    }
-
-    private void showAddProductWindow() {
-        showPopup(pageNewProduct);
-    }
-
-    private void removeProduct(int row) {
-        if (row != -1) {
-            //TODO: Confirm option must be added.
-            productController.removeProduct(row);
-        }
-    }
-
-    private void showProductDetailsWindow(int row) {
-        if (row != -1) {
-            productController.showProductDetails(row);
-        }
-    }
-
-    public void displayProductDetailWindow(String name, String description, String price) {
-        ProductViewPage view = new ProductViewPage(name, description, price);
-        showPopup(view);
     }
 
     public void displayProductDeletionError(SoldProductDeletionException exception) {

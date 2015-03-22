@@ -17,7 +17,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 /**
  * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
  */
-@org.springframework.stereotype.Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 
