@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Set;
 import javax.swing.*;
@@ -26,14 +27,16 @@ public class SaleAddPage extends Page {
 
     private SaleController saleController;
 
-    private JTextField textfieldCustomerName;
-    private JTable     productTable, saleProductTable;
-    private JTextField textfieldTotalPrice;
+    private JTextField customerNameField;
+    private JTextField priceField;
     private JTextField dateField;
+    private JTable     productTable;
+    private JTable     saleProductTable;
     private JButton    backButton, confirmButton;
     private ButtonListener buttonListener;
     private JButton        buttonAdd, buttonRemove;
-    private JScrollPane productListPane, saleProductListPane;
+    private JScrollPane productListPane;
+    private JScrollPane saleProductListPane;
     public static final String DATE_REGEX = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
 
     public SaleAddPage(SaleController saleController) {
@@ -73,12 +76,12 @@ public class SaleAddPage extends Page {
         labelCustomerName.setFont(new Font("Tahoma", Font.BOLD, 13));
         labelCustomerName.setBounds(29, 74, 125, 24);
 
-        textfieldCustomerName = new JTextField();
-        textfieldCustomerName.setBounds(164, 77, 201, 20);
-        textfieldCustomerName.setColumns(10);
+        customerNameField = new JTextField();
+        customerNameField.setBounds(164, 77, 201, 20);
+        customerNameField.setColumns(10);
 
         add(labelCustomerName);
-        add(textfieldCustomerName);
+        add(customerNameField);
     }
 
     private void initDateField() {
@@ -87,7 +90,11 @@ public class SaleAddPage extends Page {
         labelDate.setFont(new Font("Tahoma", Font.BOLD, 13));
         labelDate.setBounds(29, 109, 125, 24);
 
-        dateField = new JTextField("yyyy-MM-dd");
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        int month = Calendar.getInstance().get(Calendar.MONTH);
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+
+        dateField = new JTextField(year + "-" + month + "-" + day);
         dateField.setBounds(164, 111, 201, 22);
 
         add(labelDate);
@@ -175,13 +182,13 @@ public class SaleAddPage extends Page {
         labelTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
         labelTotal.setBounds(292, 311, 49, 24);
 
-        textfieldTotalPrice = new JTextField();
-        textfieldTotalPrice.setBounds(341, 315, 125, 20);
-        textfieldTotalPrice.setColumns(10);
-        textfieldTotalPrice.setEditable(false);
+        priceField = new JTextField();
+        priceField.setBounds(341, 315, 125, 20);
+        priceField.setColumns(10);
+        priceField.setEditable(false);
 
         add(labelTotal);
-        add(textfieldTotalPrice);
+        add(priceField);
     }
 
     private void initConfirmButton() {
@@ -199,7 +206,7 @@ public class SaleAddPage extends Page {
         for (int row = 0; row < saleProductTable.getRowCount(); row++) {
             totalPrice += Double.parseDouble((String) saleProductTable.getValueAt(row, 2));
         }
-        textfieldTotalPrice.setText("" + totalPrice);
+        priceField.setText("" + totalPrice);
     }
 
     private ArrayList<String> getProducts() {
@@ -265,7 +272,7 @@ public class SaleAddPage extends Page {
             showDateParseError();
             return;
         }
-        boolean saleSaved = saleController.saveSale(textfieldCustomerName.getText().trim(), parseDate(dateText), getProducts(), getAmounts());
+        boolean saleSaved = saleController.saveSale(customerNameField.getText().trim(), parseDate(dateText), getProducts(), getAmounts());
         if (saleSaved) {
             displaySuccess();
         } else {
