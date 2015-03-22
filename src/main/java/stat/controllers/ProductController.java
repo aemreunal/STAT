@@ -1,21 +1,19 @@
 package stat.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 import stat.domain.Product;
-import stat.domain.Sale;
 import stat.exception.ProductNameException;
 import stat.exception.SoldProductDeletionException;
 import stat.graphics.ProductAddPage;
+import stat.graphics.ProductColType;
 import stat.graphics.ProductMainPage;
 import stat.service.ProductService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by Uğur Özkan.
@@ -37,6 +35,8 @@ public class ProductController implements PageController {
     @Autowired
     private ProductMainPage productMainPage;
 
+    private ArrayList<Integer> productIDList = new ArrayList<>();
+
     public void saveProduct(String productName, String productDescription, BigDecimal productPrice) {
         try {
             productService.createNewProduct(productName, productDescription, productPrice);
@@ -46,33 +46,40 @@ public class ProductController implements PageController {
         productAddPage.clearInputFields();
     }
 
-    public void populateWithProducts() {
-        productMainPage.addProducts(getAllProducts());
-    }
-
-    private Set<Product> getAllProducts() {
-        return productService.getAllProducts();
-    }
-
-    public void removeProduct(int productId) {
-        try {
-            productService.deleteProduct(productId);
-        } catch (SoldProductDeletionException spde) {
-            productMainPage.showProductDeletionError(productService.getSalesOfProduct(productId).stream().map(Sale::getCustomerName).collect(Collectors.toCollection(ArrayList<String>::new)));
+    public void populateProductListTable() {
+        productMainPage.clearProductsList();
+        Set<Product> allProducts = productService.getAllProducts();
+        Product[] products = allProducts.toArray(new Product[allProducts.size()]);
+        Object[][] productTableObjects = new Object[products.length][ProductColType.getColNameList().length];
+        for (int i = 0; i < products.length; i++) {
+            Product product = products[i];
+            productTableObjects[i] = new Object[] { product.getName(), product.getDescription(), product.getPrice() };
+            productIDList.add(i, product.getProductId());
         }
+        productMainPage.setProductsList(productTableObjects);
+    }
+
+    public void removeProduct(int row) {
+        int productIdToRemove = productIDList.get(row);
+        try {
+            productService.deleteProduct(productIdToRemove);
+        } catch (SoldProductDeletionException e) {
+            productMainPage.showProductDeletionError(e);
+        }
+        populateProductListTable();
+    }
+
+    public void showProductDetails(int row) {
+        Product product = productService.getProductWithId(productIDList.get(row));
+        productMainPage.displayProductDetailWindow(product.getName(), product.getDescription(), product.getPrice().toPlainString());
     }
 
     public Product getProduct(int productId) {
         return productService.getProductWithId(productId);
     }
 
-    public HashSet<Product> getSortedProducts() {
-        //TODO improve
-        return getAllProducts().stream().sorted().collect(Collectors.toCollection(HashSet<Product>::new));
-    }
-
     @Override
     public void refreshPage() {
-        productMainPage.refreshTable();
+        productMainPage.clearProductsList();
     }
 }

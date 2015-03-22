@@ -1,13 +1,11 @@
 package stat.graphics;
 
 import stat.controllers.ProductController;
-import stat.domain.Product;
+import stat.exception.SoldProductDeletionException;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Set;
 import javax.swing.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -29,7 +27,6 @@ public class ProductMainPage extends Page {
 
     private JTable            productTable;
     private ProductTableModel tableModel;
-    private ArrayList<Integer> productIDList = new ArrayList<>();
     private ProductPageButtonListener buttonListener;
 
     private JButton removeProductButton;
@@ -82,17 +79,18 @@ public class ProductMainPage extends Page {
         buttonPanel.add(addProductButton);
     }
 
-    public void addProducts(Set<Product> productSet) {
-        productSet.forEach(this::addProduct);
+    public void setProductsList(Object[][] items) {
+        tableModel.setDataVector(items, ProductColType.getColNameList());
+        // Refresh table view
+        this.repaint();
+        this.validate();
     }
 
-    public void addProduct(Product product) {
-        Object[] productRow = { product.getName(), product.getDescription(), product.getPrice() };
-        tableModel.addRow(productRow);
-        productIDList.add(product.getProductId());
+    public void clearProductsList() {
+        tableModel.setRowCount(0);
     }
 
-    public void showProductDeletionError(ArrayList<String> customerNames) {
+    public void showProductDeletionError(SoldProductDeletionException exception) {
         //TODO show pop-up saying Unable to delete product. Sales made to following customers already.
     }
 
@@ -119,36 +117,18 @@ public class ProductMainPage extends Page {
     private void removeProduct(int row) {
         if (row != -1) {
             //TODO: Confirm option must be added.
-            this.removeProductRow(row);
+            productController.removeProduct(row);
         }
-        this.repaint();
-        this.validate();
-    }
-    // TODO this structure has to be changed. It causes problems.
-    private void removeProductRow(int rowIndex) {
-        int removedProductId = productIDList.remove(rowIndex);
-        productController.removeProduct(removedProductId);
-        tableModel.removeRow(rowIndex);
-    }
-
-    public void refreshTable() {
-        // Clear product list
-        tableModel.setRowCount(0);
-        productIDList.clear();
-        // Tell controller that product list should be refreshed
-        productController.populateWithProducts();
-        // Display populated product list
-        this.repaint();
-        this.validate();
     }
 
     private void showProductDetailsWindow(int row) {
         if (row != -1) {
-            String productName = (String) productTable.getValueAt(row, ProductColType.NAME.getColIndex());
-            String description = (String) productTable.getValueAt(row, ProductColType.DESCRIPTION.getColIndex());
-            String unitPrice = productTable.getValueAt(row, ProductColType.PRICE.getColIndex()).toString();
-            ProductViewPage view = new ProductViewPage(productName, description, unitPrice);
-            showPopup(view);
+            productController.showProductDetails(row);
         }
+    }
+
+    public void displayProductDetailWindow(String name, String description, String price) {
+        ProductViewPage view = new ProductViewPage(name, description, price);
+        showPopup(view);
     }
 }
