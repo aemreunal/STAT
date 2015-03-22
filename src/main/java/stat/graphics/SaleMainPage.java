@@ -4,7 +4,9 @@ import stat.controllers.SaleController;
 import stat.domain.Sale;
 
 import java.awt.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -106,12 +108,6 @@ public class SaleMainPage extends Page {
         return buttonAddSale;
     }
 
-    public void emptySales() {
-        DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
-        tableModel.setRowCount(0);
-        saleIDList = new ArrayList<>();
-    }
-
     public void removeRow(int rowIndex) {
         int saleID = saleIDList.get(rowIndex);
         DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
@@ -121,25 +117,30 @@ public class SaleMainPage extends Page {
         saleController.removeSale(saleID);
     }
 
-    public void addSales(Set<Sale> saleSet) {
-        saleSet.forEach(this::addSale);
+    public void refreshTable() {
+        // Clear sales list
+        emptySales();
+        // Tell controller that sales list should be refreshed
+        saleController.populateWithSales();
+        // Display populated sales list
+        this.repaint();
+        this.validate();
     }
 
-    public void addSale(Sale sale) {
+    public void emptySales() {
+        DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
+        tableModel.setRowCount(0);
+        saleIDList.clear();
+    }
+
+    public void addSale(Integer id, String customerName, Date date, BigDecimal totalPrice) {
         DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
         Object[] saleRow = new Object[3];
-        saleRow[0] = sale.getCustomerName();
-        saleRow[1] = sale.getDate();
-        saleRow[2] = saleController.calculateTotalPrice(sale.getSaleId());
+        saleRow[0] = customerName;
+        saleRow[1] = date;
+        saleRow[2] = totalPrice;
 
         tableModel.addRow(saleRow);
-        saleIDList.add(sale.getSaleId());
+        saleIDList.add(id);
     }
-
-    public void refreshTable() {
-        emptySales();
-        saleController.populateWithSales();
-        saleTable.repaint();
-    }
-
 }

@@ -81,7 +81,19 @@ public class SaleController implements PageController {
 
 
     // SaleMainPage methods
-    public BigDecimal calculateTotalPrice(Integer saleId) {
+    public void populateWithSales() {
+        getAllSales().forEach(this::addSale);
+    }
+
+    private void addSale(Sale sale) {
+        Integer id = sale.getSaleId();
+        String customerName = sale.getCustomerName();
+        Date date = sale.getDate();
+        BigDecimal totalPrice = calculateTotalPrice(id);
+        saleMainPage.addSale(id, customerName, date, totalPrice);
+    }
+
+    private BigDecimal calculateTotalPrice(Integer saleId) {
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (Map.Entry<Product, Integer> productsAndAmounts : getProductsAndAmounts(saleId).entrySet()) {
             Product product = productsAndAmounts.getKey();
@@ -89,18 +101,6 @@ public class SaleController implements PageController {
             totalPrice = totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(amount)));
         }
         return totalPrice;
-    }
-
-    public void populateWithProductNames() {
-        saleAddPage.fillProducts(getProductNames());
-    }
-
-    private LinkedHashSet<String> getProductNames() {
-        return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
-    public void populateWithSales() {
-        saleMainPage.addSales(getAllSales());
     }
 
     private Set<Sale> getAllSales() {
@@ -136,6 +136,14 @@ public class SaleController implements PageController {
 
             saleViewPage.addProductDetailsToTable(productName, amount, price);
         }
+    }
+
+    public void populateWithProductNames() {
+        saleAddPage.fillProducts(getProductNames());
+    }
+
+    private LinkedHashSet<String> getProductNames() {
+        return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
 
