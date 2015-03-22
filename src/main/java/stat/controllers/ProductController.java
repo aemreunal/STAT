@@ -1,6 +1,7 @@
 package stat.controllers;
 
 import stat.domain.Product;
+import stat.domain.Sale;
 import stat.exception.ProductNameException;
 import stat.exception.SoldProductDeletionException;
 import stat.graphics.ProductAddPage;
@@ -8,9 +9,11 @@ import stat.graphics.ProductMainPage;
 import stat.service.ProductService;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -55,8 +58,8 @@ public class ProductController implements PageController {
     public void removeProduct(int productId) {
         try {
             productService.deleteProduct(productId);
-        } catch (SoldProductDeletionException e) {
-            // TODO handle this exception and show details of it to the user.
+        } catch (SoldProductDeletionException spde) {
+            productMainPage.showProductDeletionError(productService.getSalesOfProduct(productId).stream().map(Sale::getCustomerName).collect(Collectors.toCollection(ArrayList<String>::new)));
         }
     }
 

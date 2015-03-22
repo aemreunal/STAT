@@ -92,6 +92,10 @@ public class ProductMainPage extends Page {
         productIDList.add(product.getProductId());
     }
 
+    public void showProductDeletionError(ArrayList<String> customerNames) {
+        //TODO show pop-up saying Unable to delete product. Sales made to following customers already.
+    }
+
     private class ProductPageButtonListener implements ActionListener {
 
         @Override
