@@ -19,12 +19,15 @@ package stat.repository;
 import stat.domain.Product;
 
 import java.util.Set;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface ProductRepo extends CrudRepository<Product, Integer>, JpaSpecificationExecutor {
+public interface ProductRepo extends PagingAndSortingRepository<Product, Integer>, JpaSpecificationExecutor {
 
     Set<Product> findAll();
+
+    Set<Product> findAll(Sort sort);
 
     /**
      * Matches the name exactly

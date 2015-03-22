@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +75,8 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Set<Product> getAllProducts() {
-        return productRepo.findAll();
+        Sort sortByIdAsc = new Sort(Sort.Direction.ASC, "productId");
+        return productRepo.findAll(sortByIdAsc);
     }
 
     @Transactional(readOnly = true)
