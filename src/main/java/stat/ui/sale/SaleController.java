@@ -12,8 +12,6 @@ import stat.ui.sale.view.SaleViewPage;
 import stat.ui.sale.view.helper.SaleColType;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,45 +29,30 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class SaleController implements PageController {
 
-    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-
     @Autowired
-    private SaleService    saleService;
+    private SaleService saleService;
 
     @Autowired
     private ProductService productService;
 
     @Autowired
-    private SaleMainPage   saleMainPage;
+    private SaleMainPage saleMainPage;
 
     private ArrayList<Integer> saleIDList = new ArrayList<>();
 
-    // SaleAddPage methods
-    public boolean validateDate(String date) {
-        String dateRegex = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
-        return date.matches(dateRegex);
-    }
-
-    public void saveSale(String customerName, String date, ArrayList<String> productNames, ArrayList<Integer> amounts) {
-        Sale sale = saleService.createNewSale(customerName, parseDate(date));
+    public boolean saveSale(String customerName, Date date, ArrayList<String> productNames, ArrayList<Integer> amounts) {
+        Sale sale = saleService.createNewSale(customerName, date);
         for (int i = 0; i < productNames.size(); i++) {
             try {
                 Integer productId = productService.getIdOfProductWithName(productNames.get(i));
                 sale = saleService.addProduct(sale, productId, amounts.get(i));
             } catch (ProductNotFoundException e) {
                 System.out.println("Product not found exception");
+                return false;
             }
         }
-    }
-
-    private Date parseDate(String date) {
-        try {
-            return dateFormatter.parse(date);
-        } catch (ParseException pe) {
-            System.out.println("SaleController pe");
-        }
-
-        return null;
+        refreshSaleListTable();
+        return true;
     }
 
     public BigDecimal calculatePrice(String productName, int amount) {
@@ -96,20 +79,6 @@ public class SaleController implements PageController {
         saleMainPage.setSalesList(saleTableObjects);
     }
 
-    public void removeSale(int row) {
-        int saleIdToRemove = saleIDList.remove(row);
-        saleService.deleteSale(saleIdToRemove);
-        refreshSaleListTable();
-    }
-
-    private LinkedHashMap<Product, Integer> getProductsAndAmounts(Integer saleId) {
-        return saleService.getProductsOfSale(saleId);
-    }
-
-    public void populateWithProductNames(SaleAddPage saleAddPage) {
-        saleAddPage.fillProducts(getProductNames());
-    }
-
     private LinkedHashSet<String> getProductNames() {
         return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
     }
@@ -119,35 +88,30 @@ public class SaleController implements PageController {
         refreshSaleListTable();
     }
 
-
-    public void showAddSaleWindow() {
+    public void addSaleButtonClicked() {
         SaleAddPage saleAddPage = new SaleAddPage(this);
-        populateWithProductNames(saleAddPage);
+        saleAddPage.fillProducts(getProductNames());
         saleMainPage.displayAddSaleWindow(saleAddPage);
     }
 
-    public void showSaleDetails(int row) {
-        SaleViewPage saleViewPage = new SaleViewPage();
-        saleViewPage.setSale(saleService.getSaleWithId(saleIDList.get(row)));
 
+    public void removeSaleButtonClicked(int row) {
+        if (row == -1) { // If no row has been chosen
+            return;
+        }
+        int saleIdToRemove = saleIDList.remove(row);
+        saleService.deleteSale(saleIdToRemove);
+        refreshSaleListTable();
+    }
+
+    public void showSaleDetailsButtonClicked(int row) {
+        if (row == -1) { // If no row has been chosen
+            return;
+        }
         Integer saleId = saleIDList.get(row);
         Sale sale = saleService.getSaleWithId(saleId);
-        String customerName = sale.getCustomerName();
-        Date date = sale.getDate();
-        BigDecimal totalPrice = sale.getTotalPrice();
-
-        saleViewPage.setCustomerNameField(customerName);
-        saleViewPage.setDateField(date);
-        saleViewPage.setTotalPriceField(totalPrice);
-        LinkedHashMap<Product, Integer> productsAndAmounts = getProductsAndAmounts(saleId);
-
-        for (Map.Entry<Product, Integer> entry : productsAndAmounts.entrySet()) {
-            Product product = entry.getKey();
-            Integer amount = entry.getValue();
-            BigDecimal price = product.getPrice().multiply(BigDecimal.valueOf(amount));
-            saleViewPage.addProductDetailsToTable(product.getName(), amount, price);
-        }
-
+        LinkedHashMap<Product, Integer> productsAndAmounts = saleService.getProductsOfSale(saleId);
+        SaleViewPage saleViewPage = new SaleViewPage(sale, productsAndAmounts);
         saleMainPage.displaySaleDetailsWindow(saleViewPage);
     }
 }

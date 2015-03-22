@@ -1,14 +1,16 @@
 package stat.ui.sale.view;
 
 import stat.ui.Page;
-import stat.ui.mainApp.view.ApplicationWindow;
 import stat.ui.sale.SaleController;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,6 +22,8 @@ import javax.swing.table.TableModel;
 
 public class SaleAddPage extends Page {
 
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+
     private SaleController saleController;
 
     private JTextField textfieldCustomerName;
@@ -30,6 +34,7 @@ public class SaleAddPage extends Page {
     private ButtonListener buttonListener;
     private JButton        buttonAdd, buttonRemove;
     private JScrollPane productListPane, saleProductListPane;
+    public static final String DATE_REGEX = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
 
     public SaleAddPage(SaleController saleController) {
         this.saleController = saleController;
@@ -215,69 +220,83 @@ public class SaleAddPage extends Page {
         return productAmounts;
     }
 
-    private void displaySuccess() {
-        JOptionPane.showMessageDialog(this, "The Sale was successfully saved.");
-    }
-
-    private void displayValidationError() {
-        JOptionPane.showMessageDialog(this,
-                                      "Enter the fields correctly.",
-                                      "Validation Error",
-                                      JOptionPane.ERROR_MESSAGE);
-    }
-
     private class ButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            ApplicationWindow appWindow = getApplicationWindow();
             Object sourceOfAction = e.getSource();
-            if (sourceOfAction instanceof JButton) {
-                if (sourceOfAction.equals(backButton)) {
-                    JFrame parentFrame = (JFrame) getRootPane().getParent();
-                    parentFrame.dispose();
-                } else if (sourceOfAction.equals(buttonAdd)) {
-                    addProductToSale();
-                } else if (sourceOfAction.equals(buttonRemove)) {
-                    removeProductFromSale();
-                } else if (sourceOfAction.equals(confirmButton)) {
-                    boolean isDateValid = saleController.validateDate(dateField.getText());
-                    if (isDateValid) {
-                        saveSale();
-                        saleController.refreshPage();
-                        displaySuccess();
-                        //TODO close
-                    } else {
-                        displayValidationError();
-                        //TODO ask again
-                    }
-                }
+            if (sourceOfAction.equals(backButton)) {
+                JFrame parentFrame = (JFrame) getRootPane().getParent();
+                parentFrame.dispose();
+            } else if (sourceOfAction.equals(buttonAdd)) {
+                addProductToSale();
+            } else if (sourceOfAction.equals(buttonRemove)) {
+                removeProductFromSale();
+            } else if (sourceOfAction.equals(confirmButton)) {
+                saveSale();
             }
         }
+    }
 
-        private void addProductToSale() {
-            int row = productTable.getSelectedRow();
-            if (row != -1) {
-                String productName = (String) productTable.getValueAt(row, 0);
-                ((DefaultTableModel) productTable.getModel()).removeRow(row);
-                BigDecimal unitPrice = saleController.calculatePrice(productName, 1);
-                ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[] { productName, 1, "" + unitPrice });
-            }
-            updateTotalPrice();
+    private void addProductToSale() {
+        int row = productTable.getSelectedRow();
+        if (row != -1) {
+            String productName = (String) productTable.getValueAt(row, 0);
+            ((DefaultTableModel) productTable.getModel()).removeRow(row);
+            BigDecimal unitPrice = saleController.calculatePrice(productName, 1);
+            ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[] { productName, 1, "" + unitPrice });
         }
+        updateTotalPrice();
+    }
 
-        private void removeProductFromSale() {
-            int row = saleProductTable.getSelectedRow();
-            if (row != -1) {
-                String productName = (String) saleProductTable.getValueAt(row, 0);
-                ((DefaultTableModel) saleProductTable.getModel()).removeRow(row);
-                ((DefaultTableModel) productTable.getModel()).addRow(new Object[] { productName });
-            }
-            updateTotalPrice();
+    private void removeProductFromSale() {
+        int row = saleProductTable.getSelectedRow();
+        if (row != -1) {
+            String productName = (String) saleProductTable.getValueAt(row, 0);
+            ((DefaultTableModel) saleProductTable.getModel()).removeRow(row);
+            ((DefaultTableModel) productTable.getModel()).addRow(new Object[] { productName });
         }
+        updateTotalPrice();
+    }
 
-        private void saveSale() {
-            saleController.saveSale(textfieldCustomerName.getText(), dateField.getText(), getProducts(), getAmounts());
+    private void saveSale() {
+        String dateText = dateField.getText().trim();
+        if (!dateText.matches(DATE_REGEX)) {
+            showDateParseError();
+            return;
         }
+        boolean saleSaved = saleController.saveSale(textfieldCustomerName.getText().trim(), parseDate(dateText), getProducts(), getAmounts());
+        if (saleSaved) {
+            displaySuccess();
+        } else {
+            displayValidationError();
+        }
+    }
+
+    private Date parseDate(String dateText) {
+        try {
+            return dateFormatter.parse(dateText);
+        } catch (ParseException pe) {
+            showDateParseError();
+        }
+        return null;
+    }
+
+    private void showDateParseError() {
+        JOptionPane.showMessageDialog(this,
+                                      "Please enter a valid date.",
+                                      "Validation Error",
+                                      JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void displaySuccess() {
+        JOptionPane.showMessageDialog(this, "The Sale was successfully saved.");
+    }
+
+    public void displayValidationError() {
+        JOptionPane.showMessageDialog(this,
+                                      "Enter the fields correctly.",
+                                      "Validation Error",
+                                      JOptionPane.ERROR_MESSAGE);
     }
 }
