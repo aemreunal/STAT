@@ -5,6 +5,7 @@ import stat.controllers.SaleController;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Set;
 import javax.swing.*;
@@ -139,7 +140,7 @@ public class SaleAddPage extends Page {
                     if (value.matches(regex)) {
                         super.setValueAt(aValue, row, column);
                         String productName = (String) saleProductTable.getValueAt(row, 0);
-                        double price = saleController.calculatePrice(productName, Integer.parseInt((value)));
+                        BigDecimal price = saleController.calculatePrice(productName, Integer.parseInt((value)));
                         saleProductTable.setValueAt("" + price, row, 2);
                         updateTotalPrice();
                     }
@@ -263,7 +264,7 @@ public class SaleAddPage extends Page {
             if (row != -1) {
                 String productName = (String) productTable.getValueAt(row, 0);
                 ((DefaultTableModel) productTable.getModel()).removeRow(row);
-                double unitPrice = saleController.calculatePrice(productName, 1);
+                BigDecimal unitPrice = saleController.calculatePrice(productName, 1);
                 ((DefaultTableModel) saleProductTable.getModel()).addRow(new Object[] { productName, 1, "" + unitPrice });
             }
             updateTotalPrice();

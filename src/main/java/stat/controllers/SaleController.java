@@ -69,14 +69,14 @@ public class SaleController implements PageController {
         return null;
     }
 
-    public double calculatePrice(String productName, int amount) {
-        double productPrice = 0.0;
+    public BigDecimal calculatePrice(String productName, int amount) {
+        BigDecimal productPrice = BigDecimal.ZERO;
         try {
-            productPrice = productService.getProductWithName(productName).getPrice().doubleValue();
+            productPrice = productService.getProductWithName(productName).getPrice();
         } catch (ProductNotFoundException pnfe) {
             System.out.println("SaleController pnfe");
         }
-        return productPrice * amount;
+        return productPrice.multiply(BigDecimal.valueOf(amount));
     }
 
 
