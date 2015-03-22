@@ -43,7 +43,7 @@ public class SaleAddPage extends Page {
         this.saleController = saleController;
         buttonListener = new ButtonListener();
         initPageDesign();
-        initBackButton();
+        initCancelButton();
         initCustomerNameField();
         initDateField();
         initProductTable();
@@ -60,8 +60,8 @@ public class SaleAddPage extends Page {
         setMinimumSize(new Dimension(500, 450));
     }
 
-    private void initBackButton() {
-        backButton = new JButton("BACK");
+    private void initCancelButton() {
+        backButton = new JButton("Cancel");
         backButton.setForeground(new Color(204, 51, 51));
         backButton.setBackground(new Color(245, 245, 245));
         backButton.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -71,7 +71,7 @@ public class SaleAddPage extends Page {
     }
 
     private void initCustomerNameField() {
-        JLabel labelCustomerName = new JLabel("Customer Name : ");
+        JLabel labelCustomerName = new JLabel("Customer Name:");
         labelCustomerName.setHorizontalAlignment(SwingConstants.RIGHT);
         labelCustomerName.setFont(new Font("Tahoma", Font.BOLD, 13));
         labelCustomerName.setBounds(29, 74, 125, 24);
@@ -85,7 +85,7 @@ public class SaleAddPage extends Page {
     }
 
     private void initDateField() {
-        JLabel labelDate = new JLabel("Date : ");
+        JLabel labelDate = new JLabel("Date:");
         labelDate.setHorizontalAlignment(SwingConstants.RIGHT);
         labelDate.setFont(new Font("Tahoma", Font.BOLD, 13));
         labelDate.setBounds(29, 109, 125, 24);
@@ -160,25 +160,25 @@ public class SaleAddPage extends Page {
     }
 
     private void initAddButton() {
-        buttonAdd = new JButton("ADD");
+        buttonAdd = new JButton("Add →");
         buttonAdd.setFont(new Font("Tahoma", Font.BOLD, 11));
         buttonAdd.setForeground(new Color(106, 90, 205));
-        buttonAdd.setBounds(145, 190, 69, 23);
+        buttonAdd.setBounds(137, 190, 85, 23);
         buttonAdd.addActionListener(buttonListener);
         add(buttonAdd);
     }
 
     private void initRemoveButton() {
-        buttonRemove = new JButton("DEL");
+        buttonRemove = new JButton("← Remove");
         buttonRemove.setForeground(new Color(165, 42, 42));
         buttonRemove.setFont(new Font("Tahoma", Font.BOLD, 11));
-        buttonRemove.setBounds(145, 224, 69, 23);
+        buttonRemove.setBounds(137, 224, 85, 23);
         buttonRemove.addActionListener(buttonListener);
         add(buttonRemove);
     }
 
     private void initTotalPrice() {
-        JLabel labelTotal = new JLabel("Total :");
+        JLabel labelTotal = new JLabel("Total:");
         labelTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
         labelTotal.setBounds(292, 311, 49, 24);
 
@@ -192,7 +192,7 @@ public class SaleAddPage extends Page {
     }
 
     private void initConfirmButton() {
-        confirmButton = new JButton("CONFIRM");
+        confirmButton = new JButton("Create");
         confirmButton.setForeground(new Color(0, 153, 51));
         confirmButton.setBackground(new Color(245, 245, 245));
         confirmButton.setFont(new Font("Tahoma", Font.BOLD, 14));
