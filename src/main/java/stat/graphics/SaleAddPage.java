@@ -212,7 +212,7 @@ public class SaleAddPage extends Page {
     private ArrayList<Integer> getAmounts() {
         ArrayList<Integer> productAmounts = new ArrayList<>();
         for (int row = 0; row < saleProductTable.getRowCount(); row++) {
-            int productAmount = Integer.parseInt((String) saleProductTable.getValueAt(row, 1));
+            int productAmount = Integer.parseInt(saleProductTable.getValueAt(row, 1).toString());
             productAmounts.add(productAmount);
         }
         return productAmounts;

@@ -130,7 +130,7 @@ public class SaleMainPage extends Page {
         Object[] saleRow = new Object[3];
         saleRow[0] = sale.getCustomerName();
         saleRow[1] = sale.getDate();
-        saleRow[2] = 0.0; // TODO: find way to calculate total amount
+        saleRow[2] = saleController.calculateTotalPrice(sale.getSaleId());
 
         tableModel.addRow(saleRow);
         saleIDList.add(sale.getSaleId());

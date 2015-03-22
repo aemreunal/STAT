@@ -9,6 +9,7 @@ import stat.graphics.SaleViewPage;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -80,6 +81,16 @@ public class SaleController implements PageController {
 
 
     // SaleMainPage methods
+    public BigDecimal calculateTotalPrice(Integer saleId) {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (Map.Entry<Product, Integer> productsAndAmounts : getProductsAndAmounts(saleId).entrySet()) {
+            Product product = productsAndAmounts.getKey();
+            Integer amount = productsAndAmounts.getValue();
+            totalPrice = totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(amount)));
+        }
+        return totalPrice;
+    }
+
     public void populateWithProductNames() {
         saleAddPage.fillProducts(getProductNames());
     }
