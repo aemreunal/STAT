@@ -109,6 +109,10 @@ public class SaleAddPage extends Page {
     }
 
     public void fillProducts(Set<String> productNames) {
+        // Clear product list
+        ((DefaultTableModel) productTable.getModel()).setRowCount(0);
+
+        // Populate with product names
         for (String productName : productNames) {
             ((DefaultTableModel) productTable.getModel()).addRow(new Object[] { productName });
         }

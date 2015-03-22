@@ -124,11 +124,11 @@ public class ProductMainPage extends Page {
         this.repaint();
         this.validate();
     }
-
+    // TODO this structure has to be changed. It causes problems.
     private void removeProductRow(int rowIndex) {
-        tableModel.removeRow(rowIndex);
         int removedProductId = productIDList.remove(rowIndex);
         productController.removeProduct(removedProductId);
+        tableModel.removeRow(rowIndex);
     }
 
     public void refreshTable() {
