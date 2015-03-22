@@ -147,8 +147,8 @@ public class ProductAddPage extends Page {
     }
 
     private void saveProduct() {
-        String productName = nameField.getText();
-        String productDescription = descriptionField.getText();
+        String productName = nameField.getText().trim();
+        String productDescription = descriptionField.getText().trim();
         BigDecimal productPrice = new BigDecimal(priceField.getText());
         productController.saveProduct(productName, productDescription, productPrice);
     }
@@ -160,6 +160,13 @@ public class ProductAddPage extends Page {
     public void displayValidationError() {
         JOptionPane.showMessageDialog(this,
                                       "The fields have invalid data. Please check them again.",
+                                      "Validation Error",
+                                      JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void displayNameError() {
+        JOptionPane.showMessageDialog(this,
+                                      "There already is a product named \'" + nameField.getText().trim() + "\', please enter a different name.",
                                       "Validation Error",
                                       JOptionPane.ERROR_MESSAGE);
     }

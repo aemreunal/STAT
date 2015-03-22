@@ -46,10 +46,10 @@ public class ProductController implements PageController {
             productService.createNewProduct(productName, productDescription, productPrice);
             refreshPage();
             productAddPage.displaySuccess();
+            productAddPage.clearInputFields();
         } catch (ProductNameException pne) {
-            System.out.println("productController pne ");
+            productAddPage.displayNameError();
         }
-        productAddPage.clearInputFields();
     }
 
     public void populateProductListTable() {
@@ -69,10 +69,10 @@ public class ProductController implements PageController {
         int productIdToRemove = productIDList.get(row);
         try {
             productService.deleteProduct(productIdToRemove);
+            populateProductListTable();
         } catch (SoldProductDeletionException e) {
             productMainPage.displayProductDeletionError(e);
         }
-        populateProductListTable();
     }
 
     public void showProductDetails(int row) {
