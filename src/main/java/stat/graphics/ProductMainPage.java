@@ -1,6 +1,7 @@
 package stat.graphics;
 
 import stat.controllers.ProductController;
+import stat.controllers.ProductTableSorter;
 import stat.exception.SoldProductDeletionException;
 
 import java.awt.*;
@@ -29,9 +30,10 @@ public class ProductMainPage extends Page {
     private ProductTableModel         tableModel;
     private ProductPageButtonListener buttonListener;
 
-    private JButton removeProductButton;
-    private JButton viewProductButton;
-    private JButton addProductButton;
+    private JButton            removeProductButton;
+    private JButton            viewProductButton;
+    private JButton            addProductButton;
+    private ProductTableSorter productTableSorter;
 
     public ProductMainPage() {
         buttonListener = new ProductPageButtonListener();
@@ -47,7 +49,9 @@ public class ProductMainPage extends Page {
 
     private void initProductTable() {
         tableModel = new ProductTableModel(new Object[0][0], ProductColType.getColNameList());
+        productTableSorter = new ProductTableSorter(tableModel);
         productTable = new JTable(tableModel);
+        productTable.setRowSorter(productTableSorter);
         productTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(new JScrollPane(productTable), BorderLayout.CENTER);
     }
@@ -81,28 +85,30 @@ public class ProductMainPage extends Page {
 
     public void setProductsList(Object[][] items) {
         tableModel.setDataVector(items, ProductColType.getColNameList());
-        // Refresh table view
-        this.repaint();
-        this.validate();
-    }
-
-    public void clearProductsList() {
-        tableModel.setRowCount(0);
     }
 
     private class ProductPageButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int row = productTable.getSelectedRow();
+            int selectedRow = getRow();
             Object sourceOfAction = e.getSource();
             if (sourceOfAction.equals(addProductButton)) {
                 showAddProductWindow();
             } else if (sourceOfAction.equals(removeProductButton)) {
-                removeProduct(row);
+                removeProduct(selectedRow);
             } else if (sourceOfAction.equals(viewProductButton)) {
-                showProductDetailsWindow(row);
+                showProductDetailsWindow(selectedRow);
             }
+        }
+
+        private int getRow() {
+            int selectedRow = productTable.getSelectedRow();
+            if (selectedRow != -1) { // Check whether any row is selected
+                // Convert from [possibly] sorted view row index to underlying model row index
+                selectedRow = productTableSorter.convertRowIndexToModel(selectedRow);
+            }
+            return selectedRow;
         }
     }
 

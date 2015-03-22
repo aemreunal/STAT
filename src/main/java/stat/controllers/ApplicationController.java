@@ -29,7 +29,7 @@ public class ApplicationController {
     public void startGui() {
         applicationWindow.display();
         saleController.populateWithSales();
-        productController.populateProductListTable();
+        productController.refreshProductListTable();
     }
 
     public void changedTab(String tabName) {

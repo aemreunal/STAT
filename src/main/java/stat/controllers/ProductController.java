@@ -52,8 +52,7 @@ public class ProductController implements PageController {
         }
     }
 
-    public void populateProductListTable() {
-        productMainPage.clearProductsList();
+    public void refreshProductListTable() {
         Set<Product> allProducts = productService.getAllProducts();
         Product[] products = allProducts.toArray(new Product[allProducts.size()]);
         Object[][] productTableObjects = new Object[products.length][ProductColType.getColNameList().length];
@@ -69,7 +68,7 @@ public class ProductController implements PageController {
         int productIdToRemove = productIDList.get(row);
         try {
             productService.deleteProduct(productIdToRemove);
-            populateProductListTable();
+            refreshProductListTable();
         } catch (SoldProductDeletionException e) {
             productMainPage.displayProductDeletionError(e);
         }
@@ -80,12 +79,8 @@ public class ProductController implements PageController {
         productMainPage.displayProductDetailWindow(product.getName(), product.getDescription(), product.getPrice().toPlainString());
     }
 
-    public Product getProduct(int productId) {
-        return productService.getProductWithId(productId);
-    }
-
     @Override
     public void refreshPage() {
-        productMainPage.clearProductsList();
+        refreshProductListTable();
     }
 }

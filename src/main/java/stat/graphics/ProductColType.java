@@ -62,4 +62,8 @@ public enum ProductColType {
     public static Class<?> getColClass(int columnIndex) {
         return ProductColType.fromColIndex(columnIndex).getColClass();
     }
+
+    public static int getNumCols() {
+        return values().length;
+    }
 }
