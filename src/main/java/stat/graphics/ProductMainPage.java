@@ -25,8 +25,8 @@ public class ProductMainPage extends Page {
     @Autowired
     private ProductAddPage pageNewProduct;
 
-    private JTable            productTable;
-    private ProductTableModel tableModel;
+    private JTable                    productTable;
+    private ProductTableModel         tableModel;
     private ProductPageButtonListener buttonListener;
 
     private JButton removeProductButton;
@@ -91,7 +91,7 @@ public class ProductMainPage extends Page {
     }
 
     public void showProductDeletionError(SoldProductDeletionException exception) {
-        //TODO show pop-up saying Unable to delete product. Sales made to following customers already.
+        JOptionPane.showMessageDialog(this, exception.getErrorMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
     }
 
     private class ProductPageButtonListener implements ActionListener {

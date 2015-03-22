@@ -37,4 +37,10 @@ public class SoldProductDeletionException extends Throwable {
     public Sale getSale() {
         return sale;
     }
+
+    public String getErrorMessage() {
+        return "The product can't be deleted because it's part of a sale to \'"
+                + sale.getCustomerName() + "\' on " + sale.getDate()
+                + "!";
+    }
 }
