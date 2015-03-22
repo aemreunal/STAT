@@ -38,8 +38,14 @@ public class ProductController implements PageController {
     private ArrayList<Integer> productIDList = new ArrayList<>();
 
     public void saveProduct(String productName, String productDescription, BigDecimal productPrice) {
+        if (productPrice.signum() == -1) {
+            productAddPage.displayValidationError();
+            return;
+        }
         try {
             productService.createNewProduct(productName, productDescription, productPrice);
+            refreshPage();
+            productAddPage.displaySuccess();
         } catch (ProductNameException pne) {
             System.out.println("productController pne ");
         }

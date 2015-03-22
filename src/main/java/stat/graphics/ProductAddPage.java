@@ -153,13 +153,13 @@ public class ProductAddPage extends Page {
         productController.saveProduct(productName, productDescription, productPrice);
     }
 
-    private void displaySuccess() {
+    public void displaySuccess() {
         JOptionPane.showMessageDialog(this, "The Product was successfully saved.");
     }
 
-    private void displayValidationError() {
+    public void displayValidationError() {
         JOptionPane.showMessageDialog(this,
-                                      "Enter the fields correctly.",
+                                      "The fields have invalid data. Please check them again.",
                                       "Validation Error",
                                       JOptionPane.ERROR_MESSAGE);
     }
@@ -173,8 +173,6 @@ public class ProductAddPage extends Page {
                 if (sourceOfAction.equals(saveButton)) {
                     if (validateFields()) {
                         saveProduct();
-                        productController.refreshPage();
-                        displaySuccess();
                         //TODO close maybe?
                     } else {
                         displayValidationError();
