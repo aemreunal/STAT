@@ -19,8 +19,8 @@ package stat.ui.product.view;
 import javax.swing.table.DefaultTableModel;
 
 public class ProductTableModel extends DefaultTableModel {
-    public ProductTableModel(Object[][] data, String[] columnNames) {
-        super(data, columnNames);
+    public ProductTableModel() {
+        super(new Object[0][0], ProductColType.getColNameList());
     }
 
     public boolean isCellEditable(int row, int column) {

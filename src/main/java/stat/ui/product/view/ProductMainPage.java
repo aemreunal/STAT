@@ -48,7 +48,7 @@ public class ProductMainPage extends Page {
     }
 
     private void initProductTable() {
-        tableModel = new ProductTableModel(new Object[0][0], ProductColType.getColNameList());
+        tableModel = new ProductTableModel();
         productTableSorter = new ProductTableSorter(tableModel);
         productTable = new JTable(tableModel);
         productTable.setRowSorter(productTableSorter);
