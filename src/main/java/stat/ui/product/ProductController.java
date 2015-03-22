@@ -54,6 +54,7 @@ public class ProductController implements PageController {
     }
 
     public void refreshProductListTable() {
+        productIDList.clear();
         Set<Product> allProducts = productService.getAllProducts();
         Product[] products = allProducts.toArray(new Product[allProducts.size()]);
         Object[][] productTableObjects = new Object[products.length][ProductColType.getColNameList().length];
@@ -66,7 +67,7 @@ public class ProductController implements PageController {
     }
 
     public void removeProduct(int row) {
-        int productIdToRemove = productIDList.get(row);
+        int productIdToRemove = productIDList.remove(row);
         try {
             productService.deleteProduct(productIdToRemove);
             refreshProductListTable();

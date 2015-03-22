@@ -30,7 +30,7 @@ public class ApplicationController {
 
     public void startGui() {
         applicationWindow.display();
-        saleController.populateWithSales();
+        saleController.refreshSaleListTable();
         productController.refreshProductListTable();
     }
 

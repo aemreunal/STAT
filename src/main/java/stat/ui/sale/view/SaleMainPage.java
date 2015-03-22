@@ -9,11 +9,7 @@ import stat.ui.sale.view.helper.SaleTableSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -34,13 +30,12 @@ public class SaleMainPage extends Page {
     private SaleAddPage pageNewSale;
 
     private JTable saleTable;
-    private ArrayList<Integer> saleIDList = new ArrayList<>();
-    private JButton                saleRemoveButton;
+    private JButton                removeSaleButton;
     private SalePageButtonListener buttonListener;
     private JButton                addSaleButton;
     private JButton                viewSaleButton;
     private SaleTableModel         tableModel;
-    private SaleTableSorter saleTableSorter;
+    private SaleTableSorter        saleTableSorter;
 
     public SaleMainPage() {
         buttonListener = new SalePageButtonListener();
@@ -56,9 +51,9 @@ public class SaleMainPage extends Page {
 
     private void initSaleTable() {
         tableModel = new SaleTableModel();
-//        saleTableSorter = new SaleTableSorter(tableModel);
+        saleTableSorter = new SaleTableSorter(tableModel);
         saleTable = new JTable(tableModel);
-//        saleTable.setRowSorter(saleTableSorter);
+        saleTable.setRowSorter(saleTableSorter);
         saleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(new JScrollPane(saleTable), BorderLayout.CENTER);
     }
@@ -73,9 +68,9 @@ public class SaleMainPage extends Page {
     }
 
     private void createRemoveButton(JPanel buttonPanel) {
-        saleRemoveButton = new JButton("Delete Sale");
-        saleRemoveButton.addActionListener(buttonListener);
-        buttonPanel.add(saleRemoveButton);
+        removeSaleButton = new JButton("Delete Sale");
+        removeSaleButton.addActionListener(buttonListener);
+        buttonPanel.add(removeSaleButton);
     }
 
     private void createViewButton(JPanel buttonPanel) {
@@ -90,63 +85,52 @@ public class SaleMainPage extends Page {
         buttonPanel.add(addSaleButton);
     }
 
-    public void removeRow(int rowIndex) {
-        int saleID = saleIDList.get(rowIndex);
-        DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
-
-        tableModel.removeRow(rowIndex);
-        saleIDList.remove(rowIndex);
-        saleController.removeSale(saleID);
-    }
-
-    public void refreshTable() {
-        // Clear sales list
-        emptySales();
-        // Tell controller that sales list should be refreshed
-        saleController.populateWithSales();
-        // Display populated sales list
-        this.repaint();
-        this.validate();
-    }
-
-    public void emptySales() {
-        DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
-        tableModel.setRowCount(0);
-        saleIDList.clear();
-    }
-
-    public void addSale(Integer id, String customerName, Date date, BigDecimal totalPrice) {
-        DefaultTableModel tableModel = (DefaultTableModel) saleTable.getModel();
-        Object[] saleRow = new Object[3];
-        saleRow[0] = customerName;
-        saleRow[1] = date;
-        saleRow[2] = totalPrice;
-
-        tableModel.addRow(saleRow);
-        saleIDList.add(id);
+    public void setSalesList(Object[][] items) {
+        tableModel.setDataVector(items, SaleColType.getColNameList());
     }
 
     private class SalePageButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             Object sourceOfAction = e.getSource();
-            int rowIndex = saleTable.getSelectedRow();
-            if (sourceOfAction.equals(saleRemoveButton)) {
-                if (saleTable.getSelectedRowCount() > 0) {
-                    SaleMainPage.this.removeRow(rowIndex);
-                    SaleMainPage.this.refreshTable();
-                }
-            } else if (sourceOfAction.equals(addSaleButton)) {
-                SaleMainPage.this.showPopup(pageNewSale);
-                saleController.populateWithProductNames();
+            int selectedRow = getRow();
+            if (sourceOfAction.equals(addSaleButton)) {
+                showAddSaleWindow();
+            } else if (sourceOfAction.equals(removeSaleButton)) {
+                removeSale(selectedRow);
             } else if (sourceOfAction.equals(viewSaleButton)) {
-                if (saleTable.getSelectedRowCount() > 0) {
-                    SaleViewPage viewPage = new SaleViewPage();
-                    viewPage.setSale(saleController.getSale(saleIDList.get(rowIndex)));
-                    SaleMainPage.this.showPopup(viewPage);
-                    saleController.fillSaleDetails(saleIDList.get(rowIndex));
-                }
+                showSaleDetailsWindow(selectedRow);
             }
+        }
+
+        private int getRow() {
+            int selectedRow = saleTable.getSelectedRow();
+            if (selectedRow != -1) { // Check whether any row is selected
+                // Convert from [possibly] sorted view row index to underlying model row index
+                selectedRow = saleTableSorter.convertRowIndexToModel(selectedRow);
+            }
+            return selectedRow;
+        }
+    }
+
+    private void showAddSaleWindow() {
+        showPopup(pageNewSale);
+        saleController.populateWithProductNames();
+    }
+
+    private void showSaleDetailsWindow(int row) {
+        if (row != -1) {
+            saleController.showSaleDetails(row);
+        }
+    }
+
+    public void displaySaleDetailsWindow(SaleViewPage saleViewPage) {
+        showPopup(saleViewPage);
+    }
+
+    private void removeSale(int row) {
+        if (row != -1) {
+            saleController.removeSale(row);
         }
     }
 }
