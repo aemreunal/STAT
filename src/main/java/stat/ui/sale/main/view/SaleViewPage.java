@@ -1,4 +1,4 @@
-package stat.ui.sale.view;
+package stat.ui.sale.main.view;
 
 import stat.domain.Product;
 import stat.domain.Sale;

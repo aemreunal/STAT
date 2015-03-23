@@ -1,4 +1,4 @@
-package stat.ui.sale.view.helper;
+package stat.ui.sale.main.view.helper;
 
 /*
  ***************************

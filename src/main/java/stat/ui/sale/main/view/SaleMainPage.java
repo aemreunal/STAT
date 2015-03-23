@@ -1,10 +1,10 @@
-package stat.ui.sale.view;
+package stat.ui.sale.main.view;
 
 import stat.ui.Page;
-import stat.ui.sale.SaleController;
-import stat.ui.sale.view.helper.SaleColType;
-import stat.ui.sale.view.helper.SaleTableModel;
-import stat.ui.sale.view.helper.SaleTableSorter;
+import stat.ui.sale.main.SaleController;
+import stat.ui.sale.main.view.helper.SaleColType;
+import stat.ui.sale.main.view.helper.SaleTableModel;
+import stat.ui.sale.main.view.helper.SaleTableSorter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

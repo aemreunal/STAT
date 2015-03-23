@@ -1,4 +1,4 @@
-package stat.ui.sale;
+package stat.ui.sale.main;
 
 import stat.domain.Product;
 import stat.domain.Sale;
@@ -7,10 +7,10 @@ import stat.service.SaleService;
 import stat.service.exception.ProductNotFoundException;
 import stat.ui.Page;
 import stat.ui.PageController;
-import stat.ui.sale.view.SaleAddPage;
-import stat.ui.sale.view.SaleMainPage;
-import stat.ui.sale.view.SaleViewPage;
-import stat.ui.sale.view.helper.SaleColType;
+import stat.ui.sale.add.SaleAddPage;
+import stat.ui.sale.main.view.SaleMainPage;
+import stat.ui.sale.main.view.SaleViewPage;
+import stat.ui.sale.main.view.helper.SaleColType;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -91,7 +91,7 @@ public class SaleController implements PageController {
 
     public void addSaleButtonClicked() {
         SaleAddPage saleAddPage = new SaleAddPage(this);
-        saleAddPage.fillProducts(getProductNames());
+        saleAddPage.setAvailableProducts(getProductNames());
         Page.showPopup(saleAddPage);
     }
 

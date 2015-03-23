@@ -2,7 +2,7 @@ package stat.ui.mainApp.view;
 
 import stat.ui.mainApp.ApplicationController;
 import stat.ui.product.view.ProductMainPage;
-import stat.ui.sale.view.SaleMainPage;
+import stat.ui.sale.main.view.SaleMainPage;
 
 import java.awt.*;
 import javax.swing.*;

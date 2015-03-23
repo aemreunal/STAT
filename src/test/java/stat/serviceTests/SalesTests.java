@@ -190,7 +190,7 @@ public class SalesTests extends StatTest {
 
     @Test
     @Rollback
-    public void searchNonExistantSalesWithDatesTest() throws ParseException {
+    public void searchNonExistentSalesWithDatesTest() throws ParseException {
 
         Date date1 = dateFormatter.parse("2011-02-01"); // 1 February 2011 - 00h00
         Date date2 = dateFormatter.parse("2011-06-01"); // 1 June 2011 - 00h00
