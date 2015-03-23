@@ -21,6 +21,7 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.service.exception.ProductNameException;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -61,6 +62,28 @@ public class SalesTests extends StatTest {
 
         assertTrue("Product is not persisted in sale!", productsOfSale.containsKey(product));
         assertEquals("Amount of sale is not true!", amount, productsOfSale.get(product).intValue());
+    }
+
+    @Test
+    @Rollback
+    public void saleTotalPriceTest() throws ProductNameException {
+        Sale sale = saleService.createNewSale("test customer");
+
+        int amount1 = (int) (Math.random() * 10);
+        BigDecimal price1 = BigDecimal.valueOf(19.3121);
+        Product product1 = productService.createNewProduct("test product 1", price1);
+        sale = saleService.addProduct(sale, product1.getProductId(), amount1);
+
+        BigDecimal expectedTotalPrice1 = price1.multiply(BigDecimal.valueOf(amount1));
+        assertEquals("The sale total price is not correctly calculated and stored!", expectedTotalPrice1, sale.getTotalPrice());
+
+        int amount2 = (int) (Math.random() * 10);
+        BigDecimal price2 = BigDecimal.valueOf(95.4934);
+        Product product2 = productService.createNewProduct("test product 2", price2);
+        sale = saleService.addProduct(sale, product2.getProductId(), amount2);
+
+        BigDecimal expectedTotalPrice2 = expectedTotalPrice1.add(price2.multiply(BigDecimal.valueOf(amount2)));
+        assertEquals("The sale total price is not correctly calculated and stored!", expectedTotalPrice2, sale.getTotalPrice());
     }
 
     @Test
