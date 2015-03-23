@@ -30,8 +30,8 @@ public class ApplicationController {
 
     public void startGui() {
         applicationWindow.display();
-        saleController.refreshSaleListTable();
-        productController.refreshProductListTable();
+        saleController.refreshPage();
+        productController.refreshPage();
     }
 
     public void changedTab(String tabName) {

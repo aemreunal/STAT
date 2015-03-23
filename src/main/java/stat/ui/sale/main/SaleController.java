@@ -68,7 +68,7 @@ public class SaleController implements PageController {
         }
         int saleIdToRemove = saleIDList.remove(row);
         saleService.deleteSale(saleIdToRemove);
-        refreshSaleListTable();
+        refreshPage();
     }
 
     public void showSaleDetailsButtonClicked(int row) {

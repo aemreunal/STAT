@@ -9,7 +9,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.*;
 
@@ -160,7 +159,7 @@ public class SaleAddPage extends Page {
         labelTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
         labelTotal.setBounds(292, 311, 49, 24);
 
-        priceField = new JTextField();
+        priceField = new JTextField(String.valueOf(BigDecimal.ZERO));
         priceField.setBounds(341, 315, 125, 20);
         priceField.setColumns(10);
         priceField.setEditable(false);
@@ -169,56 +168,12 @@ public class SaleAddPage extends Page {
         add(priceField);
     }
 
-    public void setAvailableProducts(Object[][] productNames) {
-        availableProductsTableModel.setDataVector(productNames, AvailableProductsTableModel.AVAILABLE_PRODUCTS_TABLE_COLUMN_NAMES);
+    public void setAvailableProducts(Object[][] availableProductsNames) {
+        availableProductsTableModel.setDataVector(availableProductsNames, AvailableProductsTableModel.AVAILABLE_PRODUCTS_TABLE_COLUMN_NAMES);
     }
 
-    private void updateTotalPrice() {
-        BigDecimal totalPrice = BigDecimal.ZERO;
-        for (int row = 0; row < chosenProductsTable.getRowCount(); row++) {
-            BigDecimal productPrice = (BigDecimal) chosenProductsTable.getValueAt(row, 2);
-            totalPrice = totalPrice.add(productPrice);
-        }
-        priceField.setText(totalPrice.toPlainString());
-    }
-
-    private void addProductToSale() {
-        int row = availableProductsTable.getSelectedRow();
-        if (row != -1) {
-            String productName = (String) availableProductsTable.getValueAt(row, 0);
-            availableProductsTableModel.removeRow(row);
-            BigDecimal unitPrice = saleAddController.calculatePrice(productName, 1);
-            chosenProductsTableModel.addRow(new Object[] { productName, 1, unitPrice });
-        }
-        updateTotalPrice();
-    }
-
-    private void removeProductFromSale() {
-        int row = chosenProductsTable.getSelectedRow();
-        if (row != -1) {
-            String productName = (String) chosenProductsTable.getValueAt(row, 0);
-            chosenProductsTableModel.removeRow(row);
-            availableProductsTableModel.addRow(new Object[] { productName });
-        }
-        updateTotalPrice();
-    }
-
-    public ArrayList<String> getChosenProducts() {
-        ArrayList<String> productNames = new ArrayList<>();
-        for (int row = 0; row < chosenProductsTable.getRowCount(); row++) {
-            String productName = (String) chosenProductsTable.getValueAt(row, 0);
-            productNames.add(productName);
-        }
-        return productNames;
-    }
-
-    public ArrayList<Integer> getChosenAmounts() {
-        ArrayList<Integer> productAmounts = new ArrayList<>();
-        for (int row = 0; row < chosenProductsTable.getRowCount(); row++) {
-            int productAmount = Integer.parseInt(chosenProductsTable.getValueAt(row, 1).toString());
-            productAmounts.add(productAmount);
-        }
-        return productAmounts;
+    public void setChosenProducts(Object[][] chosenProductsNames) {
+        chosenProductsTableModel.setDataVector(chosenProductsNames, ChosenProductsTableModel.CHOSEN_PRODUCTS_TABLE_COLUMN_NAMES);
     }
 
     private class ButtonListener implements ActionListener {
@@ -227,23 +182,38 @@ public class SaleAddPage extends Page {
         public void actionPerformed(ActionEvent e) {
             Object sourceOfAction = e.getSource();
             if (sourceOfAction.equals(backButton)) {
-                JFrame parentFrame = (JFrame) getRootPane().getParent();
-                parentFrame.dispose();
+                closeAddPage();
             } else if (sourceOfAction.equals(addProductButton)) {
-                addProductToSale();
+                int availableProdsRow = availableProductsTable.getSelectedRow(); // TODO fix for sort
+                if (availableProdsRow != -1) {
+                    saleAddController.addProductButtonClicked(availableProdsRow);
+                }
             } else if (sourceOfAction.equals(removeProductButton)) {
-                removeProductFromSale();
+                int chosenProdsRow = chosenProductsTable.getSelectedRow(); // TODO fix for sort
+                if (chosenProdsRow != -1) {
+                    saleAddController.removeProductButtonClicked(chosenProdsRow);
+                }
             } else if (sourceOfAction.equals(confirmButton)) {
-                saleAddController.saveSale();
+                saleAddController.confirmButtonClicked();
             }
         }
     }
 
+    public void closeAddPage() {
+        JFrame parentFrame = (JFrame) getRootPane().getParent();
+        parentFrame.dispose();
+    }
+
     public void productAmountChanged(int row, int newAmount) {
-        String productName = (String) chosenProductsTable.getValueAt(row, 0);
-        BigDecimal price = saleAddController.calculatePrice(productName, newAmount);
-        chosenProductsTable.setValueAt(price, row, 2);
-        updateTotalPrice();
+        saleAddController.productAmountChanged(row, newAmount);
+    }
+
+    public void setChosenProductPrice(int row, BigDecimal newPrice) {
+        chosenProductsTable.setValueAt(newPrice, row, 2);
+    }
+
+    public void setTotalPrice(String newTotal) {
+        this.priceField.setText(newTotal);
     }
 
     public String getDateText() {
@@ -272,10 +242,10 @@ public class SaleAddPage extends Page {
         JOptionPane.showMessageDialog(this, "The Sale was successfully saved.");
     }
 
-    public void displayValidationError() {
+    public void showSaveError() {
         JOptionPane.showMessageDialog(this,
-                                      "Enter the fields correctly.",
-                                      "Validation Error",
+                                      "An error occurred while saving the sale. Please try again later.",
+                                      "Save Error",
                                       JOptionPane.ERROR_MESSAGE);
     }
 }
