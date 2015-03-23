@@ -1,7 +1,7 @@
-package stat.ui.sale.add;
+package stat.ui.sale.add.view;
 
 import stat.ui.Page;
-import stat.ui.sale.main.SaleController;
+import stat.ui.sale.add.SaleAddController;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,7 +25,7 @@ public class SaleAddPage extends Page {
     public static final String           DATE_REGEX    = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
     private final       SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    private SaleController saleController;
+    private SaleAddController saleController;
 
     private JTextField customerNameField;
     private JTextField priceField;
@@ -39,9 +39,11 @@ public class SaleAddPage extends Page {
     private JButton addProductButton;
     private JButton removeProductButton;
 
-    private ButtonListener buttonListener;
+    private ButtonListener              buttonListener;
+    private AvailableProductsTableModel availableProductsTableModel;
+    private ChosenProductsTableModel    chosenProductsTableModel;
 
-    public SaleAddPage(SaleController saleController) {
+    public SaleAddPage(SaleAddController saleController) {
         this.saleController = saleController;
         buttonListener = new ButtonListener();
         initPageDesign();
@@ -72,6 +74,34 @@ public class SaleAddPage extends Page {
         initAddButton();
         initRemoveButton();
         initConfirmButton();
+    }
+
+    private void initAddButton() {
+        addProductButton = new JButton("Add →");
+        addProductButton.setFont(new Font("Tahoma", Font.BOLD, 11));
+        addProductButton.setForeground(new Color(106, 90, 205));
+        addProductButton.setBounds(137, 190, 85, 23);
+        addProductButton.addActionListener(buttonListener);
+        add(addProductButton);
+    }
+
+    private void initRemoveButton() {
+        removeProductButton = new JButton("← Remove");
+        removeProductButton.setFont(new Font("Tahoma", Font.BOLD, 11));
+        removeProductButton.setForeground(new Color(165, 42, 42));
+        removeProductButton.setBounds(137, 224, 85, 23);
+        removeProductButton.addActionListener(buttonListener);
+        add(removeProductButton);
+    }
+
+    private void initConfirmButton() {
+        confirmButton = new JButton("Create");
+        confirmButton.setForeground(new Color(0, 153, 51));
+        confirmButton.setBackground(new Color(245, 245, 245));
+        confirmButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+        confirmButton.setBounds(29, 362, 437, 30);
+        confirmButton.addActionListener(buttonListener);
+        add(confirmButton);
     }
 
     private void initCancelButton() {
@@ -116,35 +146,19 @@ public class SaleAddPage extends Page {
     }
 
     private void initAvailableProductsTable() {
-        availableProductsTable = new JTable(new AvailableProductsTableModel());
+        availableProductsTableModel = new AvailableProductsTableModel();
+        availableProductsTable = new JTable(availableProductsTableModel);
         JScrollPane availableProductsListPane = new JScrollPane(availableProductsTable);
         availableProductsListPane.setBounds(10, 155, 125, 145);
         add(availableProductsListPane);
     }
 
     private void initChosenProductsTable() {
-        chosenProductsTable = new JTable(new ChosenProductsTableModel());
+        chosenProductsTableModel = new ChosenProductsTableModel();
+        chosenProductsTable = new JTable(chosenProductsTableModel);
         JScrollPane chosenProductsListPane = new JScrollPane(chosenProductsTable);
         chosenProductsListPane.setBounds(224, 155, 266, 145);
         add(chosenProductsListPane);
-    }
-
-    private void initAddButton() {
-        addProductButton = new JButton("Add →");
-        addProductButton.setFont(new Font("Tahoma", Font.BOLD, 11));
-        addProductButton.setForeground(new Color(106, 90, 205));
-        addProductButton.setBounds(137, 190, 85, 23);
-        addProductButton.addActionListener(buttonListener);
-        add(addProductButton);
-    }
-
-    private void initRemoveButton() {
-        removeProductButton = new JButton("← Remove");
-        removeProductButton.setForeground(new Color(165, 42, 42));
-        removeProductButton.setFont(new Font("Tahoma", Font.BOLD, 11));
-        removeProductButton.setBounds(137, 224, 85, 23);
-        removeProductButton.addActionListener(buttonListener);
-        add(removeProductButton);
     }
 
     private void initTotalPrice() {
@@ -161,23 +175,13 @@ public class SaleAddPage extends Page {
         add(priceField);
     }
 
-    private void initConfirmButton() {
-        confirmButton = new JButton("Create");
-        confirmButton.setForeground(new Color(0, 153, 51));
-        confirmButton.setBackground(new Color(245, 245, 245));
-        confirmButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-        confirmButton.setBounds(29, 362, 437, 30);
-        confirmButton.addActionListener(buttonListener);
-        add(confirmButton);
-    }
-
     public void setAvailableProducts(Set<String> productNames) {
         // Clear product list
-        ((DefaultTableModel) availableProductsTable.getModel()).setRowCount(0);
+        availableProductsTableModel.setRowCount(0);
 
         // Populate with product names
         for (String productName : productNames) {
-            ((DefaultTableModel) availableProductsTable.getModel()).addRow(new Object[] { productName });
+            availableProductsTableModel.addRow(new Object[] { productName });
         }
     }
 
@@ -212,9 +216,9 @@ public class SaleAddPage extends Page {
         int row = availableProductsTable.getSelectedRow();
         if (row != -1) {
             String productName = (String) availableProductsTable.getValueAt(row, 0);
-            ((DefaultTableModel) availableProductsTable.getModel()).removeRow(row);
+            availableProductsTableModel.removeRow(row);
             BigDecimal unitPrice = saleController.calculatePrice(productName, 1);
-            ((DefaultTableModel) chosenProductsTable.getModel()).addRow(new Object[] { productName, 1, "" + unitPrice });
+            chosenProductsTableModel.addRow(new Object[] { productName, 1, "" + unitPrice });
         }
         updateTotalPrice();
     }
@@ -223,8 +227,8 @@ public class SaleAddPage extends Page {
         int row = chosenProductsTable.getSelectedRow();
         if (row != -1) {
             String productName = (String) chosenProductsTable.getValueAt(row, 0);
-            ((DefaultTableModel) chosenProductsTable.getModel()).removeRow(row);
-            ((DefaultTableModel) availableProductsTable.getModel()).addRow(new Object[] { productName });
+            chosenProductsTableModel.removeRow(row);
+            availableProductsTableModel.addRow(new Object[] { productName });
         }
         updateTotalPrice();
     }

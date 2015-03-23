@@ -7,14 +7,16 @@ import stat.service.SaleService;
 import stat.service.exception.ProductNotFoundException;
 import stat.ui.Page;
 import stat.ui.PageController;
-import stat.ui.sale.add.SaleAddPage;
+import stat.ui.sale.add.SaleAddController;
 import stat.ui.sale.main.view.SaleMainPage;
 import stat.ui.sale.main.view.SaleViewPage;
 import stat.ui.sale.main.view.helper.SaleColType;
 
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,9 @@ public class SaleController implements PageController {
 
     @Autowired
     private SaleMainPage saleMainPage;
+
+    @Autowired
+    private SaleAddController saleAddController;
 
     private ArrayList<Integer> saleIDList = new ArrayList<>();
 
@@ -80,19 +85,13 @@ public class SaleController implements PageController {
         saleMainPage.setSalesList(saleTableObjects);
     }
 
-    private LinkedHashSet<String> getProductNames() {
-        return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
-    }
-
     @Override
     public void refreshPage() {
         refreshSaleListTable();
     }
 
     public void addSaleButtonClicked() {
-        SaleAddPage saleAddPage = new SaleAddPage(this);
-        saleAddPage.setAvailableProducts(getProductNames());
-        Page.showPopup(saleAddPage);
+        saleAddController.showSaleCreator();
     }
 
 
