@@ -2,19 +2,16 @@ package stat.ui.sale.add.view;
 
 import stat.ui.Page;
 import stat.ui.sale.add.SaleAddController;
+import stat.ui.sale.add.view.helper.AvailableProductsTableModel;
+import stat.ui.sale.add.view.helper.ChosenProductsTableModel;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Set;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
@@ -22,10 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 public class SaleAddPage extends Page {
 
-    public static final String           DATE_REGEX    = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
-    private final       SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
-
-    private SaleAddController saleController;
+    private SaleAddController saleAddController;
 
     private JTextField customerNameField;
     private JTextField priceField;
@@ -43,8 +37,8 @@ public class SaleAddPage extends Page {
     private AvailableProductsTableModel availableProductsTableModel;
     private ChosenProductsTableModel    chosenProductsTableModel;
 
-    public SaleAddPage(SaleAddController saleController) {
-        this.saleController = saleController;
+    public SaleAddPage(SaleAddController saleAddController) {
+        this.saleAddController = saleAddController;
         buttonListener = new ButtonListener();
         initPageDesign();
         initFields();
@@ -128,6 +122,22 @@ public class SaleAddPage extends Page {
         add(customerNameField);
     }
 
+    private void initAvailableProductsTable() {
+        availableProductsTableModel = new AvailableProductsTableModel();
+        availableProductsTable = new JTable(availableProductsTableModel);
+        JScrollPane availableProductsListPane = new JScrollPane(availableProductsTable);
+        availableProductsListPane.setBounds(10, 155, 125, 145);
+        add(availableProductsListPane);
+    }
+
+    private void initChosenProductsTable() {
+        chosenProductsTableModel = new ChosenProductsTableModel(this);
+        chosenProductsTable = new JTable(chosenProductsTableModel);
+        JScrollPane chosenProductsListPane = new JScrollPane(chosenProductsTable);
+        chosenProductsListPane.setBounds(224, 155, 266, 145);
+        add(chosenProductsListPane);
+    }
+
     private void initDateField() {
         JLabel labelDate = new JLabel("Date:");
         labelDate.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -145,22 +155,6 @@ public class SaleAddPage extends Page {
         add(dateField);
     }
 
-    private void initAvailableProductsTable() {
-        availableProductsTableModel = new AvailableProductsTableModel();
-        availableProductsTable = new JTable(availableProductsTableModel);
-        JScrollPane availableProductsListPane = new JScrollPane(availableProductsTable);
-        availableProductsListPane.setBounds(10, 155, 125, 145);
-        add(availableProductsListPane);
-    }
-
-    private void initChosenProductsTable() {
-        chosenProductsTableModel = new ChosenProductsTableModel();
-        chosenProductsTable = new JTable(chosenProductsTableModel);
-        JScrollPane chosenProductsListPane = new JScrollPane(chosenProductsTable);
-        chosenProductsListPane.setBounds(224, 155, 266, 145);
-        add(chosenProductsListPane);
-    }
-
     private void initTotalPrice() {
         JLabel labelTotal = new JLabel("Total:");
         labelTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -175,41 +169,17 @@ public class SaleAddPage extends Page {
         add(priceField);
     }
 
-    public void setAvailableProducts(Set<String> productNames) {
-        // Clear product list
-        availableProductsTableModel.setRowCount(0);
-
-        // Populate with product names
-        for (String productName : productNames) {
-            availableProductsTableModel.addRow(new Object[] { productName });
-        }
+    public void setAvailableProducts(Object[][] productNames) {
+        availableProductsTableModel.setDataVector(productNames, AvailableProductsTableModel.AVAILABLE_PRODUCTS_TABLE_COLUMN_NAMES);
     }
 
     private void updateTotalPrice() {
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (int row = 0; row < chosenProductsTable.getRowCount(); row++) {
-            String productPrice = (String) chosenProductsTable.getValueAt(row, 2);
-            totalPrice = totalPrice.add(new BigDecimal(productPrice));
+            BigDecimal productPrice = (BigDecimal) chosenProductsTable.getValueAt(row, 2);
+            totalPrice = totalPrice.add(productPrice);
         }
         priceField.setText(totalPrice.toPlainString());
-    }
-
-    private ArrayList<String> getProducts() {
-        ArrayList<String> productNames = new ArrayList<>();
-        for (int row = 0; row < chosenProductsTable.getRowCount(); row++) {
-            String productName = (String) chosenProductsTable.getValueAt(row, 0);
-            productNames.add(productName);
-        }
-        return productNames;
-    }
-
-    private ArrayList<Integer> getAmounts() {
-        ArrayList<Integer> productAmounts = new ArrayList<>();
-        for (int row = 0; row < chosenProductsTable.getRowCount(); row++) {
-            int productAmount = Integer.parseInt(chosenProductsTable.getValueAt(row, 1).toString());
-            productAmounts.add(productAmount);
-        }
-        return productAmounts;
     }
 
     private void addProductToSale() {
@@ -217,8 +187,8 @@ public class SaleAddPage extends Page {
         if (row != -1) {
             String productName = (String) availableProductsTable.getValueAt(row, 0);
             availableProductsTableModel.removeRow(row);
-            BigDecimal unitPrice = saleController.calculatePrice(productName, 1);
-            chosenProductsTableModel.addRow(new Object[] { productName, 1, "" + unitPrice });
+            BigDecimal unitPrice = saleAddController.calculatePrice(productName, 1);
+            chosenProductsTableModel.addRow(new Object[] { productName, 1, unitPrice });
         }
         updateTotalPrice();
     }
@@ -233,32 +203,67 @@ public class SaleAddPage extends Page {
         updateTotalPrice();
     }
 
-    private void saveSale() {
-        String dateText = dateField.getText().trim();
-        if (!dateText.matches(DATE_REGEX)) {
-            showDateParseError();
-            return;
+    public ArrayList<String> getChosenProducts() {
+        ArrayList<String> productNames = new ArrayList<>();
+        for (int row = 0; row < chosenProductsTable.getRowCount(); row++) {
+            String productName = (String) chosenProductsTable.getValueAt(row, 0);
+            productNames.add(productName);
         }
-        boolean saleSaved = saleController.saveSale(customerNameField.getText().trim(), parseDate(dateText), getProducts(), getAmounts());
-        if (saleSaved) {
-            displaySuccess();
-        } else {
-            displayValidationError();
+        return productNames;
+    }
+
+    public ArrayList<Integer> getChosenAmounts() {
+        ArrayList<Integer> productAmounts = new ArrayList<>();
+        for (int row = 0; row < chosenProductsTable.getRowCount(); row++) {
+            int productAmount = Integer.parseInt(chosenProductsTable.getValueAt(row, 1).toString());
+            productAmounts.add(productAmount);
+        }
+        return productAmounts;
+    }
+
+    private class ButtonListener implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Object sourceOfAction = e.getSource();
+            if (sourceOfAction.equals(backButton)) {
+                JFrame parentFrame = (JFrame) getRootPane().getParent();
+                parentFrame.dispose();
+            } else if (sourceOfAction.equals(addProductButton)) {
+                addProductToSale();
+            } else if (sourceOfAction.equals(removeProductButton)) {
+                removeProductFromSale();
+            } else if (sourceOfAction.equals(confirmButton)) {
+                saleAddController.saveSale();
+            }
         }
     }
 
-    private Date parseDate(String dateText) {
-        try {
-            return dateFormatter.parse(dateText);
-        } catch (ParseException pe) {
-            showDateParseError();
-        }
-        return null;
+    public void productAmountChanged(int row, int newAmount) {
+        String productName = (String) chosenProductsTable.getValueAt(row, 0);
+        BigDecimal price = saleAddController.calculatePrice(productName, newAmount);
+        chosenProductsTable.setValueAt(price, row, 2);
+        updateTotalPrice();
     }
 
-    private void showDateParseError() {
+    public String getDateText() {
+        return this.dateField.getText().trim();
+    }
+
+    public String getCustomerNameText() {
+        return customerNameField.getText().trim();
+    }
+
+    public void showDateParseError() {
         JOptionPane.showMessageDialog(this,
                                       "Please enter a valid date.",
+                                      "Validation Error",
+                                      JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showCustomerNameParseError() {
+        JOptionPane.showMessageDialog(this,
+                                      "Please enter a valid customer name.",
                                       "Validation Error",
                                       JOptionPane.ERROR_MESSAGE);
     }
@@ -272,60 +277,5 @@ public class SaleAddPage extends Page {
                                       "Enter the fields correctly.",
                                       "Validation Error",
                                       JOptionPane.ERROR_MESSAGE);
-    }
-
-    private class AvailableProductsTableModel extends DefaultTableModel {
-        public AvailableProductsTableModel() {
-            super(new Object[][] { }, new String[] { "Product" });
-        }
-
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    }
-
-    private class ChosenProductsTableModel extends DefaultTableModel {
-
-        public ChosenProductsTableModel() {
-            super(new Object[][] { }, new String[] { "Product", "Amount", "Price" });
-        }
-
-        public boolean isCellEditable(int row, int column) {
-            return (column == 1);
-        }
-
-        public void setValueAt(Object aValue, int row, int column) {
-            if (column == 1) {
-                String regex = "[0-9]+";
-                String value = (String) aValue;
-                if (value.matches(regex)) {
-                    super.setValueAt(aValue, row, column);
-                    String productName = (String) chosenProductsTable.getValueAt(row, 0);
-                    BigDecimal price = saleController.calculatePrice(productName, Integer.parseInt((value)));
-                    chosenProductsTable.setValueAt("" + price, row, 2);
-                    updateTotalPrice();
-                }
-            } else {
-                super.setValueAt(aValue, row, column);
-            }
-        }
-
-    }
-
-    private class ButtonListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Object sourceOfAction = e.getSource();
-            if (sourceOfAction.equals(backButton)) {
-                JFrame parentFrame = (JFrame) getRootPane().getParent();
-                parentFrame.dispose();
-            } else if (sourceOfAction.equals(addProductButton)) {
-                addProductToSale();
-            } else if (sourceOfAction.equals(removeProductButton)) {
-                removeProductFromSale();
-            } else if (sourceOfAction.equals(confirmButton)) {
-                saveSale();
-            }
-        }
     }
 }
