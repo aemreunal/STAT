@@ -17,8 +17,13 @@ package stat.ui.sale.add;
  */
 
 import stat.domain.Product;
+import stat.domain.Sale;
 import stat.service.ProductService;
 import stat.service.SaleService;
+import stat.service.exception.ProductNotFoundException;
+import stat.ui.Page;
+import stat.ui.sale.add.view.SaleAddPage;
+import stat.ui.sale.main.SaleController;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -40,24 +45,41 @@ public class SaleAddController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private SaleController saleController;
+
+    public void showSaleCreator() {
+        SaleAddPage saleAddPage = new SaleAddPage(this);
+        saleAddPage.setAvailableProducts(getProductNames());
+        Page.showPopup(saleAddPage);
+    }
+
     private LinkedHashSet<String> getProductNames() {
         return productService.getAllProducts().stream().map(Product::getName).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public void showSaleCreator() {
-//        SaleAddPage saleAddPage = new SaleAddPage(this);
-//        saleAddPage.setAvailableProducts(getProductNames());
-//        Page.showPopup(saleAddPage);
-        // TODO implement.
+    public boolean saveSale(String customerName, Date date, ArrayList<String> productNames, ArrayList<Integer> amounts) {
+        Sale sale = saleService.createNewSale(customerName, date);
+        for (int i = 0; i < productNames.size(); i++) {
+            try {
+                Integer productId = productService.getIdOfProductWithName(productNames.get(i));
+                sale = saleService.addProduct(sale, productId, amounts.get(i));
+            } catch (ProductNotFoundException e) {
+                System.out.println("Product not found exception");
+                return false;
+            }
+        }
+        saleController.refreshSaleListTable();
+        return true;
     }
 
-    public BigDecimal calculatePrice(String productName, int i) {
-        // TODO implement.
-        return null;
-    }
-
-    public boolean saveSale(String trim, Date date, ArrayList<String> products, ArrayList<Integer> amounts) {
-        // TODO implement.
-        return false;
+    public BigDecimal calculatePrice(String productName, int amount) {
+        BigDecimal productPrice = BigDecimal.ZERO;
+        try {
+            productPrice = productService.getProductWithName(productName).getPrice();
+        } catch (ProductNotFoundException pnfe) {
+            System.out.println("SaleController pnfe");
+        }
+        return productPrice.multiply(BigDecimal.valueOf(amount));
     }
 }
