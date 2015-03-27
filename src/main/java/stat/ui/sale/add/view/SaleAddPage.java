@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
@@ -23,6 +25,8 @@ public class SaleAddPage extends Page {
     private JTextField customerNameField;
     private JTextField priceField;
     private JTextField dateField;
+
+    private JPanel fieldHolder;
 
     private JTable availableProductsTable;
     private JTable chosenProductsTable;
@@ -40,6 +44,7 @@ public class SaleAddPage extends Page {
         this.saleAddController = saleAddController;
         buttonListener = new ButtonListener();
         initPageDesign();
+        initFielHolder();
         initFields();
         initTables();
         initButtons();
@@ -47,8 +52,15 @@ public class SaleAddPage extends Page {
 
     private void initPageDesign() {
         setLayout(null);
-        setBackground(new Color(204, 204, 0));
         setMinimumSize(new Dimension(500, 450));
+    }
+
+    private void initFielHolder() {
+        fieldHolder = new JPanel();
+        fieldHolder.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Sale Info", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+        fieldHolder.setBounds(2, 22, 492, 277);
+        fieldHolder.setLayout(null);
+        add(fieldHolder);
     }
 
     private void initFields() {
@@ -70,39 +82,33 @@ public class SaleAddPage extends Page {
     }
 
     private void initAddButton() {
-        addProductButton = new JButton("Add →");
+        addProductButton = new JButton("Add");
         addProductButton.setFont(new Font("Tahoma", Font.BOLD, 11));
-        addProductButton.setForeground(new Color(106, 90, 205));
-        addProductButton.setBounds(137, 190, 85, 23);
+        addProductButton.setBounds(133, 124, 85, 23);
         addProductButton.addActionListener(buttonListener);
-        add(addProductButton);
+        fieldHolder.add(addProductButton);
     }
 
     private void initRemoveButton() {
-        removeProductButton = new JButton("← Remove");
+        removeProductButton = new JButton("Remove");
         removeProductButton.setFont(new Font("Tahoma", Font.BOLD, 11));
-        removeProductButton.setForeground(new Color(165, 42, 42));
-        removeProductButton.setBounds(137, 224, 85, 23);
+        removeProductButton.setBounds(133, 158, 85, 23);
         removeProductButton.addActionListener(buttonListener);
-        add(removeProductButton);
+        fieldHolder.add(removeProductButton);
     }
 
     private void initConfirmButton() {
         confirmButton = new JButton("Create");
-        confirmButton.setForeground(new Color(0, 153, 51));
-        confirmButton.setBackground(new Color(245, 245, 245));
         confirmButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-        confirmButton.setBounds(29, 362, 437, 30);
+        confirmButton.setBounds(29, 318, 437, 30);
         confirmButton.addActionListener(buttonListener);
         add(confirmButton);
     }
 
     private void initCancelButton() {
         backButton = new JButton("Cancel");
-        backButton.setForeground(new Color(204, 51, 51));
-        backButton.setBackground(new Color(245, 245, 245));
         backButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-        backButton.setBounds(29, 28, 437, 30);
+        backButton.setBounds(29, 362, 437, 30);
         backButton.addActionListener(buttonListener);
         add(backButton);
     }
@@ -110,62 +116,62 @@ public class SaleAddPage extends Page {
     private void initCustomerNameField() {
         JLabel labelCustomerName = new JLabel("Customer Name:");
         labelCustomerName.setHorizontalAlignment(SwingConstants.RIGHT);
-        labelCustomerName.setFont(new Font("Tahoma", Font.BOLD, 13));
-        labelCustomerName.setBounds(29, 74, 125, 24);
+        labelCustomerName.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        labelCustomerName.setBounds(25, 12, 125, 24);
 
         customerNameField = new JTextField();
-        customerNameField.setBounds(164, 77, 201, 20);
+        customerNameField.setBounds(160, 15, 201, 20);
         customerNameField.setColumns(10);
 
-        add(labelCustomerName);
-        add(customerNameField);
+        fieldHolder.add(labelCustomerName);
+        fieldHolder.add(customerNameField);
     }
 
     private void initAvailableProductsTable() {
         availableProductsTableModel = new AvailableProductsTableModel();
         availableProductsTable = new JTable(availableProductsTableModel);
         JScrollPane availableProductsListPane = new JScrollPane(availableProductsTable);
-        availableProductsListPane.setBounds(10, 155, 125, 145);
-        add(availableProductsListPane);
+        availableProductsListPane.setBounds(6, 79, 125, 145);
+        fieldHolder.add(availableProductsListPane);
     }
 
     private void initChosenProductsTable() {
         chosenProductsTableModel = new ChosenProductsTableModel(this);
         chosenProductsTable = new JTable(chosenProductsTableModel);
         JScrollPane chosenProductsListPane = new JScrollPane(chosenProductsTable);
-        chosenProductsListPane.setBounds(224, 155, 266, 145);
-        add(chosenProductsListPane);
+        chosenProductsListPane.setBounds(220, 79, 266, 145);
+        fieldHolder.add(chosenProductsListPane);
     }
 
     private void initDateField() {
         JLabel labelDate = new JLabel("Date:");
         labelDate.setHorizontalAlignment(SwingConstants.RIGHT);
-        labelDate.setFont(new Font("Tahoma", Font.BOLD, 13));
-        labelDate.setBounds(29, 109, 125, 24);
+        labelDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        labelDate.setBounds(25, 43, 125, 24);
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
         int month = Calendar.getInstance().get(Calendar.MONTH);
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 
         dateField = new JTextField(year + "-" + month + "-" + day);
-        dateField.setBounds(164, 111, 201, 22);
+        dateField.setBounds(160, 45, 201, 22);
 
-        add(labelDate);
-        add(dateField);
+        fieldHolder.add(labelDate);
+        fieldHolder.add(dateField);
     }
 
     private void initTotalPrice() {
         JLabel labelTotal = new JLabel("Total:");
         labelTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
-        labelTotal.setBounds(292, 311, 49, 24);
+        labelTotal.setBounds(288, 245, 49, 24);
 
         priceField = new JTextField(String.valueOf(BigDecimal.ZERO));
-        priceField.setBounds(341, 315, 125, 20);
+        priceField.setBounds(337, 249, 125, 20);
         priceField.setColumns(10);
         priceField.setEditable(false);
 
-        add(labelTotal);
-        add(priceField);
+        fieldHolder.add(labelTotal);
+        fieldHolder.add(priceField);
     }
 
     public void setAvailableProducts(Object[][] availableProductsNames) {
