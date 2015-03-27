@@ -41,7 +41,6 @@ public class ProductAddPage extends Page {
 
     private void initializePageDesign() {
         setMinimumSize(new Dimension(420, 370));
-        setBackground(new Color(204, 204, 0));
         setLayout(null);
     }
 
@@ -54,7 +53,6 @@ public class ProductAddPage extends Page {
 
     private void initializeFieldHolder() {
         fieldHolder = new JPanel();
-        fieldHolder.setBackground(new Color(245, 245, 220));
         fieldHolder.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Product Info", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
         fieldHolder.setBounds(50, 25, 311, 165);
         fieldHolder.setLayout(null);
@@ -106,22 +104,18 @@ public class ProductAddPage extends Page {
     }
 
     private void initializeSaveButton() {
-        saveButton = new JButton("SAVE");
-        saveButton.setForeground(new Color(0, 153, 51));
-        saveButton.setBackground(new Color(245, 245, 245));
-        saveButton.setBounds(50, 210, 311, 50);
-        saveButton.setFont(new Font("Tahoma", Font.BOLD, 16));
+        saveButton = new JButton("Create");
+        saveButton.setBounds(50, 210, 311, 30);
+        saveButton.setFont(new Font("Tahoma", Font.BOLD, 14));
         saveButton.addActionListener(buttonListener);
 
         add(saveButton);
     }
 
     private void initializeBackButton() {
-        backButton = new JButton("Back");
-        backButton.setForeground(new Color(204, 51, 51));
-        backButton.setFont(new Font("Tahoma", Font.BOLD, 16));
-        backButton.setBackground(new Color(245, 245, 245));
-        backButton.setBounds(50, 263, 311, 50);
+        backButton = new JButton("Cancel");
+        backButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+        backButton.setBounds(50, 263, 311, 30);
         backButton.addActionListener(buttonListener);
 
         add(backButton);
