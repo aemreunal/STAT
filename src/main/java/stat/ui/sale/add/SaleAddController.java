@@ -27,8 +27,6 @@ import stat.ui.sale.add.view.helper.SaleSaveException;
 import stat.ui.sale.main.SaleController;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
@@ -41,9 +39,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class SaleAddController implements PageController {
 
-    public static final String           DATE_REGEX             = "^([0-9]{4})-([0]?[1-9]|[1][0-2])-([0]?[1-9]|[1|2][0-9]|[3][0|1])$";
-    public static final int              DEFAULT_PRODUCT_AMOUNT = 1;
-    private final       SimpleDateFormat dateFormatter          = new SimpleDateFormat("yyyy-MM-dd");
+    public static final int DEFAULT_PRODUCT_AMOUNT = 1;
 
     @Autowired
     private SaleService saleService;
@@ -132,13 +128,11 @@ public class SaleAddController implements PageController {
 
     public void confirmButtonClicked() {
         try {
-            Date date = getDate();
+            Date date = saleAddPage.getDate();
             String customerName = getCustomerName();
             saveSale(customerName, date);
             saleController.refreshPage();
             saleAddPage.displaySuccess();
-        } catch (ParseException e) {
-            saleAddPage.showDateParseError();
         } catch (SaleSaveException e) {
             switch (e.getCausingData()) {
                 case SaleSaveException.DATE:
@@ -152,14 +146,6 @@ public class SaleAddController implements PageController {
                     break;
             }
         }
-    }
-
-    private Date getDate() throws ParseException, SaleSaveException {
-        String dateText = saleAddPage.getDateText();
-        if (!dateText.matches(DATE_REGEX)) {
-            throw new SaleSaveException(SaleSaveException.DATE);
-        }
-        return dateFormatter.parse(dateText);
     }
 
     private String getCustomerName() throws SaleSaveException {

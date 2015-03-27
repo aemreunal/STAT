@@ -4,15 +4,20 @@ import stat.ui.Page;
 import stat.ui.sale.add.SaleAddController;
 import stat.ui.sale.add.view.helper.AvailableProductsTableModel;
 import stat.ui.sale.add.view.helper.ChosenProductsTableModel;
+import stat.ui.sale.add.view.helper.DateLabelFormatter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
@@ -39,6 +44,7 @@ public class SaleAddPage extends Page {
     private ButtonListener              buttonListener;
     private AvailableProductsTableModel availableProductsTableModel;
     private ChosenProductsTableModel    chosenProductsTableModel;
+    private UtilDateModel dateModel;
 
     public SaleAddPage(SaleAddController saleAddController) {
         this.saleAddController = saleAddController;
@@ -147,17 +153,26 @@ public class SaleAddPage extends Page {
         JLabel labelDate = new JLabel("Date:");
         labelDate.setHorizontalAlignment(SwingConstants.RIGHT);
         labelDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        labelDate.setBounds(25, 43, 125, 24);
+        labelDate.setBounds(25, 45, 125, 24);
 
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        int month = Calendar.getInstance().get(Calendar.MONTH);
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-
-        dateField = new JTextField(year + "-" + month + "-" + day);
-        dateField.setBounds(160, 45, 201, 22);
+        JDatePickerImpl datePicker = createDatePicker();
 
         fieldHolder.add(labelDate);
-        fieldHolder.add(dateField);
+        fieldHolder.add(datePicker);
+    }
+
+    private JDatePickerImpl createDatePicker() {
+        // JDatePicker creation via: http://stackoverflow.com/a/26794863/2246876
+        dateModel = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
+        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        datePicker.setLocation(160, 45);
+        datePicker.setSize(datePicker.getPreferredSize());
+        return datePicker;
     }
 
     private void initTotalPrice() {
@@ -222,8 +237,8 @@ public class SaleAddPage extends Page {
         this.priceField.setText(newTotal);
     }
 
-    public String getDateText() {
-        return this.dateField.getText().trim();
+    public Date getDate() {
+        return dateModel.getValue();
     }
 
     public String getCustomerNameText() {
@@ -255,3 +270,4 @@ public class SaleAddPage extends Page {
                                       JOptionPane.ERROR_MESSAGE);
     }
 }
+
