@@ -11,6 +11,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.TableRowSorter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -39,6 +45,7 @@ public class ProductMainPage extends Page {
     public ProductMainPage() {
         buttonListener = new ProductPageButtonListener();
         initPage();
+        initFilters();
         initProductTable();
         initButtons();
     }
@@ -46,6 +53,25 @@ public class ProductMainPage extends Page {
     private void initPage() {
         setBackground(Color.LIGHT_GRAY);
         setLayout(new BorderLayout(0, 0));
+    }
+
+    private void initFilters() {
+        JPanel filterHolder = new JPanel();
+        filterHolder.setLayout(new GridLayout(1, 3));
+
+        JTextField productnameFilterField = new JTextField();
+        productnameFilterField.getDocument().addDocumentListener(new FilterFieldListener(0));
+        filterHolder.add(productnameFilterField);
+
+        JTextField descriptionFilterField = new JTextField();
+        descriptionFilterField.getDocument().addDocumentListener(new FilterFieldListener(1));
+        filterHolder.add(descriptionFilterField);
+
+        JTextField unitpriceFilterField = new JTextField();
+        unitpriceFilterField.getDocument().addDocumentListener(new FilterFieldListener(2));
+        filterHolder.add(unitpriceFilterField);
+
+        add(filterHolder, BorderLayout.NORTH);
     }
 
     private void initProductTable() {
@@ -116,4 +142,44 @@ public class ProductMainPage extends Page {
     public void displayProductDeletionError(SoldProductDeletionException exception) {
         JOptionPane.showMessageDialog(this, exception.getErrorMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
     }
+
+    private class FilterFieldListener implements DocumentListener {
+
+        private int columnIndex;
+
+        public FilterFieldListener(int columnIndex) {
+            this.columnIndex = columnIndex;
+        }
+
+        @Override
+        public void insertUpdate(DocumentEvent e) {
+            filterTable(getText(e));
+        }
+
+        @Override
+        public void removeUpdate(DocumentEvent e) {
+            filterTable(getText(e));
+        }
+
+        @Override
+        public void changedUpdate(DocumentEvent e) {
+            filterTable(getText(e));
+        }
+
+        private String getText(DocumentEvent event) {
+            try {
+                Document document = event.getDocument();
+                return document.getText(0, document.getLength());
+            } catch (BadLocationException e1) {
+                e1.printStackTrace();
+                return new String();
+            }
+        }
+
+        private void filterTable(String filterText) {
+            productTableSorter.setRowFilter(RowFilter.regexFilter(filterText, columnIndex));
+        }
+
+    }
+
 }
