@@ -90,6 +90,11 @@ public class ProductController implements PageController {
         }
         Product product = productService.getProductWithId(productIDList.get(row));
         ProductViewPage productViewPage = new ProductViewPage(product);
+
+        int amountOfProductSoldTotal = productService.getAmountOfProductSoldTotal(productIDList.get(row));
+        BigDecimal priceOfProductSoldTotal = productService.getPriceOfProductSoldTotal(productIDList.get(row));
+        productViewPage.initializeDetails(amountOfProductSoldTotal, priceOfProductSoldTotal);
+
         Page.showPopup(productViewPage);
     }
 
