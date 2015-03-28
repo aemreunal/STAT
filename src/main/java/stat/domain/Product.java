@@ -65,7 +65,13 @@ public class Product implements Comparable {
     public Product(String name, String description, BigDecimal price) {
         this.name = name;
         this.description = description;
-        this.price = price;
+        this.price = roundPrice(price);
+    }
+
+    // Helpers
+
+    private BigDecimal roundPrice(BigDecimal price) {
+        return price.setScale(GlobalSettings.PRICE_DECIMAL_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
 
     // Getters & Setters
@@ -107,7 +113,7 @@ public class Product implements Comparable {
     }
 
     public void setPrice(BigDecimal price) {
-        this.price = price;
+        this.price = roundPrice(price);
     }
 
     @Override

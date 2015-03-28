@@ -81,7 +81,8 @@ public class ProductTests extends StatTest {
     public void productPriceDecimalSaveTest1() throws ProductNameException {
         BigDecimal price = BigDecimal.valueOf(1.1);
         Product product1 = productService.createNewProduct("test product 1", price);
-        assertTrue("Product price is not stored properly!", productService.getProductWithId(product1.getProductId()).getPrice().equals(price));
+        // The comparison is tested against 0 as the result of compareTo() is equal to 0 when the two values are equal.
+        assertEquals("Product price is not stored properly!", 0, productService.getProductWithId(product1.getProductId()).getPrice().compareTo(price));
     }
 
     @Test
@@ -89,7 +90,18 @@ public class ProductTests extends StatTest {
     public void productPriceDecimalSaveTest2() throws ProductNameException {
         BigDecimal price = BigDecimal.valueOf(1.1234);
         Product product1 = productService.createNewProduct("test product 1", price);
-        assertTrue("Product price is not stored properly!", productService.getProductWithId(product1.getProductId()).getPrice().equals(price));
+        // The comparison is tested against 0 as the result of compareTo() is equal to 0 when the two values are equal.
+        assertEquals("Product price is not stored properly!", 0, productService.getProductWithId(product1.getProductId()).getPrice().compareTo(price));
+    }
+
+    @Test
+    @Rollback
+    public void productPriceDecimalRoundSaveTest() throws ProductNameException {
+        BigDecimal price = BigDecimal.valueOf(1.1234567);
+        BigDecimal roundedPrice = BigDecimal.valueOf(1.1235); // The rounding is correct for 4 decimal precision
+        Product product1 = productService.createNewProduct("test product 1", price);
+        // The comparison is tested against 0 as the result of compareTo() is equal to 0 when the two values are equal.
+        assertEquals("Product price is not stored properly!", 0, productService.getProductWithId(product1.getProductId()).getPrice().compareTo(roundedPrice));
     }
 
     @Test
