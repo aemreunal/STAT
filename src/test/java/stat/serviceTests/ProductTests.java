@@ -272,4 +272,21 @@ public class ProductTests extends StatTest {
         assertTrue("Search result does not contain the product!", products.contains(product3));
     }
 
+    @Test
+    @Rollback
+    public void totalSoldProductAmountTest() throws ProductNameException {
+        BigDecimal price = getRandomPrice();
+
+        Product product = productService.createNewProduct("test product", price);
+        Sale sale1 = saleService.createNewSale("test customer");
+        Sale sale2 = saleService.createNewSale("test customer");
+        int getAmount1 = getRandomAmount();
+        saleService.addProduct(sale1, product.getProductId(), getAmount1);
+        int getAmount2 = getRandomAmount();
+        saleService.addProduct(sale2, product.getProductId(), getAmount2);
+
+        int amountSoldTotal = productService.getAmountOfProductSoldTotal(product.getProductId());
+        assertEquals("The total amount actually sold and stored/retrieved are not equal!", (getAmount1 + getAmount2), amountSoldTotal);
+    }
+
 }

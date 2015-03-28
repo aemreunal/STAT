@@ -104,6 +104,16 @@ public class ProductService {
         return product.getSales().stream().collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
+    @Transactional(readOnly = true)
+    public int getAmountOfProductSoldTotal(Integer productId) {
+        LinkedHashSet<Sale> sales = this.getSalesOfProduct(productId);
+        int amountSold = 0;
+        for (Sale sale : sales) {
+            amountSold += sale.getAmounts().get(productId);
+        }
+        return amountSold;
+    }
+
     /**
      * WARNING: DO NOT USE THIS METHOD.
      * <p>
