@@ -1,10 +1,12 @@
 package stat.ui.product.view;
 
 import stat.domain.Product;
+import stat.domain.Sale;
 import stat.ui.Page;
 
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -89,7 +91,7 @@ public class ProductViewPage extends Page {
         fieldHolder.add(priceField);
     }
 
-    public void initializeDetails(int amountOfProductSoldTotal, BigDecimal priceOfProductSoldTotal) {
-        //TODO initialize amountOfProductSoldTotal and priceOfProductSoldTotal fields
+    public void initializeDetails(String amountOfProductSoldTotal, String priceOfProductSoldTotal, LinkedHashSet<Sale> sales) {
+        //TODO initialize amountOfProductSoldTotal and priceOfProductSoldTotal fields, and sales
     }
 }

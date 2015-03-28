@@ -1,6 +1,7 @@
 package stat.ui.product;
 
 import stat.domain.Product;
+import stat.domain.Sale;
 import stat.service.ProductService;
 import stat.service.exception.ProductNameException;
 import stat.service.exception.SoldProductDeletionException;
@@ -13,6 +14,7 @@ import stat.ui.product.view.helper.ProductColType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -93,7 +95,8 @@ public class ProductController implements PageController {
 
         int amountOfProductSoldTotal = productService.getAmountOfProductSoldTotal(productIDList.get(row));
         BigDecimal priceOfProductSoldTotal = productService.getPriceOfProductSoldTotal(productIDList.get(row));
-        productViewPage.initializeDetails(amountOfProductSoldTotal, priceOfProductSoldTotal);
+        LinkedHashSet<Sale> sales = productService.getSalesOfProduct(productIDList.get(row));
+        productViewPage.initializeDetails(String.valueOf(amountOfProductSoldTotal), String.valueOf(priceOfProductSoldTotal), sales);
 
         Page.showPopup(productViewPage);
     }
