@@ -96,6 +96,15 @@ public class ProductTests extends StatTest {
 
     @Test
     @Rollback
+    public void productPriceDecimalSaveTest3() throws ProductNameException {
+        BigDecimal price = getRandomPrice();
+        Product product1 = productService.createNewProduct("test product 1", price);
+        // The comparison is tested against 0 as the result of compareTo() is equal to 0 when the two values are equal.
+        assertEquals("Product price is not stored properly!", 0, productService.getProductWithId(product1.getProductId()).getPrice().compareTo(price));
+    }
+
+    @Test
+    @Rollback
     public void productPriceDecimalRoundSaveTest() throws ProductNameException {
         BigDecimal price = BigDecimal.valueOf(1.1234567);
         BigDecimal roundedPrice = BigDecimal.valueOf(1.1235); // The rounding is correct for 4 decimal precision
@@ -289,4 +298,21 @@ public class ProductTests extends StatTest {
         assertEquals("The total amount actually sold and stored/retrieved are not equal!", (getAmount1 + getAmount2), amountSoldTotal);
     }
 
+    @Test
+    @Rollback
+    public void totalSoldProductPriceTest() throws ProductNameException {
+        BigDecimal price = getRandomPrice();
+
+        Product product = productService.createNewProduct("test product", price);
+        Sale sale1 = saleService.createNewSale("test customer");
+        Sale sale2 = saleService.createNewSale("test customer");
+        int getAmount1 = getRandomAmount();
+        saleService.addProduct(sale1, product.getProductId(), getAmount1);
+        int getAmount2 = getRandomAmount();
+        saleService.addProduct(sale2, product.getProductId(), getAmount2);
+
+        BigDecimal amountSoldTotal = productService.getPriceOfProductSoldTotal(product.getProductId());
+        BigDecimal expectedTotal = BigDecimal.valueOf(getAmount1 + getAmount2).multiply(price);
+        assertEquals("The total price actually sold and stored/retrieved are not equal!", expectedTotal, amountSoldTotal);
+    }
 }

@@ -114,6 +114,13 @@ public class ProductService {
         return amountSold;
     }
 
+    @Transactional(readOnly = true)
+    public BigDecimal getPriceOfProductSoldTotal(Integer productId) {
+        int amountSold = this.getAmountOfProductSoldTotal(productId);
+        BigDecimal price = this.getProductWithId(productId).getPrice();
+        return price.multiply(BigDecimal.valueOf(amountSold));
+    }
+
     /**
      * WARNING: DO NOT USE THIS METHOD.
      * <p>
