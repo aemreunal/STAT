@@ -20,6 +20,7 @@ import stat.config.GlobalSettings;
 import stat.service.ProductService;
 import stat.service.SaleService;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -46,5 +47,13 @@ public abstract class StatTest {
     @Before
     public void setUpTest() {
         System.out.println("<------TEST------>");
+    }
+
+    protected int getRandomAmount() {
+        return (int) (Math.random() * 10);
+    }
+
+    protected BigDecimal getRandomPrice() {
+        return BigDecimal.valueOf(Math.random() * 100).setScale(GlobalSettings.PRICE_DECIMAL_PRECISION, BigDecimal.ROUND_HALF_UP);
     }
 }

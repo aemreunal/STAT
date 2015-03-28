@@ -49,6 +49,7 @@ public class Sale implements Comparable {
     @OrderBy("productId")
     private Set<Product> products = new LinkedHashSet<Product>();
 
+    // The amounts map from a product ID to the amount sold of that product
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "amounts", joinColumns = @JoinColumn(name = "sale_id"))
     @MapKeyColumn(name = "product_id")

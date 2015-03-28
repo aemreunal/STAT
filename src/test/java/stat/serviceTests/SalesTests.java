@@ -55,7 +55,7 @@ public class SalesTests extends StatTest {
     public void storeProductAmountInSaleTest() throws ProductNameException {
         Product product = productService.createNewProduct("test product", 1.0);
         Sale sale = saleService.createNewSale("test customer");
-        int amount = 4;
+        int amount = getRandomAmount();
         sale = saleService.addProduct(sale, product.getProductId(), amount);
 
         LinkedHashMap<Product, Integer> productsOfSale = saleService.getProductsOfSale(sale.getSaleId());
@@ -69,16 +69,16 @@ public class SalesTests extends StatTest {
     public void saleTotalPriceTest() throws ProductNameException {
         Sale sale = saleService.createNewSale("test customer");
 
-        int amount1 = (int) (Math.random() * 10);
-        BigDecimal price1 = BigDecimal.valueOf(19.3121);
+        int amount1 = getRandomAmount();
+        BigDecimal price1 = getRandomPrice();
         Product product1 = productService.createNewProduct("test product 1", price1);
         sale = saleService.addProduct(sale, product1.getProductId(), amount1);
 
         BigDecimal expectedTotalPrice1 = price1.multiply(BigDecimal.valueOf(amount1));
         assertEquals("The sale total price is not correctly calculated and stored!", expectedTotalPrice1, sale.getTotalPrice());
 
-        int amount2 = (int) (Math.random() * 10);
-        BigDecimal price2 = BigDecimal.valueOf(95.4934);
+        int amount2 = getRandomAmount();
+        BigDecimal price2 = getRandomPrice();
         Product product2 = productService.createNewProduct("test product 2", price2);
         sale = saleService.addProduct(sale, product2.getProductId(), amount2);
 
@@ -106,8 +106,6 @@ public class SalesTests extends StatTest {
         Date date2 = dateFormatter.parse("2011-06-01"); // 1 June 2011 - 00h00
         Date date3 = dateFormatter.parse("2012-01-01"); // 1 January 2012 - 00h00
         Date date4 = dateFormatter.parse("2013-01-01"); // 1 January 2013 - 00h00
-        Date date5 = dateFormatter.parse("2009-01-01"); // 1 January 2009 - 00h00
-        Date date6 = dateFormatter.parse("2009-02-01"); // 1 February 2009 - 00h00
 
         // Sale from 2011-02-01 - 00h00
         Sale sale1 = saleService.createNewSale("test customer", date1);
@@ -136,8 +134,6 @@ public class SalesTests extends StatTest {
         Date date2 = dateFormatter.parse("2011-06-01"); // 1 June 2011 - 00h00
         Date date3 = dateFormatter.parse("2012-01-01"); // 1 January 2012 - 00h00
         Date date4 = dateFormatter.parse("2013-01-01"); // 1 January 2013 - 00h00
-        Date date5 = dateFormatter.parse("2009-01-01"); // 1 January 2009 - 00h00
-        Date date6 = dateFormatter.parse("2009-02-01"); // 1 February 2009 - 00h00
 
         // Sale from 2011-02-01 - 00h00
         Sale sale1 = saleService.createNewSale("test customer", date1);
@@ -166,8 +162,6 @@ public class SalesTests extends StatTest {
         Date date2 = dateFormatter.parse("2011-06-01"); // 1 June 2011 - 00h00
         Date date3 = dateFormatter.parse("2012-01-01"); // 1 January 2012 - 00h00
         Date date4 = dateFormatter.parse("2013-01-01"); // 1 January 2013 - 00h00
-        Date date5 = dateFormatter.parse("2009-01-01"); // 1 January 2009 - 00h00
-        Date date6 = dateFormatter.parse("2009-02-01"); // 1 February 2009 - 00h00
 
         // Sale from 2011-02-01 - 00h00
         Sale sale1 = saleService.createNewSale("test customer", date1);
