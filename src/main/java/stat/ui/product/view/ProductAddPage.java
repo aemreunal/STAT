@@ -34,12 +34,12 @@ public class ProductAddPage extends Page {
     public ProductAddPage(ProductController productController) {
         this.productController = productController;
         buttonListener = new ButtonListener();
-        initializePageDesign();
+        initPage();
         initializeFields();
         initializeButtons();
     }
 
-    private void initializePageDesign() {
+    protected void initPage() {
         setMinimumSize(new Dimension(420, 370));
         setLayout(null);
     }

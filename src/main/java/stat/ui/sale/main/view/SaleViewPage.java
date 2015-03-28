@@ -39,7 +39,7 @@ public class SaleViewPage extends Page {
         initProductTable();
     }
 
-    private void initPage() {
+    protected void initPage() {
         setLayout(null);
         setSize(new Dimension(500, 500));
     }

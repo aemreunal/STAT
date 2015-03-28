@@ -20,11 +20,11 @@ public class ProductViewPage extends Page {
     private JPanel     fieldHolder;
 
     public ProductViewPage(Product product) {
-        initializePageDesign();
+        initPage();
         initializeFields(product);
     }
 
-    private void initializePageDesign() {
+    protected void initPage() {
         setSize(420, 370);
         setBackground(new Color(204, 204, 0));
         setLayout(null);

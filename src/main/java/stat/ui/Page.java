@@ -1,8 +1,11 @@
 package stat.ui;
 
 import stat.ui.mainApp.view.ApplicationWindow;
+import stat.ui.sale.helper.FilterFieldListener;
 
+import java.awt.*;
 import javax.swing.*;
+import javax.swing.table.TableRowSorter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +18,8 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public abstract class Page extends JPanel {
 
-    private ApplicationWindow appWindow;
+    protected TableRowSorter    tableSorter;
+    private   ApplicationWindow appWindow;
 
     public ApplicationWindow getApplicationWindow() {
         return appWindow;
@@ -23,6 +27,25 @@ public abstract class Page extends JPanel {
 
     public void setApplicationWindow(ApplicationWindow appWindow) {
         this.appWindow = appWindow;
+    }
+
+    protected abstract void initPage();
+
+    protected void initFilters(int numCols) {
+        JPanel filterHolder = new JPanel();
+        filterHolder.setLayout(new GridLayout(1, numCols));
+
+        for (int i = 0; i < numCols; i++) {
+            createFilterFieldForCol(filterHolder, i);
+        }
+
+        add(filterHolder, BorderLayout.NORTH);
+    }
+
+    protected void createFilterFieldForCol(JPanel parentPanel, int columnIndex) {
+        JTextField filterField = new JTextField();
+        filterField.getDocument().addDocumentListener(new FilterFieldListener(tableSorter, columnIndex));
+        parentPanel.add(filterField);
     }
 
     public static void showPopup(Page page) {

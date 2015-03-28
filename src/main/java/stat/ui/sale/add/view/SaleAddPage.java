@@ -49,14 +49,14 @@ public class SaleAddPage extends Page {
     public SaleAddPage(SaleAddController saleAddController) {
         this.saleAddController = saleAddController;
         buttonListener = new ButtonListener();
-        initPageDesign();
+        initPage();
         initFielHolder();
         initFields();
         initTables();
         initButtons();
     }
 
-    private void initPageDesign() {
+    protected void initPage() {
         setLayout(null);
         setMinimumSize(new Dimension(500, 450));
     }
