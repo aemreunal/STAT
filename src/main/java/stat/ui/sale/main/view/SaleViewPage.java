@@ -113,7 +113,13 @@ public class SaleViewPage extends Page {
     }
 
     public void addProductDetailsToTable(String productName, int amount, BigDecimal price) {
-        //TODO implement. Auto-generated for SaleController.java
+        Object[] row = new Object[3];
+        row[0] = productName;
+        row[1] = amount;
+        row[2] = price.doubleValue();
+
+        DefaultTableModel tableModel = (DefaultTableModel) productTable.getModel();
+        tableModel.addRow(row);
     }
 
     public void setCustomerNameField(String customerName) {
