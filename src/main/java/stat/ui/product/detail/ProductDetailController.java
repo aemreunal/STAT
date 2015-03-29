@@ -56,6 +56,6 @@ public class ProductDetailController {
 
     private void setProductSaleList(Integer productId) {
         LinkedHashSet<Sale> sales = productService.getSalesOfProduct(productId);
-        // TODO list sales
+        productDetailWindow.setProductSales(sales);
     }
 }

@@ -1,12 +1,14 @@
 package stat.ui.product.detail.view;
 
 import stat.domain.Product;
+import stat.domain.Sale;
 import stat.ui.product.detail.ProductDetailController;
 import stat.ui.product.detail.view.tabs.ProductInfoTab;
 import stat.ui.product.detail.view.tabs.ProductSalesTab;
 
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -65,5 +67,9 @@ public class ProductDetailWindow extends JFrame {
     public void setProductSaleStats(int amountSold, BigDecimal totalRevenue) {
         productInfoTab.setAmountSold(amountSold);
         productInfoTab.setRevenue(totalRevenue);
+    }
+
+    public void setProductSales(LinkedHashSet<Sale> sales) {
+        productSalesTab.fillSaleTable(sales);
     }
 }
