@@ -1,11 +1,11 @@
-package stat.ui.product.view;
+package stat.ui.product.main.view;
 
 import stat.service.exception.SoldProductDeletionException;
 import stat.ui.Page;
-import stat.ui.product.ProductController;
-import stat.ui.product.view.helper.ProductColType;
-import stat.ui.product.view.helper.ProductTableModel;
-import stat.ui.product.view.helper.ProductTableSorter;
+import stat.ui.product.main.ProductController;
+import stat.ui.product.main.view.helper.ProductColType;
+import stat.ui.product.main.view.helper.ProductTableModel;
+import stat.ui.product.main.view.helper.ProductTableSorter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

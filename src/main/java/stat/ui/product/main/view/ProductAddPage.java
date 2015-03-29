@@ -1,7 +1,7 @@
-package stat.ui.product.view;
+package stat.ui.product.main.view;
 
 import stat.ui.Page;
-import stat.ui.product.ProductController;
+import stat.ui.product.main.ProductController;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

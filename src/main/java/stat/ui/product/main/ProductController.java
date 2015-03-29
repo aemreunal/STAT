@@ -1,20 +1,18 @@
-package stat.ui.product;
+package stat.ui.product.main;
 
 import stat.domain.Product;
-import stat.domain.Sale;
 import stat.service.ProductService;
 import stat.service.exception.ProductNameException;
 import stat.service.exception.SoldProductDeletionException;
 import stat.ui.Page;
 import stat.ui.PageController;
-import stat.ui.product.view.ProductAddPage;
-import stat.ui.product.view.ProductMainPage;
-import stat.ui.product.view.ProductViewPage;
-import stat.ui.product.view.helper.ProductColType;
+import stat.ui.product.detail.ProductDetailController;
+import stat.ui.product.main.view.ProductAddPage;
+import stat.ui.product.main.view.ProductMainPage;
+import stat.ui.product.main.view.helper.ProductColType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,6 +34,9 @@ public class ProductController implements PageController {
 
     @Autowired
     private ProductMainPage productMainPage;
+
+    @Autowired
+    private ProductDetailController productDetailController;
 
     private ArrayList<Integer> productIDList = new ArrayList<>();
 
@@ -90,15 +91,7 @@ public class ProductController implements PageController {
         if (row == -1) { // If no row has been chosen
             return;
         }
-        Product product = productService.getProductWithId(productIDList.get(row));
-        ProductViewPage productViewPage = new ProductViewPage(product);
-
-        int amountOfProductSoldTotal = productService.getAmountOfProductSoldTotal(productIDList.get(row));
-        BigDecimal priceOfProductSoldTotal = productService.getPriceOfProductSoldTotal(productIDList.get(row));
-        LinkedHashSet<Sale> sales = productService.getSalesOfProduct(productIDList.get(row));
-        productViewPage.initializeDetails(String.valueOf(amountOfProductSoldTotal), String.valueOf(priceOfProductSoldTotal), sales);
-
-        Page.showPopup(productViewPage);
+        productDetailController.showDetailsOfProductWithId(productIDList.get(row));
     }
 
     @Override

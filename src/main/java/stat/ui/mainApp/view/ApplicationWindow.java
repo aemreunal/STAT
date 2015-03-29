@@ -1,13 +1,12 @@
 package stat.ui.mainApp.view;
 
 import stat.ui.mainApp.ApplicationController;
-import stat.ui.product.view.ProductMainPage;
+import stat.ui.product.main.view.ProductMainPage;
 import stat.ui.sale.main.view.SaleMainPage;
 
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -55,17 +54,8 @@ public class ApplicationWindow extends JFrame {
         pageTab = new JTabbedPane(JTabbedPane.TOP);
         pageTab.addTab(TAB_SALES, new JPanel());
         pageTab.addTab(TAB_PRODUCT, new JPanel());
-        pageTab.addChangeListener(createChangeListener());
 
         contentPane.add(pageTab, BorderLayout.CENTER);
-    }
-
-    private ChangeListener createChangeListener() {
-        return e -> {
-            JTabbedPane tab = (JTabbedPane) e.getSource();
-            String tabName = tab.getTitleAt(tab.getSelectedIndex());
-            applicationController.changedTab(tabName);
-        };
     }
 
     public void display() {
