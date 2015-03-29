@@ -122,15 +122,4 @@ public class SaleViewPage extends Page {
         tableModel.addRow(row);
     }
 
-    public void setCustomerNameField(String customerName) {
-        //TODO implement. Auto-generated for SaleController.java
-    }
-
-    public void setDateField(Date date) {
-        //TODO implement. Auto-generated for SaleController.java
-    }
-
-    public void setTotalPriceField(BigDecimal sum) {
-        //TODO implement. Auto-generated for SaleController.java
-    }
 }
