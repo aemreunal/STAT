@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
@@ -39,6 +40,7 @@ public class SaleAddPage extends Page {
     private ButtonListener              buttonListener;
     private AvailableProductsTableModel availableProductsTableModel;
     private ChosenProductsTableModel    chosenProductsTableModel;
+    private UtilDateModel               dateModel;
 
     public SaleAddPage(SaleAddController saleAddController) {
         this.saleAddController = saleAddController;
@@ -150,7 +152,7 @@ public class SaleAddPage extends Page {
         labelDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
         labelDate.setBounds(25, 45, 125, 24);
 
-        JDatePickerImpl datePicker = createDatePicker();
+        JDatePickerImpl datePicker = createDatePicker(dateModel);
         datePicker.setLocation(160, 45);
         datePicker.setSize(datePicker.getPreferredSize());
 

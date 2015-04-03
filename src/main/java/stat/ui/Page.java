@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 public abstract class Page extends JPanel {
 
     protected TableRowSorter    tableSorter;
-    protected UtilDateModel     dateModel;
     private   ApplicationWindow appWindow;
 
     public ApplicationWindow getApplicationWindow() {
@@ -48,7 +47,13 @@ public abstract class Page extends JPanel {
         add(filterHolder, BorderLayout.NORTH);
     }
 
-    protected JDatePickerImpl createDatePicker() {
+    protected void createFilterFieldForCol(JPanel parentPanel, int columnIndex) {
+        JTextField filterField = new JTextField();
+        filterField.getDocument().addDocumentListener(new FilterFieldListener(tableSorter, columnIndex));
+        parentPanel.add(filterField);
+    }
+
+    public static JDatePickerImpl createDatePicker(UtilDateModel dateModel) {
         // JDatePicker creation via: http://stackoverflow.com/a/26794863/2246876
         dateModel = new UtilDateModel();
         Properties p = new Properties();
@@ -58,12 +63,6 @@ public abstract class Page extends JPanel {
         JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
         JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
         return datePicker;
-    }
-
-    protected void createFilterFieldForCol(JPanel parentPanel, int columnIndex) {
-        JTextField filterField = new JTextField();
-        filterField.getDocument().addDocumentListener(new FilterFieldListener(tableSorter, columnIndex));
-        parentPanel.add(filterField);
     }
 
     public static void showPopup(Page page) {

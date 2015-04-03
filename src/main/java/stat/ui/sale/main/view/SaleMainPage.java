@@ -3,7 +3,6 @@ package stat.ui.sale.main.view;
 import stat.ui.Page;
 import stat.ui.sale.main.SaleController;
 import stat.ui.sale.main.view.helper.SaleColType;
-import stat.ui.sale.main.view.helper.SaleFilter;
 import stat.ui.sale.main.view.helper.SaleTableModel;
 import stat.ui.sale.main.view.helper.SaleTableSorter;
 
@@ -27,6 +26,7 @@ public class SaleMainPage extends Page {
     @Autowired
     private SaleController saleController;
 
+    private SaleFilterPanel        filterPanel;
     private JTable                 saleTable;
     private SaleTableModel         tableModel;
     private SalePageButtonListener buttonListener;
@@ -58,8 +58,8 @@ public class SaleMainPage extends Page {
     }
 
     private void initFilters() {
-        SaleFilter filter = new SaleFilter();
-        add(filter, BorderLayout.NORTH);
+        filterPanel = new SaleFilterPanel();
+        add(filterPanel, BorderLayout.NORTH);
     }
 
     private void initButtons() {
