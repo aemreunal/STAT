@@ -15,6 +15,9 @@ import java.util.Properties;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -128,9 +131,42 @@ public class SaleAddPage extends Page {
         customerNameField = new JTextField();
         customerNameField.setBounds(160, 15, 201, 20);
         customerNameField.setColumns(10);
+        customerNameField.getDocument().addDocumentListener(getDocumentListener());
 
         fieldHolder.add(labelCustomerName);
         fieldHolder.add(customerNameField);
+    }
+
+    private DocumentListener getDocumentListener() {
+        return new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updateNameField();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) { }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) { }
+
+            private void updateNameField() {
+                Runnable doHighlight = new Runnable() {
+                    @Override
+                    public void run() {
+                        String input = customerNameField.getText();
+                        String suggestion = saleAddController.getNameSuggestion(input);
+                        if (!suggestion.equals(customerNameField.getText()) && suggestion.length() > input.length()) {
+                            customerNameField.setText(suggestion);
+                            customerNameField.setSelectionStart(input.length());
+                            customerNameField.setSelectionEnd(suggestion.length());
+                        }
+                    }
+                };
+                SwingUtilities.invokeLater(doHighlight);
+
+            }
+        };
     }
 
     private void initAvailableProductsTable() {
