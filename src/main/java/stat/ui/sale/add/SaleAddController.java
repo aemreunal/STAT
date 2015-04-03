@@ -36,10 +36,10 @@ public class SaleAddController implements PageController {
 
     private SaleAddPage saleAddPage;
 
-    private ArrayList<Product> availableProducts     = new ArrayList<Product>();
-    private ArrayList<Product> chosenProducts        = new ArrayList<Product>();
-    private ArrayList<Integer> chosenProductsAmounts = new ArrayList<Integer>();
-    private LinkedHashSet<String> customerNames = new LinkedHashSet<>();
+    private ArrayList<Product> availableProducts     = new ArrayList<>();
+    private ArrayList<Product> chosenProducts        = new ArrayList<>();
+    private ArrayList<Integer> chosenProductsAmounts = new ArrayList<>();
+    private LinkedHashSet<String> customerNames      = new LinkedHashSet<>();
 
     public void showSaleCreator() {
         saleAddPage = new SaleAddPage(this);
@@ -113,6 +113,19 @@ public class SaleAddController implements PageController {
     }
 
     public void confirmButtonClicked() {
+        if (!haveProducts()) {
+            saleAddPage.showMissingProductError();
+        } else {
+            recordSale();
+        }
+
+    }
+
+    private boolean haveProducts() {
+        return chosenProducts.size() > 0;
+    }
+
+    private void recordSale() {
         try {
             Date date = saleAddPage.getDate();
             String customerName = getCustomerName();
@@ -168,10 +181,10 @@ public class SaleAddController implements PageController {
 
         LinkedHashSet<String> possibleNameSuggestions = customerNames.stream()
                 .filter(name -> name.startsWith(text))
-                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
         try {
-            return possibleNameSuggestions.iterator().next().toString();
+            return possibleNameSuggestions.iterator().next();
         } catch (NoSuchElementException e) {
             return "";
         }

@@ -146,16 +146,13 @@ public class SaleAddPage extends Page {
             public void changedUpdate(DocumentEvent e) { }
 
             private void updateNameField() {
-                Runnable doHighlight = new Runnable() {
-                    @Override
-                    public void run() {
-                        String input = customerNameField.getText();
-                        String suggestion = saleAddController.getNameSuggestion(input);
-                        if (!suggestion.equals(customerNameField.getText()) && suggestion.length() > input.length()) {
-                            customerNameField.setText(suggestion);
-                            customerNameField.setSelectionStart(input.length());
-                            customerNameField.setSelectionEnd(suggestion.length());
-                        }
+                Runnable doHighlight = () -> {
+                    String input = customerNameField.getText();
+                    String suggestion = saleAddController.getNameSuggestion(input);
+                    if (!suggestion.equals(customerNameField.getText()) && suggestion.length() > input.length()) {
+                        customerNameField.setText(suggestion);
+                        customerNameField.setSelectionStart(input.length());
+                        customerNameField.setSelectionEnd(suggestion.length());
                     }
                 };
                 SwingUtilities.invokeLater(doHighlight);
@@ -275,6 +272,13 @@ public class SaleAddPage extends Page {
         JOptionPane.showMessageDialog(this,
                                       "Please enter a valid customer name.",
                                       "Validation Error",
+                                      JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showMissingProductError() {
+        JOptionPane.showMessageDialog(this,
+                                      "Please add at least one product.",
+                                      "Save Error",
                                       JOptionPane.ERROR_MESSAGE);
     }
 
