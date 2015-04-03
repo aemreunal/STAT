@@ -85,7 +85,10 @@ public class SaleService {
     @Transactional(readOnly = true)
     public LinkedHashSet<String> getCustomerNames() {
         Set<Sale> allSales = this.getAllSales();
-        return allSales.stream().map(Sale::getCustomerName).collect(Collectors.toCollection(LinkedHashSet::new));
+        return allSales.stream()
+                       .map(Sale::getCustomerName)
+                       .sorted(String::compareToIgnoreCase)
+                       .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**
