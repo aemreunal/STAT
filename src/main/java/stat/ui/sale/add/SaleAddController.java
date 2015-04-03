@@ -1,21 +1,5 @@
 package stat.ui.sale.add;
 
-/*
- ***************************
- * Copyright (c) 2015      *
- *                         *
- * This code belongs to:   *
- *                         *
- * @author Ahmet Emre Ünal *
- * S001974                 *
- *                         *
- * emre@aemreunal.com      *
- * emre.unal@ozu.edu.tr    *
- *                         *
- * aemreunal.com           *
- ***************************
- */
-
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.service.ProductService;
@@ -29,7 +13,10 @@ import stat.ui.sale.main.SaleController;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -55,9 +42,11 @@ public class SaleAddController implements PageController {
     private ArrayList<Product> availableProducts     = new ArrayList<Product>();
     private ArrayList<Product> chosenProducts        = new ArrayList<Product>();
     private ArrayList<Integer> chosenProductsAmounts = new ArrayList<Integer>();
+    private LinkedHashSet<String> customerNames = new LinkedHashSet<>();
 
     public void showSaleCreator() {
         saleAddPage = new SaleAddPage(this);
+        customerNames = saleService.getCustomerNames();
         refreshPage();
         Page.showPopup(saleAddPage);
     }
@@ -174,5 +163,10 @@ public class SaleAddController implements PageController {
 
     public BigDecimal calculatePrice(Product product, int amount) {
         return product.getPrice().multiply(BigDecimal.valueOf(amount));
+    }
+
+    public String getNameSuggestion(String text) {
+        LinkedHashSet<String> possibleNameSuggestions = customerNames.stream().filter(name -> name.startsWith(text)).collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+        return possibleNameSuggestions.iterator().next().toString();
     }
 }
