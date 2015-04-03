@@ -4,14 +4,12 @@ import stat.ui.Page;
 import stat.ui.sale.add.SaleAddController;
 import stat.ui.sale.add.view.helper.AvailableProductsTableModel;
 import stat.ui.sale.add.view.helper.ChosenProductsTableModel;
-import stat.ui.sale.add.view.helper.DateLabelFormatter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Properties;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -20,7 +18,6 @@ import javax.swing.event.DocumentListener;
 
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
@@ -32,7 +29,6 @@ public class SaleAddPage extends Page {
 
     private JTextField customerNameField;
     private JTextField priceField;
-    private JTextField dateField;
 
     private JPanel fieldHolder;
 
@@ -47,24 +43,24 @@ public class SaleAddPage extends Page {
     private ButtonListener              buttonListener;
     private AvailableProductsTableModel availableProductsTableModel;
     private ChosenProductsTableModel    chosenProductsTableModel;
-    private UtilDateModel dateModel;
 
     public SaleAddPage(SaleAddController saleAddController) {
         this.saleAddController = saleAddController;
         buttonListener = new ButtonListener();
         initPage();
-        initFielHolder();
+        initFieldHolder();
         initFields();
         initTables();
         initButtons();
     }
 
+    @Override
     protected void initPage() {
         setLayout(null);
         setMinimumSize(new Dimension(500, 450));
     }
 
-    private void initFielHolder() {
+    private void initFieldHolder() {
         fieldHolder = new JPanel();
         fieldHolder.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Sale Info", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
         fieldHolder.setBounds(2, 22, 492, 277);
@@ -192,23 +188,11 @@ public class SaleAddPage extends Page {
         labelDate.setBounds(25, 45, 125, 24);
 
         JDatePickerImpl datePicker = createDatePicker();
+        datePicker.setLocation(160, 45);
+        datePicker.setSize(datePicker.getPreferredSize());
 
         fieldHolder.add(labelDate);
         fieldHolder.add(datePicker);
-    }
-
-    private JDatePickerImpl createDatePicker() {
-        // JDatePicker creation via: http://stackoverflow.com/a/26794863/2246876
-        dateModel = new UtilDateModel();
-        Properties p = new Properties();
-        p.put("text.today", "Today");
-        p.put("text.month", "Month");
-        p.put("text.year", "Year");
-        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-        datePicker.setLocation(160, 45);
-        datePicker.setSize(datePicker.getPreferredSize());
-        return datePicker;
     }
 
     private void initTotalPrice() {

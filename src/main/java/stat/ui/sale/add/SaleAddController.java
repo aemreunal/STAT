@@ -11,10 +11,7 @@ import stat.ui.sale.add.view.helper.SaleSaveException;
 import stat.ui.sale.main.SaleController;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,7 +163,18 @@ public class SaleAddController implements PageController {
     }
 
     public String getNameSuggestion(String text) {
-        LinkedHashSet<String> possibleNameSuggestions = customerNames.stream().filter(name -> name.startsWith(text)).collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
-        return possibleNameSuggestions.iterator().next().toString();
+        if (text.equals(""))
+            return "";
+
+        LinkedHashSet<String> possibleNameSuggestions = customerNames.stream()
+                .filter(name -> name.startsWith(text))
+                .collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
+
+        try {
+            return possibleNameSuggestions.iterator().next().toString();
+        } catch (NoSuchElementException e) {
+            return "";
+        }
+
     }
 }

@@ -119,7 +119,7 @@ public class SalesTests extends StatTest {
         // Sale from 2013-01-01 - 00h00
         Sale sale4 = saleService.createNewSale("test customer", date4);
 
-        LinkedHashSet<Sale> sales = saleService.searchForSales(null, date1, date2);
+        LinkedHashSet<Sale> sales = saleService.searchForSales(null, date1, date2, null, null);
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
@@ -147,7 +147,7 @@ public class SalesTests extends StatTest {
         // Sale from 2013-01-01 - 00h00
         Sale sale4 = saleService.createNewSale("test customer", date4);
 
-        LinkedHashSet<Sale> sales = saleService.searchForSales(null, date2, null);
+        LinkedHashSet<Sale> sales = saleService.searchForSales(null, date2, null, null, null);
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale3));
@@ -175,7 +175,7 @@ public class SalesTests extends StatTest {
         // Sale from 2013-01-01 - 00h00
         Sale sale4 = saleService.createNewSale("test customer", date4);
 
-        LinkedHashSet<Sale> sales = saleService.searchForSales(null, null, date3);
+        LinkedHashSet<Sale> sales = saleService.searchForSales(null, null, date3, null, null);
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale3));
@@ -205,10 +205,79 @@ public class SalesTests extends StatTest {
         // Sale from 2013-01-01 - 00h00
         Sale sale4 = saleService.createNewSale("test customer", date4);
 
-        LinkedHashSet<Sale> sales = saleService.searchForSales(null, date5, date6);
+        LinkedHashSet<Sale> sales = saleService.searchForSales(null, date5, date6, null, null);
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale2));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
+    }
+
+    @Test
+    @Rollback
+    public void searchSalesByMinPriceTest() throws ParseException, ProductNameException {
+        Sale sale1 = saleService.createNewSale("sale 1");
+        Sale sale2 = saleService.createNewSale("sale 2");
+        Sale sale3 = saleService.createNewSale("sale 3");
+        Sale sale4 = saleService.createNewSale("sale 4");
+
+        BigDecimal price = BigDecimal.valueOf(1.0);
+        Product product = productService.createNewProduct("test product 1", price);
+
+        sale1 = saleService.addProduct(sale1, product.getProductId(), 1);
+        sale2 = saleService.addProduct(sale2, product.getProductId(), 2);
+        sale3 = saleService.addProduct(sale3, product.getProductId(), 3);
+        sale4 = saleService.addProduct(sale4, product.getProductId(), 4);
+
+        LinkedHashSet<Sale> sales = saleService.searchForSales(null, null, null, price.multiply(BigDecimal.valueOf(2)), null);
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale3));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale4));
+    }
+
+    @Test
+    @Rollback
+    public void searchSalesByMaxPriceTest() throws ParseException, ProductNameException {
+        Sale sale1 = saleService.createNewSale("sale 1");
+        Sale sale2 = saleService.createNewSale("sale 2");
+        Sale sale3 = saleService.createNewSale("sale 3");
+        Sale sale4 = saleService.createNewSale("sale 4");
+
+        BigDecimal price = BigDecimal.valueOf(1.0);
+        Product product = productService.createNewProduct("test product 1", price);
+
+        sale1 = saleService.addProduct(sale1, product.getProductId(), 1);
+        sale2 = saleService.addProduct(sale2, product.getProductId(), 2);
+        sale3 = saleService.addProduct(sale3, product.getProductId(), 3);
+        sale4 = saleService.addProduct(sale4, product.getProductId(), 4);
+
+        LinkedHashSet<Sale> sales = saleService.searchForSales(null, null, null, null, price.multiply(BigDecimal.valueOf(2)));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
+    }
+
+    @Test
+    @Rollback
+    public void searchSalesByPriceIntervalTest() throws ParseException, ProductNameException {
+        Sale sale1 = saleService.createNewSale("sale 1");
+        Sale sale2 = saleService.createNewSale("sale 2");
+        Sale sale3 = saleService.createNewSale("sale 3");
+        Sale sale4 = saleService.createNewSale("sale 4");
+
+        BigDecimal price = BigDecimal.valueOf(1.0);
+        Product product = productService.createNewProduct("test product 1", price);
+
+        sale1 = saleService.addProduct(sale1, product.getProductId(), 1);
+        sale2 = saleService.addProduct(sale2, product.getProductId(), 2);
+        sale3 = saleService.addProduct(sale3, product.getProductId(), 3);
+        sale4 = saleService.addProduct(sale4, product.getProductId(), 4);
+
+        LinkedHashSet<Sale> sales = saleService.searchForSales(null, null, null, price.multiply(BigDecimal.valueOf(2)), price.multiply(BigDecimal.valueOf(3)));
+        assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
+        assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale3));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
     }
 
@@ -233,7 +302,7 @@ public class SalesTests extends StatTest {
         // Sale from 2013-01-01 - 00h00
         Sale sale4 = saleService.createNewSale("test CUstomer 3", date4);
 
-        LinkedHashSet<Sale> sales = saleService.searchForSales("test", null, null);
+        LinkedHashSet<Sale> sales = saleService.searchForSales("test", null, null, null, null);
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale3));
@@ -261,7 +330,7 @@ public class SalesTests extends StatTest {
         // Sale from 2013-01-01 - 00h00
         Sale sale4 = saleService.createNewSale("test CUstomer 3", date4);
 
-        LinkedHashSet<Sale> sales = saleService.searchForSales("custOMER", null, null);
+        LinkedHashSet<Sale> sales = saleService.searchForSales("custOMER", null, null, null, null);
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
@@ -289,7 +358,7 @@ public class SalesTests extends StatTest {
         // Sale from 2013-01-01 - 00h00
         Sale sale4 = saleService.createNewSale("test CUstomer 3", date4);
 
-        LinkedHashSet<Sale> sales = saleService.searchForSales("test", date1, date2);
+        LinkedHashSet<Sale> sales = saleService.searchForSales("test", date1, date2, null, null);
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale1));
         assertTrue("Search result does not contain sales from the searched interval!", sales.contains(sale2));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
@@ -317,7 +386,7 @@ public class SalesTests extends StatTest {
         // Sale from 2013-01-01 - 00h00
         Sale sale4 = saleService.createNewSale("test CUstomer 3", date4);
 
-        LinkedHashSet<Sale> sales = saleService.searchForSales("3", date1, date2);
+        LinkedHashSet<Sale> sales = saleService.searchForSales("3", date1, date2, null, null);
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale1));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale2));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
