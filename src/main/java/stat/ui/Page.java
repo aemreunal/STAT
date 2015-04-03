@@ -1,11 +1,16 @@
 package stat.ui;
 
 import stat.ui.mainApp.view.ApplicationWindow;
+import stat.ui.sale.add.view.helper.DateLabelFormatter;
 import stat.ui.sale.helper.FilterFieldListener;
 
 import java.awt.*;
+import java.util.Properties;
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Component;
 public abstract class Page extends JPanel {
 
     protected TableRowSorter    tableSorter;
+    protected UtilDateModel     dateModel;
     private   ApplicationWindow appWindow;
 
     public ApplicationWindow getApplicationWindow() {
@@ -40,6 +46,18 @@ public abstract class Page extends JPanel {
         }
 
         add(filterHolder, BorderLayout.NORTH);
+    }
+
+    protected JDatePickerImpl createDatePicker() {
+        // JDatePicker creation via: http://stackoverflow.com/a/26794863/2246876
+        dateModel = new UtilDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
+        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        return datePicker;
     }
 
     protected void createFilterFieldForCol(JPanel parentPanel, int columnIndex) {
