@@ -3,6 +3,7 @@ package stat.ui.sale.main.view;
 import stat.ui.Page;
 import stat.ui.sale.main.SaleController;
 import stat.ui.sale.main.view.helper.SaleColType;
+import stat.ui.sale.main.view.helper.SaleFilter;
 import stat.ui.sale.main.view.helper.SaleTableModel;
 import stat.ui.sale.main.view.helper.SaleTableSorter;
 
@@ -38,7 +39,7 @@ public class SaleMainPage extends Page {
         buttonListener = new SalePageButtonListener();
         initPage();
         initSaleTable();
-        initFilters(saleTable.getColumnCount());
+        initFilters();
         initButtons();
     }
 
@@ -54,6 +55,11 @@ public class SaleMainPage extends Page {
         saleTable.setRowSorter(tableSorter);
         saleTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(new JScrollPane(saleTable), BorderLayout.CENTER);
+    }
+
+    private void initFilters() {
+        SaleFilter filter = new SaleFilter();
+        add(filter, BorderLayout.NORTH);
     }
 
     private void initButtons() {
