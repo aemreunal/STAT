@@ -20,6 +20,7 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.service.repository.SaleRepo;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.persistence.criteria.Predicate;
@@ -119,12 +120,13 @@ public class SaleService {
      *         also be returned). If a {@code null} value is provided, the search won't be
      *         restricted to a specific ending date.
      *
-     * @return The {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale sales}
+     * @param minPrice
+     *@param maxPrice @return The {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale sales}
      * which match the given criteria.
      */
     @Transactional(readOnly = true)
-    public LinkedHashSet<Sale> searchForSales(String customerName, Date from, Date until) {
-        List searchResult = saleRepo.findAll(saleWithSpecification(customerName, from, until));
+    public LinkedHashSet<Sale> searchForSales(String customerName, Date from, Date until, BigDecimal minPrice, BigDecimal maxPrice) {
+        List searchResult = saleRepo.findAll(saleWithSpecification(customerName, from, until, minPrice, maxPrice));
 
         LinkedHashSet<Sale> sales = new LinkedHashSet<Sale>();
         for (Object saleObject : searchResult) {
@@ -141,7 +143,7 @@ public class SaleService {
         saleRepo.delete(saleId);
     }
 
-    private Specification<Sale> saleWithSpecification(String customerName, Date from, Date until) {
+    private Specification<Sale> saleWithSpecification(String customerName, Date from, Date until, BigDecimal minPrice, BigDecimal maxPrice) {
         return (root, query, builder) -> {
             ArrayList<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -155,6 +157,14 @@ public class SaleService {
 
             if (until != null) {
                 predicates.add(builder.lessThanOrEqualTo(root.get("date").as(Date.class), until));
+            }
+
+            if (minPrice != null) {
+                predicates.add(builder.greaterThanOrEqualTo(root.get("totalPrice").as(BigDecimal.class), minPrice));
+            }
+
+            if (maxPrice != null) {
+                predicates.add(builder.lessThanOrEqualTo(root.get("totalPrice").as(BigDecimal.class), maxPrice));
             }
 
             return builder.and(predicates.toArray(new Predicate[predicates.size()]));
