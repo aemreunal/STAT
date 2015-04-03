@@ -21,6 +21,7 @@ import stat.domain.Sale;
 import stat.service.repository.SaleRepo;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import javax.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -37,8 +38,7 @@ public class SaleService {
     private ProductService productService;
 
     public Sale createNewSale(String customerName) {
-        Sale sale = new Sale(customerName);
-        return this.save(sale);
+        return this.createNewSale(customerName, new Date());
     }
 
     public Sale createNewSale(String customerName, Date dateOfSale) {
@@ -80,6 +80,12 @@ public class SaleService {
             productsAndAmounts.put(product, amountOfProduct);
         }
         return productsAndAmounts;
+    }
+
+    @Transactional(readOnly = true)
+    public LinkedHashSet<String> getCustomerNames() {
+        Set<Sale> allSales = this.getAllSales();
+        return allSales.stream().map(Sale::getCustomerName).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     /**

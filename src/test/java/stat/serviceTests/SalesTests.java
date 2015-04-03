@@ -323,4 +323,19 @@ public class SalesTests extends StatTest {
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale3));
         assertFalse("Search result contains sales from outside the interval!", sales.contains(sale4));
     }
+
+    @Test
+    @Rollback
+    public void getCustomerNameTest() {
+        String customerName1 = "test customer 1";
+        String customerName2 = "test customer 2";
+        saleService.createNewSale(customerName1);
+        saleService.createNewSale(customerName2);
+        saleService.createNewSale(customerName2);
+        LinkedHashSet<String> customerNames = saleService.getCustomerNames();
+
+        assertEquals("There are [erroneously] more than 2 customers!", 2, customerNames.size());
+        assertTrue("One of the customers are not included in the names list!", customerNames.contains(customerName1));
+        assertTrue("One of the customers are not included in the names list!", customerNames.contains(customerName2));
+    }
 }
