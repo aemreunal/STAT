@@ -11,10 +11,7 @@ import stat.ui.sale.add.view.helper.SaleSaveException;
 import stat.ui.sale.main.SaleController;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +36,10 @@ public class SaleAddController implements PageController {
 
     private SaleAddPage saleAddPage;
 
-    private ArrayList<Product> availableProducts     = new ArrayList<Product>();
-    private ArrayList<Product> chosenProducts        = new ArrayList<Product>();
-    private ArrayList<Integer> chosenProductsAmounts = new ArrayList<Integer>();
-    private LinkedHashSet<String> customerNames = new LinkedHashSet<>();
+    private ArrayList<Product> availableProducts     = new ArrayList<>();
+    private ArrayList<Product> chosenProducts        = new ArrayList<>();
+    private ArrayList<Integer> chosenProductsAmounts = new ArrayList<>();
+    private LinkedHashSet<String> customerNames      = new LinkedHashSet<>();
 
     public void showSaleCreator() {
         saleAddPage = new SaleAddPage(this);
@@ -116,6 +113,19 @@ public class SaleAddController implements PageController {
     }
 
     public void confirmButtonClicked() {
+        if (!haveProducts()) {
+            saleAddPage.showMissingProductError();
+        } else {
+            recordSale();
+        }
+
+    }
+
+    private boolean haveProducts() {
+        return chosenProducts.size() > 0;
+    }
+
+    private void recordSale() {
         try {
             Date date = saleAddPage.getDate();
             String customerName = getCustomerName();
@@ -166,7 +176,18 @@ public class SaleAddController implements PageController {
     }
 
     public String getNameSuggestion(String text) {
-        LinkedHashSet<String> possibleNameSuggestions = customerNames.stream().filter(name -> name.startsWith(text)).collect(Collectors.toCollection(() -> new LinkedHashSet<>()));
-        return possibleNameSuggestions.iterator().next().toString();
+        if (text.equals(""))
+            return "";
+
+        LinkedHashSet<String> possibleNameSuggestions = customerNames.stream()
+                .filter(name -> name.startsWith(text))
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+
+        try {
+            return possibleNameSuggestions.iterator().next();
+        } catch (NoSuchElementException e) {
+            return "";
+        }
+
     }
 }
