@@ -10,6 +10,7 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 public class SaleFilterPanel extends JPanel {
+    public static final int HGAP = 10;
 
     private JTextField nameField;
 
@@ -19,17 +20,23 @@ public class SaleFilterPanel extends JPanel {
     private JTextField minPriceField;
     private JTextField maxPriceField;
 
+    private JButton filterButton;
+
     public SaleFilterPanel() {
-        setLayout(new GridLayout(1, 3));
+        setLayout(new GridLayout(1, 3, HGAP, 0));
         initNameFilterHolder();
         initDateFilterHolder();
         initPriceFilterHolder();
     }
 
     private void initNameFilterHolder() {
-        JPanel nameFilterHolder = new JPanel(new GridBagLayout());
         nameField = new JTextField();
+        filterButton = new JButton("Apply filter...");
+
+        JPanel nameFilterHolder = new JPanel(new GridBagLayout());
         addLabelAndComponent(nameFilterHolder, new JLabel("Name:"), this.nameField, 0);
+        addLabelAndComponent(nameFilterHolder, null, this.filterButton, 1);
+
         add(nameFilterHolder);
     }
 
@@ -61,10 +68,12 @@ public class SaleFilterPanel extends JPanel {
         constraints.gridy = row;
         constraints.weighty = 1.0;
 
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.gridx = 0;
-        constraints.weightx = 0.0;
-        panel.add(label, constraints);
+        if (label != null) {
+            constraints.fill = GridBagConstraints.NONE;
+            constraints.gridx = 0;
+            constraints.weightx = 0.0;
+            panel.add(label, constraints);
+        }
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
