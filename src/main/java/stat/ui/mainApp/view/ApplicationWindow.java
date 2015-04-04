@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import stat.ui.stats.main.view.StatMainPage;
 
 /**
  * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
@@ -22,6 +23,7 @@ public class ApplicationWindow extends JFrame {
 
     public static final String TAB_SALES   = "Sales";
     public static final String TAB_PRODUCT = "Product";
+    public static final String TAB_STATS = "Stats";
 
     @Autowired
     private ApplicationController applicationController;
@@ -31,6 +33,9 @@ public class ApplicationWindow extends JFrame {
 
     @Autowired
     private ProductMainPage productMainPage;
+
+    @Autowired
+    private StatMainPage statMainPage;
 
     private JPanel      contentPane;
     private JTabbedPane pageTab;
@@ -54,6 +59,7 @@ public class ApplicationWindow extends JFrame {
         pageTab = new JTabbedPane(JTabbedPane.TOP);
         pageTab.addTab(TAB_SALES, new JPanel());
         pageTab.addTab(TAB_PRODUCT, new JPanel());
+        pageTab.addTab(TAB_STATS, new JPanel());
 
         contentPane.add(pageTab, BorderLayout.CENTER);
     }
@@ -62,6 +68,7 @@ public class ApplicationWindow extends JFrame {
         setVisible(true);
         pageTab.setComponentAt(pageTab.indexOfTab(TAB_SALES), saleMainPage);
         pageTab.setComponentAt(pageTab.indexOfTab(TAB_PRODUCT), productMainPage);
+        pageTab.setComponentAt(pageTab.indexOfTab(TAB_STATS), statMainPage);
     }
 
 }
