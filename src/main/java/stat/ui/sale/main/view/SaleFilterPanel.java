@@ -20,34 +20,20 @@ public class SaleFilterPanel extends JPanel {
     private JTextField maxPriceField;
 
     public SaleFilterPanel() {
-        setLayout(new GridLayout(1, 4));
-        add(initNameFilterHolder());
-        add(initDateFilterHolder());
-        add(initPriceFilterHolder());
+        setLayout(new GridLayout(1, 3));
+        initNameFilterHolder();
+        initDateFilterHolder();
+        initPriceFilterHolder();
     }
 
-    private JPanel initNameFilterHolder() {
+    private void initNameFilterHolder() {
         JPanel nameFilterHolder = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weighty = 1.0;
-        c.weightx = 1.0;
-        nameFilterHolder.add(new JLabel("Name:"));
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx = 1;
         nameField = new JTextField();
-        nameFilterHolder.add(nameField, c);
-
-        return nameFilterHolder;
+        addLabelAndField(nameFilterHolder, new JLabel("Name:"), this.nameField, 0);
+        add(nameFilterHolder);
     }
 
-    private JPanel initDateFilterHolder() {
+    private void initDateFilterHolder() {
         JDatePickerImpl fromDatePicker = Page.createDatePicker(fromDateModel);
         JPanel fromDateHolder = new JPanel();
         fromDateHolder.add(new JLabel("From:"));
@@ -63,10 +49,10 @@ public class SaleFilterPanel extends JPanel {
         dateFilterHolder.add(fromDateHolder);
         dateFilterHolder.add(untilDateHolder);
 
-        return dateFilterHolder;
+        add(dateFilterHolder);
     }
 
-    private JPanel initPriceFilterHolder() {
+    private void initPriceFilterHolder() {
         minPriceField = new JTextField();
         JPanel minPriceHolder = new JPanel(new BorderLayout());
         minPriceHolder.add(new JLabel("Min:"), BorderLayout.WEST);
@@ -81,7 +67,24 @@ public class SaleFilterPanel extends JPanel {
         priceFilterHolder.add(minPriceHolder);
         priceFilterHolder.add(maxPriceHolder);
 
-        return priceFilterHolder;
+        add(priceFilterHolder);
+    }
+
+    private void addLabelAndField(JPanel panel, JLabel label, JTextField field, int row) {
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.WEST;
+        c.gridy = row;
+        c.weighty = 1.0;
+
+        c.fill = GridBagConstraints.NONE;
+        c.gridx = 0;
+        c.weightx = 0.0;
+        panel.add(label, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 1;
+        c.weightx = 1.0;
+        panel.add(field, c);
     }
 
     public String getCustomerName() {
