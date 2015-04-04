@@ -29,62 +29,47 @@ public class SaleFilterPanel extends JPanel {
     private void initNameFilterHolder() {
         JPanel nameFilterHolder = new JPanel(new GridBagLayout());
         nameField = new JTextField();
-        addLabelAndField(nameFilterHolder, new JLabel("Name:"), this.nameField, 0);
+        addLabelAndComponent(nameFilterHolder, new JLabel("Name:"), this.nameField, 0);
         add(nameFilterHolder);
     }
 
     private void initDateFilterHolder() {
         JDatePickerImpl fromDatePicker = Page.createDatePicker(fromDateModel);
-        JPanel fromDateHolder = new JPanel();
-        fromDateHolder.add(new JLabel("From:"));
-        fromDateHolder.add(fromDatePicker);
-
         JDatePickerImpl untilDatePicker = Page.createDatePicker(untilDateModel);
-        JPanel untilDateHolder = new JPanel();
-        untilDateHolder.add(new JLabel("Until:"));
-        untilDateHolder.add(untilDatePicker);
 
-        JPanel dateFilterHolder = new JPanel();
-        dateFilterHolder.setLayout(new GridLayout(2, 1));
-        dateFilterHolder.add(fromDateHolder);
-        dateFilterHolder.add(untilDateHolder);
+        JPanel dateFilterHolder = new JPanel(new GridBagLayout());
+        addLabelAndComponent(dateFilterHolder, new JLabel("From:"), fromDatePicker, 0);
+        addLabelAndComponent(dateFilterHolder, new JLabel("Until:"), untilDatePicker, 1);
 
         add(dateFilterHolder);
     }
 
     private void initPriceFilterHolder() {
         minPriceField = new JTextField();
-        JPanel minPriceHolder = new JPanel(new BorderLayout());
-        minPriceHolder.add(new JLabel("Min:"), BorderLayout.WEST);
-        minPriceHolder.add(minPriceField, BorderLayout.CENTER);
-
         maxPriceField = new JTextField();
-        JPanel maxPriceHolder = new JPanel(new BorderLayout());
-        maxPriceHolder.add(new JLabel("Max:"), BorderLayout.WEST);
-        maxPriceHolder.add(maxPriceField, BorderLayout.CENTER);
 
-        JPanel priceFilterHolder = new JPanel(new GridLayout(2, 1));
-        priceFilterHolder.add(minPriceHolder);
-        priceFilterHolder.add(maxPriceHolder);
+        JPanel priceFilterHolder = new JPanel(new GridBagLayout());
+        addLabelAndComponent(priceFilterHolder, new JLabel("Min:"), minPriceField, 0);
+        addLabelAndComponent(priceFilterHolder, new JLabel("Max:"), maxPriceField, 1);
 
         add(priceFilterHolder);
     }
 
-    private void addLabelAndField(JPanel panel, JLabel label, JTextField field, int row) {
-        GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.WEST;
-        c.gridy = row;
-        c.weighty = 1.0;
+    private void addLabelAndComponent(JPanel panel, JLabel label, JComponent component, int row) {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.gridy = row;
+        constraints.weighty = 1.0;
 
-        c.fill = GridBagConstraints.NONE;
-        c.gridx = 0;
-        c.weightx = 0.0;
-        panel.add(label, c);
+        constraints.fill = GridBagConstraints.NONE;
+        constraints.gridx = 0;
+        constraints.weightx = 0.0;
+        panel.add(label, constraints);
 
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 1;
-        c.weightx = 1.0;
-        panel.add(field, c);
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.gridx = 1;
+        constraints.weightx = 1.0;
+        panel.add(component, constraints);
     }
 
     public String getCustomerName() {
