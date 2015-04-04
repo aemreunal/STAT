@@ -3,6 +3,8 @@ package stat.ui.sale.main.view;
 import stat.ui.Page;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.swing.*;
@@ -10,7 +12,8 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 public class SaleFilterPanel extends JPanel {
-    public static final int HGAP = 10;
+    public static final int GAP_BETWEEN_FIELDS = 10;
+    private final SaleMainPage saleMainPage;
 
     private JTextField nameField;
 
@@ -21,9 +24,12 @@ public class SaleFilterPanel extends JPanel {
     private JTextField maxPriceField;
 
     private JButton filterButton;
+    private ApplyFilterListener filterListener;
 
-    public SaleFilterPanel() {
-        setLayout(new GridLayout(1, 3, HGAP, 0));
+    public SaleFilterPanel(SaleMainPage saleMainPage) {
+        this.saleMainPage = saleMainPage;
+        filterListener = new ApplyFilterListener();
+        setLayout(new GridLayout(1, 3, GAP_BETWEEN_FIELDS, 0));
         initNameFilterHolder();
         initDateFilterHolder();
         initPriceFilterHolder();
@@ -31,7 +37,9 @@ public class SaleFilterPanel extends JPanel {
 
     private void initNameFilterHolder() {
         nameField = new JTextField();
+        nameField.addActionListener(filterListener);
         filterButton = new JButton("Apply filter...");
+        filterButton.addActionListener(filterListener);
 
         JPanel nameFilterHolder = new JPanel(new GridBagLayout());
         addLabelAndComponent(nameFilterHolder, new JLabel("Name:"), this.nameField, 0);
@@ -56,7 +64,9 @@ public class SaleFilterPanel extends JPanel {
 
     private void initPriceFilterHolder() {
         minPriceField = new JTextField();
+        minPriceField.addActionListener(filterListener);
         maxPriceField = new JTextField();
+        maxPriceField.addActionListener(filterListener);
 
         JPanel priceFilterHolder = new JPanel(new GridBagLayout());
         addLabelAndComponent(priceFilterHolder, new JLabel("Min:"), minPriceField, 0);
@@ -112,4 +122,10 @@ public class SaleFilterPanel extends JPanel {
         }
     }
 
+    private class ApplyFilterListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            saleMainPage.applyFilterButtonClicked();
+        }
+    }
 }

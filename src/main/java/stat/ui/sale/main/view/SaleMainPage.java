@@ -26,14 +26,14 @@ public class SaleMainPage extends Page {
     @Autowired
     private SaleController saleController;
 
-    private SaleFilterPanel        filterPanel;
     private JTable                 saleTable;
     private SaleTableModel         tableModel;
     private SalePageButtonListener buttonListener;
 
-    private JButton addSaleButton;
-    private JButton removeSaleButton;
-    private JButton viewSaleButton;
+    private JButton         addSaleButton;
+    private JButton         removeSaleButton;
+    private JButton         viewSaleButton;
+    private SaleFilterPanel filterPanel;
 
     public SaleMainPage() {
         buttonListener = new SalePageButtonListener();
@@ -58,13 +58,13 @@ public class SaleMainPage extends Page {
     }
 
     private void initFilters() {
-        filterPanel = new SaleFilterPanel();
+        filterPanel = new SaleFilterPanel(this);
         add(filterPanel, BorderLayout.NORTH);
     }
 
     private void initButtons() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(0, 3, 0, 0));
+        buttonPanel.setLayout(new GridLayout(0, 3, 30, 0));
         createRemoveButton(buttonPanel);
         createViewButton(buttonPanel);
         createAddButton(buttonPanel);
@@ -94,6 +94,7 @@ public class SaleMainPage extends Page {
     }
 
     private class SalePageButtonListener implements ActionListener {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             Object sourceOfAction = e.getSource();
@@ -115,8 +116,12 @@ public class SaleMainPage extends Page {
             }
             return selectedRow;
         }
+
     }
 
+    public void applyFilterButtonClicked() {
+        saleController.applyFilterButtonClicked(filterPanel);
+    }
 }
 
 

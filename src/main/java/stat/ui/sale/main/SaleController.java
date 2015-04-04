@@ -6,13 +6,13 @@ import stat.service.SaleService;
 import stat.ui.Page;
 import stat.ui.PageController;
 import stat.ui.sale.add.SaleAddController;
+import stat.ui.sale.main.view.SaleFilterPanel;
 import stat.ui.sale.main.view.SaleMainPage;
 import stat.ui.sale.main.view.SaleViewPage;
 import stat.ui.sale.main.view.helper.SaleColType;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -39,10 +39,14 @@ public class SaleController implements PageController {
 
     private ArrayList<Integer> saleIDList = new ArrayList<>();
 
-    public void refreshSaleListTable() {
+    @Override
+    public void refreshPage() {
+        showSales(saleService.getAllSales());
+    }
+
+    private void showSales(Set<Sale> salesToShow) {
         saleIDList.clear();
-        Set<Sale> allSales = saleService.getAllSales();
-        Sale[] sales = allSales.toArray(new Sale[allSales.size()]);
+        Sale[] sales = salesToShow.toArray(new Sale[salesToShow.size()]);
         Object[][] saleTableObjects = new Object[sales.length][SaleColType.getColNameList().length];
         for (int i = 0; i < sales.length; i++) {
             Sale sale = sales[i];
@@ -52,15 +56,9 @@ public class SaleController implements PageController {
         saleMainPage.setSalesList(saleTableObjects);
     }
 
-    @Override
-    public void refreshPage() {
-        refreshSaleListTable();
-    }
-
     public void addSaleButtonClicked() {
         saleAddController.showSaleCreator();
     }
-
 
     public void removeSaleButtonClicked(int row) {
         if (row == -1) { // If no row has been chosen
@@ -80,6 +78,16 @@ public class SaleController implements PageController {
         LinkedHashMap<Product, Integer> productsAndAmounts = saleService.getProductsOfSale(saleId);
         SaleViewPage saleViewPage = new SaleViewPage(sale, productsAndAmounts);
         Page.showPopup(saleViewPage);
+    }
+
+    public void applyFilterButtonClicked(SaleFilterPanel filterPanel) {
+        String customerName = filterPanel.getCustomerName();
+        Date fromDate = filterPanel.getFromDate();
+        Date untilDate = filterPanel.getUntilDate();
+        BigDecimal minPrice = filterPanel.getMinPrice();
+        BigDecimal maxPrice = filterPanel.getMaxPrice();
+        LinkedHashSet<Sale> sales = saleService.searchForSales(customerName, fromDate, untilDate, minPrice, maxPrice);
+        showSales(sales);
     }
 }
 
