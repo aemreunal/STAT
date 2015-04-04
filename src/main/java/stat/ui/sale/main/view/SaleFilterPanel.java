@@ -41,8 +41,11 @@ public class SaleFilterPanel extends JPanel {
     }
 
     private void initDateFilterHolder() {
-        JDatePickerImpl fromDatePicker = Page.createDatePicker(fromDateModel);
-        JDatePickerImpl untilDatePicker = Page.createDatePicker(untilDateModel);
+        JDatePickerImpl fromDatePicker = Page.createDatePicker();
+        fromDateModel = (UtilDateModel) fromDatePicker.getModel();
+        
+        JDatePickerImpl untilDatePicker = Page.createDatePicker();
+        untilDateModel = (UtilDateModel) untilDatePicker.getModel();
 
         JPanel dateFilterHolder = new JPanel(new GridBagLayout());
         addLabelAndComponent(dateFilterHolder, new JLabel("From:"), fromDatePicker, 0);

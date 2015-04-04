@@ -185,7 +185,8 @@ public class SaleAddPage extends Page {
         labelDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
         labelDate.setBounds(25, 45, 125, 24);
 
-        JDatePickerImpl datePicker = createDatePicker(dateModel);
+        JDatePickerImpl datePicker = Page.createDatePicker();
+        dateModel = (UtilDateModel) datePicker.getModel();
         datePicker.setLocation(160, 45);
         datePicker.setSize(datePicker.getPreferredSize());
 

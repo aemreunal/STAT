@@ -53,16 +53,14 @@ public abstract class Page extends JPanel {
         parentPanel.add(filterField);
     }
 
-    public static JDatePickerImpl createDatePicker(UtilDateModel dateModel) {
+    public static JDatePickerImpl createDatePicker() {
         // JDatePicker creation via: http://stackoverflow.com/a/26794863/2246876
-        dateModel = new UtilDateModel();
         Properties p = new Properties();
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        JDatePanelImpl datePanel = new JDatePanelImpl(dateModel, p);
-        JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
-        return datePicker;
+        JDatePanelImpl datePanel = new JDatePanelImpl(new UtilDateModel(), p);
+        return new JDatePickerImpl(datePanel, new DateLabelFormatter());
     }
 
     public static void showPopup(Page page) {

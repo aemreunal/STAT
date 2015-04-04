@@ -1,16 +1,16 @@
 package stat.ui.stats.main.view;
 
+import stat.ui.Page;
+import stat.ui.stats.main.StatController;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import stat.ui.Page;
-import stat.ui.stats.main.StatController;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
@@ -24,7 +24,8 @@ public class StatMainPage extends Page {
     @Autowired
     private StatController statController;
 
-    private UtilDateModel dateModel;
+    private UtilDateModel dateOneModel;
+    private UtilDateModel dateTwoModel;
 
     private JButton summarizeMonthButton;
     private JButton compareMonthButton;
@@ -58,10 +59,11 @@ public class StatMainPage extends Page {
         dateLabel1.setBounds(98, 106, 46, 14);
         add(dateLabel1);
 
-        JDatePickerImpl datePicker1 = createDatePicker(dateModel);
-        datePicker1.setLocation(98, 131);
-        datePicker1.setSize(datePicker1.getPreferredSize());
-        add(datePicker1);
+        JDatePickerImpl datePicker = createDatePicker();
+        dateOneModel = (UtilDateModel) datePicker.getModel();
+        datePicker.setLocation(98, 131);
+        datePicker.setSize(datePicker.getPreferredSize());
+        add(datePicker);
     }
 
     private void initDate2Field() {
@@ -69,10 +71,11 @@ public class StatMainPage extends Page {
         dateLabel2.setBounds(496, 106, 46, 14);
         add(dateLabel2);
 
-        JDatePickerImpl datePicker2 = createDatePicker(dateModel);
-        datePicker2.setLocation(496, 131);
-        datePicker2.setSize(datePicker2.getPreferredSize());
-        add(datePicker2);
+        JDatePickerImpl datePicker = createDatePicker();
+        dateTwoModel = (UtilDateModel) datePicker.getModel();
+        datePicker.setLocation(496, 131);
+        datePicker.setSize(datePicker.getPreferredSize());
+        add(datePicker);
     }
 
     private void initLabels() {
@@ -132,7 +135,7 @@ public class StatMainPage extends Page {
         @Override
         public void actionPerformed(ActionEvent e) {
             Object sourceOfAction = e.getSource();
-            if(sourceOfAction.equals(summarizeMonthButton)) {
+            if (sourceOfAction.equals(summarizeMonthButton)) {
                 //TODO : implement
             } else if (sourceOfAction.equals(summarizeQuarterButton)) {
                 //TODO : implement
