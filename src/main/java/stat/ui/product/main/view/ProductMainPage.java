@@ -39,7 +39,7 @@ public class ProductMainPage extends Page {
         buttonListener = new ProductPageButtonListener();
         initPage();
         initProductTable();
-        initFilters(productTable.getColumnCount());
+        initFilters();
         initButtons();
     }
 
@@ -55,6 +55,11 @@ public class ProductMainPage extends Page {
         productTable.setRowSorter(tableSorter);
         productTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         add(new JScrollPane(productTable), BorderLayout.CENTER);
+    }
+
+    private void initFilters() {
+        ProductFilterPanel filterPanel = new ProductFilterPanel();
+        add(filterPanel, BorderLayout.NORTH);
     }
 
     private void initButtons() {
