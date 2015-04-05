@@ -77,8 +77,9 @@ public class StatController {
     }
 
     private BigDecimal summarizeInterval(int beginYear, int beginMonth, int beginDay, int endYear, int endMonth, int endDay) {
-        final Date from = new Date(beginYear, beginMonth, beginDay);
-        final Date until = new Date(endYear, endMonth, endDay);
+        // Dates must be created by subtracting 1900 from the year, as per Date constructor docs
+        final Date from = new Date(beginYear - 1900, beginMonth, beginDay);
+        final Date until = new Date(endYear - 1900, endMonth, endDay);
         return calculateTotalSalesForInterval(from, until);
     }
 
