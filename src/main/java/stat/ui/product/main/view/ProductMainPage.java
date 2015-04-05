@@ -44,6 +44,7 @@ public class ProductMainPage extends Page {
     private JButton addProductButton;
     private JButton removeProductButton;
     private JButton viewProductButton;
+    private ProductFilterPanel filterPanel;
 
     public ProductMainPage() {
         buttonListener = new ProductPageButtonListener();
@@ -68,7 +69,7 @@ public class ProductMainPage extends Page {
     }
 
     private void initFilters() {
-        ProductFilterPanel filterPanel = new ProductFilterPanel();
+        filterPanel = new ProductFilterPanel(this);
         add(filterPanel, BorderLayout.NORTH);
     }
 
@@ -126,6 +127,10 @@ public class ProductMainPage extends Page {
             }
             return selectedRow;
         }
+    }
+
+    public void applyFilterButtonClicked() {
+        productController.applyFilterButtonClicked(filterPanel);
     }
 
     public void displayProductDeletionError(SoldProductDeletionException exception) {

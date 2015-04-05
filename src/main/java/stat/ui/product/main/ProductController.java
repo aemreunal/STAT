@@ -50,6 +50,11 @@ public class ProductController implements PageController {
 
     private ArrayList<Integer> productIDList = new ArrayList<>();
 
+    @Override
+    public void refreshPage() {
+        showProducts(productService.getAllProducts());
+    }
+
     public void saveProduct(ProductAddPage productAddPage, String productName, String productDescription, BigDecimal productPrice) {
         if (productPrice.signum() == -1) {
             productAddPage.displayValidationError();
@@ -65,10 +70,9 @@ public class ProductController implements PageController {
         }
     }
 
-    public void refreshProductListTable() {
+    public void showProducts(Set<Product> productsToShow) {
         productIDList.clear();
-        Set<Product> allProducts = productService.getAllProducts();
-        Product[] products = allProducts.toArray(new Product[allProducts.size()]);
+        Product[] products = productsToShow.toArray(new Product[productsToShow.size()]);
         Object[][] productTableObjects = new Object[products.length][ProductColType.getColNameList().length];
         for (int i = 0; i < products.length; i++) {
             Product product = products[i];
@@ -91,7 +95,7 @@ public class ProductController implements PageController {
         int productIdToRemove = productIDList.remove(row);
         try {
             productService.deleteProduct(productIdToRemove);
-            refreshProductListTable();
+            refreshPage();
         } catch (SoldProductDeletionException e) {
             productMainPage.displayProductDeletionError(e);
         }
@@ -104,8 +108,12 @@ public class ProductController implements PageController {
         productDetailController.showDetailsOfProductWithId(productIDList.get(row));
     }
 
-    @Override
-    public void refreshPage() {
-        refreshProductListTable();
+    public void applyFilterButtonClicked(ProductFilterPanel filterPanel) {
+        String productName = filterPanel.getProductName();
+        String description = filterPanel.getDescription();
+        BigDecimal minPrice = filterPanel.getMinPrice();
+        BigDecimal maxPrice = filterPanel.getMaxPrice();
+        LinkedHashSet<Product> products = productService.searchForProducts(productName, description, minPrice, maxPrice);
+        showProducts(products);
     }
 }
