@@ -18,11 +18,13 @@ import stat.domain.Sale;
 import stat.service.SaleService;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import stat.ui.stats.main.view.StatMainPage;
 
 /**
  * Fiscal year definitions are based on those of
@@ -32,8 +34,38 @@ import org.springframework.stereotype.Component;
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class StatController {
+
     @Autowired
     private SaleService saleService;
+
+    @Autowired
+    private StatMainPage statMainPage;
+
+    public void summarizeYearButtonClicked(int year) {
+        String title = "Summary of " + getDateFormat(year, 1, 1, "YYYY");
+        String message = "Total Revenue: " + summarizeFiscalYear(year).toPlainString();
+        statMainPage.showResult(message, title);
+    }
+
+    public void summarizeQuarterButtonClicked(int year) {
+        String title = "Summary of " + getDateFormat(year, 1, 1, "YYYY");
+        String message = "Total revenue in first quarter: " + summarizeFirstFiscalQuarter(year).toPlainString() +
+                         "\nTotal revenue in second quarter: " + summarizeSecondFiscalQuarter(year) +
+                         "\nTotal revenue in third quarter: " + summarizeThirdFiscalQuarter(year) +
+                         "\nTotal revenue in fourth quarter: " + summarizeFourthFiscalQuarter(year);
+        statMainPage.showResult(message, title);
+    }
+
+    public void summarizeMonthButtonClicked(int year, int month) {
+        String title = "Summary of " + getDateFormat(year, month, 1, "MMMM YYYY");
+        String message = "Total revenue: " + summarizeMonth(year, month);
+        statMainPage.showResult(message, title);
+    }
+
+    private String getDateFormat(int year, int month, int day, String format) {
+        // Dates must be created by subtracting 1900 from the year, as per Date constructor docs
+        return new SimpleDateFormat(format).format(new Date(year - 1900, month, day));
+    }
 
     // FY 2015: 1 October 2014 - 30 September 2015
     private BigDecimal summarizeFiscalYear(int year) {

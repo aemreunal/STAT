@@ -140,17 +140,21 @@ public class StatMainPage extends Page {
         add(compareYearButton);
     }
 
+    public void showResult(String message, String title) {
+        JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
     private class StatPageButtonListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             Object sourceOfAction = e.getSource();
             if (sourceOfAction.equals(summarizeMonthButton)) {
-                //TODO : implement
+                statController.summarizeMonthButtonClicked(dateOneModel.getYear(), dateOneModel.getMonth());
             } else if (sourceOfAction.equals(summarizeQuarterButton)) {
-                //TODO : implement
+                statController.summarizeQuarterButtonClicked(dateOneModel.getYear());
             } else if (sourceOfAction.equals(summarizeYearButton)) {
-                //TODO : implement
+                statController.summarizeYearButtonClicked(dateOneModel.getYear());
             } else if (sourceOfAction.equals(compareMonthButton)) {
                 //TODO : implement
             } else if (sourceOfAction.equals(compareQuarterButton)) {
