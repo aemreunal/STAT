@@ -27,17 +27,15 @@ import org.jdatepicker.impl.UtilDateModel;
 
 public class SaleFilterPanel extends JPanel {
     public static final int GAP_BETWEEN_FIELDS = 10;
+
     private final SaleMainPage saleMainPage;
 
-    private JTextField nameField;
-
+    private   JTextField    nameField;
     protected UtilDateModel fromDateModel;
     protected UtilDateModel untilDateModel;
+    private   JTextField    minPriceField;
+    private   JTextField    maxPriceField;
 
-    private JTextField minPriceField;
-    private JTextField maxPriceField;
-
-    private JButton filterButton;
     private ApplyFilterListener filterListener;
 
     public SaleFilterPanel(SaleMainPage saleMainPage) {
@@ -52,12 +50,12 @@ public class SaleFilterPanel extends JPanel {
     private void initNameFilterHolder() {
         nameField = new JTextField();
         nameField.addActionListener(filterListener);
-        filterButton = new JButton("Apply filter...");
+        JButton filterButton = new JButton("Apply filter...");
         filterButton.addActionListener(filterListener);
 
         JPanel nameFilterHolder = new JPanel(new GridBagLayout());
         addLabelAndComponent(nameFilterHolder, new JLabel("Name:"), this.nameField, 0);
-        addLabelAndComponent(nameFilterHolder, null, this.filterButton, 1);
+        addLabelAndComponent(nameFilterHolder, null, filterButton, 1);
 
         add(nameFilterHolder);
     }
@@ -65,7 +63,7 @@ public class SaleFilterPanel extends JPanel {
     private void initDateFilterHolder() {
         JDatePickerImpl fromDatePicker = Page.createDatePicker();
         fromDateModel = (UtilDateModel) fromDatePicker.getModel();
-        
+
         JDatePickerImpl untilDatePicker = Page.createDatePicker();
         untilDateModel = (UtilDateModel) untilDatePicker.getModel();
 
