@@ -156,11 +156,11 @@ public class StatMainPage extends Page {
             } else if (sourceOfAction.equals(summarizeYearButton)) {
                 statController.summarizeYearButtonClicked(dateOneModel.getYear());
             } else if (sourceOfAction.equals(compareMonthButton)) {
-                //TODO : implement
+                statController.compareMonthButtonClicked(dateOneModel.getYear(), dateOneModel.getMonth(), dateTwoModel.getYear(), dateTwoModel.getMonth());
             } else if (sourceOfAction.equals(compareQuarterButton)) {
-                //TODO : implement
+                statController.compareQuarterButtonClicked(dateOneModel.getYear(), dateTwoModel.getYear());
             } else if (sourceOfAction.equals(compareYearButton)) {
-                //TODO : implement
+                statController.compareYearButtonClicked(dateOneModel.getYear(), dateTwoModel.getYear());
             }
         }
     }

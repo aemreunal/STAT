@@ -50,21 +50,77 @@ public class StatController {
     public void summarizeQuarterButtonClicked(int year) {
         String title = "Summary of " + getDateFormat(year, 1, 1, "YYYY");
         String message = "Total revenue in first quarter: " + summarizeFirstFiscalQuarter(year).toPlainString() +
-                         "\nTotal revenue in second quarter: " + summarizeSecondFiscalQuarter(year) +
-                         "\nTotal revenue in third quarter: " + summarizeThirdFiscalQuarter(year) +
-                         "\nTotal revenue in fourth quarter: " + summarizeFourthFiscalQuarter(year);
+                         "\nTotal revenue in second quarter: " + summarizeSecondFiscalQuarter(year).toPlainString() +
+                         "\nTotal revenue in third quarter: " + summarizeThirdFiscalQuarter(year).toPlainString() +
+                         "\nTotal revenue in fourth quarter: " + summarizeFourthFiscalQuarter(year).toPlainString();
         statMainPage.showResult(message, title);
     }
 
     public void summarizeMonthButtonClicked(int year, int month) {
         String title = "Summary of " + getDateFormat(year, month, 1, "MMMM YYYY");
-        String message = "Total revenue: " + summarizeMonth(year, month);
+        String message = "Total revenue: " + summarizeMonth(year, month).toPlainString();
+        statMainPage.showResult(message, title);
+    }
+
+    public void compareYearButtonClicked(int firstYear, int secondYear) {
+        BigDecimal firstRevenue = summarizeFiscalYear(firstYear);
+        BigDecimal secondRevenue =  summarizeFiscalYear(secondYear);
+
+        String title = getDateFormat(firstYear, 1, 1, "YYYY") + " vs " + getDateFormat(secondYear, 1, 1, "YYYY");
+        String message = getString("Total revenue of ", firstYear, secondYear, firstRevenue, secondRevenue);
+        statMainPage.showResult(message, title);
+    }
+
+    public void compareQuarterButtonClicked(int firstYear, int secondYear) {
+        BigDecimal first1QuarterRevenue = summarizeFirstFiscalQuarter(firstYear);
+        BigDecimal first2QuarterRevenue = summarizeSecondFiscalQuarter(firstYear);
+        BigDecimal first3QuarterRevenue = summarizeThirdFiscalQuarter(firstYear);
+        BigDecimal first4QuarterRevenue = summarizeFourthFiscalQuarter(firstYear);
+
+        BigDecimal second1QuarterRevenue = summarizeFirstFiscalQuarter(secondYear);
+        BigDecimal second2QuarterRevenue = summarizeSecondFiscalQuarter(secondYear);
+        BigDecimal second3QuarterRevenue = summarizeThirdFiscalQuarter(secondYear);
+        BigDecimal second4QuarterRevenue = summarizeFourthFiscalQuarter(secondYear);
+
+        String title = getDateFormat(firstYear, 1, 1, "YYYY") + " vs " + getDateFormat(secondYear, 1, 1, "YYYY");
+        String message = getString("1. Quarter of ", firstYear, secondYear, first1QuarterRevenue, second1QuarterRevenue) +
+                         "\n\n" +
+                         getString("2. Quarter of ", firstYear, secondYear, first2QuarterRevenue, second2QuarterRevenue) +
+                         "\n\n" +
+                         getString("3. Quarter of ", firstYear, secondYear, first3QuarterRevenue, second3QuarterRevenue) +
+                         "\n\n" +
+                         getString("4. Quarter of ", firstYear, secondYear, first4QuarterRevenue, second4QuarterRevenue);
+        statMainPage.showResult(message, title);
+    }
+
+    public void compareMonthButtonClicked(int firstYear, int firstMonth, int secondYear, int secondMonth) {
+        BigDecimal firstRevenue = summarizeMonth(firstYear, firstMonth);
+        BigDecimal secondRevenue =  summarizeMonth(secondYear, secondMonth);
+
+        String title = getDateFormat(firstYear, firstMonth, 1, "MMMM YYYY") + " vs " + getDateFormat(secondYear, secondMonth, 1, "MMMM YYYY");
+        String message = "Total revenue of " + getDateFormat(firstYear, firstMonth, 1, "MMMM YYYY : ") + firstRevenue.toPlainString() +
+                         "\nTotal revenue of " + getDateFormat(secondYear, secondMonth, 1, "MMMM YYYY : ") + secondRevenue.toPlainString() +
+                         "\n" + getDifference(firstRevenue, secondRevenue);
         statMainPage.showResult(message, title);
     }
 
     private String getDateFormat(int year, int month, int day, String format) {
         // Dates must be created by subtracting 1900 from the year, as per Date constructor docs
         return new SimpleDateFormat(format).format(new Date(year - 1900, month, day));
+    }
+
+    private String getString(String message, int firstYear, int secondYear, BigDecimal firstRevenue, BigDecimal secondRevenue) {
+        return message+ getDateFormat(firstYear, 1, 1, "YYYY : ") + firstRevenue.toPlainString() +
+                "\n" + message + getDateFormat(secondYear, 1, 1, "YYYY : ") + secondRevenue.toPlainString() +
+                "\n" + getDifference(firstRevenue, secondRevenue);
+    }
+
+    private String getDifference(BigDecimal firstRevenue, BigDecimal secondRevenue) {
+        switch (firstRevenue.compareTo(secondRevenue)) {
+            case -1: return "Revenue increased " + secondRevenue.subtract(firstRevenue).toPlainString();
+            case 1 : return "Revenue decreased " + firstRevenue.subtract(secondRevenue).toPlainString();
+            default: return "Revenue stayed the same";
+        }
     }
 
     // FY 2015: 1 October 2014 - 30 September 2015
