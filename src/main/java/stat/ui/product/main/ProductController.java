@@ -1,5 +1,19 @@
 package stat.ui.product.main;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.domain.Product;
 import stat.service.ProductService;
 import stat.service.exception.ProductNameException;
@@ -8,21 +22,17 @@ import stat.ui.Page;
 import stat.ui.PageController;
 import stat.ui.product.detail.ProductDetailController;
 import stat.ui.product.main.view.ProductAddPage;
+import stat.ui.product.main.view.ProductFilterPanel;
 import stat.ui.product.main.view.ProductMainPage;
 import stat.ui.product.main.view.helper.ProductColType;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-/**
- * Created by Uğur Özkan.
- * <p>
- * ugur.ozkan@ozu.edu.tr
- */
 
 @Component
 // Required to not run this class in a test environment

@@ -1,11 +1,24 @@
 package stat.ui.product.main.view;
 
-import javax.swing.*;
-import java.awt.*;
-
-/**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
  */
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import javax.swing.*;
 
 public class ProductFilterPanel extends JPanel {
 

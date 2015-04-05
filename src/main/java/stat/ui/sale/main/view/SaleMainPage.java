@@ -1,5 +1,19 @@
 package stat.ui.sale.main.view;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.ui.Page;
 import stat.ui.sale.main.SaleController;
 import stat.ui.sale.main.view.helper.SaleColType;
@@ -13,10 +27,6 @@ import javax.swing.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-/**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
- */
 
 @Component
 // Required to not run this class in a test environment
@@ -94,7 +104,6 @@ public class SaleMainPage extends Page {
     }
 
     private class SalePageButtonListener implements ActionListener {
-
         @Override
         public void actionPerformed(ActionEvent e) {
             Object sourceOfAction = e.getSource();
@@ -116,7 +125,6 @@ public class SaleMainPage extends Page {
             }
             return selectedRow;
         }
-
     }
 
     public void applyFilterButtonClicked() {

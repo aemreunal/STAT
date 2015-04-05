@@ -1,5 +1,19 @@
 package stat.ui.sale.add.view;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.ui.Page;
 import stat.ui.sale.add.SaleAddController;
 import stat.ui.sale.add.view.helper.AvailableProductsTableModel;
@@ -18,10 +32,6 @@ import javax.swing.event.DocumentListener;
 
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
-
-/**
- * Created by Burcu Basak SARIKAYA S000855 burcu.sarikaya@ozu.edu.tr
- */
 
 public class SaleAddPage extends Page {
 

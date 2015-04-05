@@ -1,5 +1,19 @@
 package stat.ui.sale.main.view;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.ui.Page;
 
 import java.awt.*;
