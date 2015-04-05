@@ -18,6 +18,7 @@ import stat.ui.Page;
 import stat.ui.sale.add.SaleAddController;
 import stat.ui.sale.add.view.helper.AvailableProductsTableModel;
 import stat.ui.sale.add.view.helper.ChosenProductsTableModel;
+import stat.ui.sale.add.view.helper.CustNameCompletionListener;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,10 +26,6 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
@@ -44,7 +41,7 @@ public class SaleAddPage extends Page {
     private JTable availableProductsTable;
     private JTable chosenProductsTable;
 
-    private JButton backButton;
+    private JButton cancelButton;
     private JButton confirmButton;
     private JButton addProductButton;
     private JButton removeProductButton;
@@ -72,7 +69,6 @@ public class SaleAddPage extends Page {
 
     private void initFieldHolder() {
         fieldHolder = new JPanel();
-        fieldHolder.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Sale Info", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
         fieldHolder.setBounds(2, 22, 492, 277);
         fieldHolder.setLayout(null);
         add(fieldHolder);
@@ -97,16 +93,16 @@ public class SaleAddPage extends Page {
     }
 
     private void initAddButton() {
-        addProductButton = new JButton("Add");
-        addProductButton.setFont(new Font("Tahoma", Font.BOLD, 11));
+        addProductButton = new JButton("Add →");
+        addProductButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
         addProductButton.setBounds(133, 124, 85, 23);
         addProductButton.addActionListener(buttonListener);
         fieldHolder.add(addProductButton);
     }
 
     private void initRemoveButton() {
-        removeProductButton = new JButton("Remove");
-        removeProductButton.setFont(new Font("Tahoma", Font.BOLD, 11));
+        removeProductButton = new JButton("← Remove");
+        removeProductButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
         removeProductButton.setBounds(133, 158, 85, 23);
         removeProductButton.addActionListener(buttonListener);
         fieldHolder.add(removeProductButton);
@@ -114,18 +110,18 @@ public class SaleAddPage extends Page {
 
     private void initConfirmButton() {
         confirmButton = new JButton("Create");
-        confirmButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+        confirmButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
         confirmButton.setBounds(29, 318, 437, 30);
         confirmButton.addActionListener(buttonListener);
         add(confirmButton);
     }
 
     private void initCancelButton() {
-        backButton = new JButton("Cancel");
-        backButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-        backButton.setBounds(29, 362, 437, 30);
-        backButton.addActionListener(buttonListener);
-        add(backButton);
+        cancelButton = new JButton("Cancel");
+        cancelButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        cancelButton.setBounds(29, 362, 437, 30);
+        cancelButton.addActionListener(buttonListener);
+        add(cancelButton);
     }
 
     private void initCustomerNameField() {
@@ -137,41 +133,10 @@ public class SaleAddPage extends Page {
         customerNameField = new JTextField();
         customerNameField.setBounds(160, 15, 201, 20);
         customerNameField.setColumns(10);
-        customerNameField.getDocument().addDocumentListener(getDocumentListener());
+        customerNameField.getDocument().addDocumentListener(new CustNameCompletionListener(saleAddController, customerNameField));
 
         fieldHolder.add(labelCustomerName);
         fieldHolder.add(customerNameField);
-    }
-
-    private DocumentListener getDocumentListener() {
-        return new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updateNameField();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-            }
-
-            private void updateNameField() {
-                Runnable doHighlight = () -> {
-                    String input = customerNameField.getText();
-                    String suggestion = saleAddController.getNameSuggestion(input);
-                    if (!suggestion.equals(customerNameField.getText()) && suggestion.length() > input.length()) {
-                        customerNameField.setText(suggestion);
-                        customerNameField.setSelectionStart(input.length());
-                        customerNameField.setSelectionEnd(suggestion.length());
-                    }
-                };
-                SwingUtilities.invokeLater(doHighlight);
-
-            }
-        };
     }
 
     private void initAvailableProductsTable() {
@@ -207,7 +172,7 @@ public class SaleAddPage extends Page {
 
     private void initTotalPrice() {
         JLabel labelTotal = new JLabel("Total:");
-        labelTotal.setFont(new Font("Tahoma", Font.BOLD, 14));
+        labelTotal.setFont(new Font("Tahoma", Font.PLAIN, 14));
         labelTotal.setBounds(288, 245, 49, 24);
 
         priceField = new JTextField(String.valueOf(BigDecimal.ZERO));
@@ -232,15 +197,15 @@ public class SaleAddPage extends Page {
         @Override
         public void actionPerformed(ActionEvent e) {
             Object sourceOfAction = e.getSource();
-            if (sourceOfAction.equals(backButton)) {
+            if (sourceOfAction.equals(cancelButton)) {
                 closeAddPage();
             } else if (sourceOfAction.equals(addProductButton)) {
-                int availableProdsRow = availableProductsTable.getSelectedRow(); // TODO fix for sort
+                int availableProdsRow = availableProductsTable.getSelectedRow();
                 if (availableProdsRow != -1) {
                     saleAddController.addProductButtonClicked(availableProdsRow);
                 }
             } else if (sourceOfAction.equals(removeProductButton)) {
-                int chosenProdsRow = chosenProductsTable.getSelectedRow(); // TODO fix for sort
+                int chosenProdsRow = chosenProductsTable.getSelectedRow();
                 if (chosenProdsRow != -1) {
                     saleAddController.removeProductButtonClicked(chosenProdsRow);
                 }
@@ -307,4 +272,3 @@ public class SaleAddPage extends Page {
                                       JOptionPane.ERROR_MESSAGE);
     }
 }
-
