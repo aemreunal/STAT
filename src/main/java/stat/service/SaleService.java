@@ -1,19 +1,17 @@
 package stat.service;
 
 /*
- ***************************
- * Copyright (c) 2015      *
- *                         *
- * This code belongs to:   *
- *                         *
- * @author Ahmet Emre Ünal *
- * S001974                 *
- *                         *
- * emre@aemreunal.com      *
- * emre.unal@ozu.edu.tr    *
- *                         *
- * aemreunal.com           *
- ***************************
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
  */
 
 import stat.domain.Product;
@@ -119,10 +117,10 @@ public class SaleService {
      *         The specified date is also included (so a sale at the exact same date will
      *         also be returned). If a {@code null} value is provided, the search won't be
      *         restricted to a specific ending date.
-     *
      * @param minPrice
-     *@param maxPrice @return The {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale sales}
-     * which match the given criteria.
+     * @param maxPrice
+     *         @return The {@link java.util.LinkedHashSet Set} of {@link stat.domain.Sale
+     *         sales} which match the given criteria.
      */
     @Transactional(readOnly = true)
     public LinkedHashSet<Sale> searchForSales(String customerName, Date from, Date until, BigDecimal minPrice, BigDecimal maxPrice) {

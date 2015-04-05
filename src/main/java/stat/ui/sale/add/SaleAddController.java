@@ -1,5 +1,19 @@
 package stat.ui.sale.add;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.service.ProductService;
@@ -13,7 +27,6 @@ import stat.ui.sale.main.SaleController;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -36,10 +49,10 @@ public class SaleAddController implements PageController {
 
     private SaleAddPage saleAddPage;
 
-    private ArrayList<Product> availableProducts     = new ArrayList<>();
-    private ArrayList<Product> chosenProducts        = new ArrayList<>();
-    private ArrayList<Integer> chosenProductsAmounts = new ArrayList<>();
-    private LinkedHashSet<String> customerNames      = new LinkedHashSet<>();
+    private ArrayList<Product>    availableProducts     = new ArrayList<>();
+    private ArrayList<Product>    chosenProducts        = new ArrayList<>();
+    private ArrayList<Integer>    chosenProductsAmounts = new ArrayList<>();
+    private LinkedHashSet<String> customerNames         = new LinkedHashSet<>();
 
     public void showSaleCreator() {
         saleAddPage = new SaleAddPage(this);
@@ -176,12 +189,13 @@ public class SaleAddController implements PageController {
     }
 
     public String getNameSuggestion(String text) {
-        if (text.equals(""))
+        if (text.equals("")) {
             return "";
+        }
 
         LinkedHashSet<String> possibleNameSuggestions = customerNames.stream()
-                .filter(name -> name.startsWith(text))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
+                                                                     .filter(name -> name.startsWith(text))
+                                                                     .collect(Collectors.toCollection(LinkedHashSet::new));
 
         try {
             return possibleNameSuggestions.iterator().next();

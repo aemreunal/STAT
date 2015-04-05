@@ -1,5 +1,19 @@
 package stat.ui.product.main.view;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.ui.Page;
 import stat.ui.product.main.ProductController;
 
@@ -11,10 +25,6 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-
-/**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
- */
 
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")

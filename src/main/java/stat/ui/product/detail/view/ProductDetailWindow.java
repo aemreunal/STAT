@@ -1,5 +1,19 @@
 package stat.ui.product.detail.view;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.ui.product.detail.ProductDetailController;
@@ -12,10 +26,6 @@ import java.util.LinkedHashSet;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-
-/**
- * Created by Burcu Basak SARIKAYA on 3/18/2015. S000855 burcu.sarikaya@ozu.edu.tr
- */
 
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")

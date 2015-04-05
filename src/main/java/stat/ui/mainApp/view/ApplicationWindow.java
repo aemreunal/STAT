@@ -1,8 +1,23 @@
 package stat.ui.mainApp.view;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.ui.mainApp.ApplicationController;
 import stat.ui.product.main.view.ProductMainPage;
 import stat.ui.sale.main.view.SaleMainPage;
+import stat.ui.stats.main.view.StatMainPage;
 
 import java.awt.*;
 import javax.swing.*;
@@ -10,11 +25,6 @@ import javax.swing.border.EmptyBorder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import stat.ui.stats.main.view.StatMainPage;
-
-/**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
- */
 
 @Component
 // Required to not run this class in a test environment
@@ -23,7 +33,7 @@ public class ApplicationWindow extends JFrame {
 
     public static final String TAB_SALES   = "Sales";
     public static final String TAB_PRODUCT = "Product";
-    public static final String TAB_STATS = "Stats";
+    public static final String TAB_STATS   = "Stats";
 
     @Autowired
     private ApplicationController applicationController;

@@ -1,19 +1,17 @@
 package stat.config;
 
 /*
- **************************
- * Copyright (c) 2014     *
- *                        *
- * This code belongs to:  *
- *                        *
- * Ahmet Emre Ünal        *
- * S001974                *
- *                        *
- * aemreunal@gmail.com    *
- * emre.unal@ozu.edu.tr   *
- *                        *
- * aemreunal.com          *
- **************************
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
  */
 
 public class GlobalSettings {
@@ -93,7 +91,7 @@ public class GlobalSettings {
     public static final String DB_PROPERTY_DDL_KEY = "db.hbm2_ddl";
 
     public static final String DB_PROPERTY_SHOW_SQL_KEY = "db.show_sql";
-    public static final int PRICE_TOTAL_PRECISION   = 16;
-    public static final int PRICE_DECIMAL_PRECISION = 4;
+    public static final int    PRICE_TOTAL_PRECISION    = 16;
+    public static final int    PRICE_DECIMAL_PRECISION  = 4;
     //-------------------------------------------------------------------------------------------
 }

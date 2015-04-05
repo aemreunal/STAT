@@ -1,5 +1,19 @@
 package stat.ui.sale.helper;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -10,7 +24,7 @@ import javax.swing.text.Document;
 public class FilterFieldListener implements DocumentListener {
 
     private TableRowSorter tableSorter;
-    private int columnIndex;
+    private int            columnIndex;
 
     public FilterFieldListener(TableRowSorter tableSorter, int columnIndex) {
         this.tableSorter = tableSorter;

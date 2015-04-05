@@ -1,21 +1,18 @@
 package stat.ui.product.detail;
 
 /*
- ***************************
- * Copyright (c) 2015      *
- *                         *
- * This code belongs to:   *
- *                         *
- * @author Ahmet Emre Ünal *
- * S001974                 *
- *                         *
- * aemreunal@gmail.com     *
- * emre.unal@ozu.edu.tr    *
- *                         *
- * aemreunal.com           *
- ***************************
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
  */
-
 
 import stat.domain.Product;
 import stat.domain.Sale;
@@ -34,7 +31,7 @@ import org.springframework.stereotype.Component;
 public class ProductDetailController {
 
     @Autowired
-    private ProductService productService;
+    private ProductService      productService;
     private ProductDetailWindow productDetailWindow;
 
     public void showDetailsOfProductWithId(Integer productId) {

@@ -29,7 +29,6 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
@@ -152,10 +151,12 @@ public class SaleAddPage extends Page {
             }
 
             @Override
-            public void removeUpdate(DocumentEvent e) { }
+            public void removeUpdate(DocumentEvent e) {
+            }
 
             @Override
-            public void changedUpdate(DocumentEvent e) { }
+            public void changedUpdate(DocumentEvent e) {
+            }
 
             private void updateNameField() {
                 Runnable doHighlight = () -> {

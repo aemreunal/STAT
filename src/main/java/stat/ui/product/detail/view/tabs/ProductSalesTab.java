@@ -1,25 +1,32 @@
 package stat.ui.product.detail.view.tabs;
 
-/**
- * Author Burcu Basak SARIKAYA
- * S000855
- * burcu.sarikaya@ozu.edu.tr
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
  */
 
 import stat.domain.Sale;
 import stat.ui.Page;
-
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import stat.ui.sale.main.view.helper.SaleTableModel;
 
-import javax.swing.*;
 import java.util.LinkedHashSet;
+import javax.swing.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ProductSalesTab extends Page {
 
-    private JTable saleTable;
+    private JTable         saleTable;
     private SaleTableModel tableModel;
 
     public ProductSalesTab() {
@@ -28,7 +35,9 @@ public class ProductSalesTab extends Page {
     }
 
     @Override
-    protected void initPage() { setLayout(null); }
+    protected void initPage() {
+        setLayout(null);
+    }
 
     private void initSaleTable() {
         tableModel = new SaleTableModel();
@@ -40,8 +49,8 @@ public class ProductSalesTab extends Page {
     }
 
     public void fillSaleTable(LinkedHashSet<Sale> sales) {
-        for(Sale sale: sales) {
-            tableModel.addRow(new Object[]{sale.getCustomerName(), sale.getDate(), sale.getTotalPrice()});
+        for (Sale sale : sales) {
+            tableModel.addRow(new Object[] { sale.getCustomerName(), sale.getDate(), sale.getTotalPrice() });
         }
     }
 }

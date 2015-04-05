@@ -41,9 +41,9 @@ public class ProductMainPage extends Page {
     private ProductTableModel         tableModel;
     private ProductPageButtonListener buttonListener;
 
-    private JButton addProductButton;
-    private JButton removeProductButton;
-    private JButton viewProductButton;
+    private JButton            addProductButton;
+    private JButton            removeProductButton;
+    private JButton            viewProductButton;
     private ProductFilterPanel filterPanel;
 
     public ProductMainPage() {

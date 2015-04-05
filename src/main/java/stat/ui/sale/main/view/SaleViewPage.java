@@ -1,12 +1,25 @@
 package stat.ui.sale.main.view;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.domain.Product;
 import stat.domain.Sale;
 import stat.ui.Page;
 
 import java.awt.*;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.swing.*;
@@ -14,20 +27,17 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
-/**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
- */
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 
 public class SaleViewPage extends Page {
 
-    private final Sale sale;
+    private final Sale                            sale;
     private final LinkedHashMap<Product, Integer> productsAndAmounts;
-    private JTextField customerNameField;
-    private JTextField totalPriceField;
-    private JTextField dateField;
-    private JTable     productTable;
+    private       JTextField                      customerNameField;
+    private       JTextField                      totalPriceField;
+    private       JTextField                      dateField;
+    private       JTable                          productTable;
 
     public SaleViewPage(Sale sale, LinkedHashMap<Product, Integer> productsAndAmounts) {
         this.sale = sale;
@@ -103,7 +113,7 @@ public class SaleViewPage extends Page {
     }
 
     private TableModel createTableModel() {
-        Object[][] data = { };
+        Object[][] data = {};
         String[] columnNames = { "Product Name", "Amount", "Price" };
         return new DefaultTableModel(data, columnNames) {
             public boolean isCellEditable(int row, int column) {

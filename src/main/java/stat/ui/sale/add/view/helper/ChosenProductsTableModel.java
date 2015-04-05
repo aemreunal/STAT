@@ -1,19 +1,17 @@
 package stat.ui.sale.add.view.helper;
 
 /*
- ***************************
- * Copyright (c) 2015      *
- *                         *
- * This code belongs to:   *
- *                         *
- * @author Ahmet Emre Ünal *
- * S001974                 *
- *                         *
- * emre@aemreunal.com      *
- * emre.unal@ozu.edu.tr    *
- *                         *
- * aemreunal.com           *
- ***************************
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
  */
 
 import stat.ui.sale.add.view.SaleAddPage;
@@ -25,7 +23,7 @@ public class ChosenProductsTableModel extends DefaultTableModel {
     private final SaleAddPage saleAddPage;
 
     public ChosenProductsTableModel(SaleAddPage saleAddPage) {
-        super(new Object[][] { }, CHOSEN_PRODUCTS_TABLE_COLUMN_NAMES);
+        super(new Object[][] {}, CHOSEN_PRODUCTS_TABLE_COLUMN_NAMES);
         this.saleAddPage = saleAddPage;
     }
 
