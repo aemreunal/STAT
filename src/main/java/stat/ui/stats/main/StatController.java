@@ -118,7 +118,9 @@ public class StatController {
     private BigDecimal calculateTotalSalesForInterval(Date from, Date until) {
         LinkedHashSet<Sale> sales = saleService.searchForSales(null, from, until, null, null);
         BigDecimal totalSales = new BigDecimal(0.0);
-        sales.stream().map(sale -> totalSales.add(sale.getTotalPrice()));
+        for (Sale sale : sales) {
+            totalSales = totalSales.add(sale.getTotalPrice());
+        }
         return totalSales;
     }
 }
