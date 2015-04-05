@@ -1,5 +1,19 @@
 package stat.ui;
 
+/*
+ * ******************************* *
+ * Copyright (c) 2015              *
+ *                                 *
+ * Sales Tracking & Analytics Tool *
+ *                                 *
+ * @author Ahmet Emre Ünal         *
+ * @author Uğur Özkan              *
+ * @author Burcu Başak Sarıkaya    *
+ * @author Eray Tuncer             *
+ *                                 *
+ * ******************************* *
+ */
+
 import stat.ui.mainApp.view.ApplicationWindow;
 import stat.ui.sale.add.view.helper.DateLabelFormatter;
 import stat.ui.sale.helper.FilterFieldListener;
@@ -13,10 +27,6 @@ import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-
-/**
- * Created by Eray Tuncer S000926 eray.tuncer@ozu.edu.tr
- */
 
 @Component
 // Required to not run this class in a test environment
@@ -55,12 +65,16 @@ public abstract class Page extends JPanel {
 
     public static JDatePickerImpl createDatePicker() {
         // JDatePicker creation via: http://stackoverflow.com/a/26794863/2246876
+        JDatePanelImpl datePanel = new JDatePanelImpl(new UtilDateModel(), getProperties());
+        return new JDatePickerImpl(datePanel, new DateLabelFormatter());
+    }
+
+    private static Properties getProperties() {
         Properties p = new Properties();
         p.put("text.today", "Today");
         p.put("text.month", "Month");
         p.put("text.year", "Year");
-        JDatePanelImpl datePanel = new JDatePanelImpl(new UtilDateModel(), p);
-        return new JDatePickerImpl(datePanel, new DateLabelFormatter());
+        return p;
     }
 
     public static void showPopup(Page page) {
