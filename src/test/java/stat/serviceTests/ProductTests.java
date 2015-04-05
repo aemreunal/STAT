@@ -236,7 +236,7 @@ public class ProductTests extends StatTest {
         Product product2 = productService.createNewProduct("test 2", "test 2", 1.5);
         Product product3 = productService.createNewProduct("test product 2", "test product 2", 2.0);
 
-        Set<Product> products = productService.searchForProducts(null, null, 1.2, 1.5);
+        Set<Product> products = productService.searchForProducts(null, null, new BigDecimal(1.2), new BigDecimal(1.5));
         assertFalse("Search result contains a product not searched for!", products.contains(product1));
         assertTrue("Search result does not contain the product!", products.contains(product2));
         assertFalse("Search result contains a product not searched for!", products.contains(product3));
@@ -249,7 +249,7 @@ public class ProductTests extends StatTest {
         Product product2 = productService.createNewProduct("test 2", "test 2", 1.5);
         Product product3 = productService.createNewProduct("test product 2", "test product 2", 2.0);
 
-        Set<Product> products = productService.searchForProducts(null, "PRO", 1.2, null);
+        Set<Product> products = productService.searchForProducts(null, "PRO", new BigDecimal(1.2), null);
         assertFalse("Search result contains a product not searched for!", products.contains(product1));
         assertFalse("Search result contains a product not searched for!", products.contains(product2));
         assertTrue("Search result does not contain the product!", products.contains(product3));

@@ -181,7 +181,7 @@ public class ProductService {
      * products} which match the given criteria.
      */
     @Transactional(readOnly = true)
-    public LinkedHashSet<Product> searchForProducts(String name, String description, Double minPrice, Double maxPrice) {
+    public LinkedHashSet<Product> searchForProducts(String name, String description, BigDecimal minPrice, BigDecimal maxPrice) {
         List searchResult = productRepo.findAll(productWithSpecification(name, description, minPrice, maxPrice));
 
         LinkedHashSet<Product> products = new LinkedHashSet<Product>();
@@ -200,7 +200,7 @@ public class ProductService {
         productRepo.delete(productId);
     }
 
-    private Specification<Product> productWithSpecification(String name, String description, Double minPrice, Double maxPrice) {
+    private Specification<Product> productWithSpecification(String name, String description, BigDecimal minPrice, BigDecimal maxPrice) {
         return (root, query, builder) -> {
             ArrayList<Predicate> predicates = new ArrayList<Predicate>();
 
@@ -213,11 +213,11 @@ public class ProductService {
             }
 
             if (minPrice != null) {
-                predicates.add(builder.greaterThanOrEqualTo(root.get("price").as(BigDecimal.class), BigDecimal.valueOf(minPrice)));
+                predicates.add(builder.greaterThanOrEqualTo(root.get("price").as(BigDecimal.class), minPrice));
             }
 
             if (maxPrice != null) {
-                predicates.add(builder.lessThanOrEqualTo(root.get("price").as(BigDecimal.class), BigDecimal.valueOf(maxPrice)));
+                predicates.add(builder.lessThanOrEqualTo(root.get("price").as(BigDecimal.class), maxPrice));
             }
 
             return builder.and(predicates.toArray(new Predicate[predicates.size()]));
