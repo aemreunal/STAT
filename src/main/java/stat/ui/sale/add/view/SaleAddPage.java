@@ -26,6 +26,9 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
+
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
@@ -69,7 +72,8 @@ public class SaleAddPage extends Page {
 
     private void initFieldHolder() {
         fieldHolder = new JPanel();
-        fieldHolder.setBounds(2, 22, 492, 277);
+        fieldHolder.setBounds(2, 22, 492, 285);
+        fieldHolder.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Sale Info", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
         fieldHolder.setLayout(null);
         add(fieldHolder);
     }
@@ -111,7 +115,7 @@ public class SaleAddPage extends Page {
     private void initConfirmButton() {
         confirmButton = new JButton("Create");
         confirmButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        confirmButton.setBounds(29, 318, 437, 30);
+        confirmButton.setBounds(260, 335, 180, 30);
         confirmButton.addActionListener(buttonListener);
         add(confirmButton);
     }
@@ -119,7 +123,7 @@ public class SaleAddPage extends Page {
     private void initCancelButton() {
         cancelButton = new JButton("Cancel");
         cancelButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        cancelButton.setBounds(29, 362, 437, 30);
+        cancelButton.setBounds(50, 335, 180, 30);
         cancelButton.addActionListener(buttonListener);
         add(cancelButton);
     }
