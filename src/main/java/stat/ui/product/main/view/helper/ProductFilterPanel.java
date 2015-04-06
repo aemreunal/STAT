@@ -1,4 +1,4 @@
-package stat.ui.product.main.view;
+package stat.ui.product.main.view.helper;
 
 /*
  * ******************************* *
@@ -13,6 +13,8 @@ package stat.ui.product.main.view;
  *                                 *
  * ******************************* *
  */
+
+import stat.ui.product.main.view.ProductMainPage;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;

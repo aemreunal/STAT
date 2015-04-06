@@ -30,7 +30,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 
-public class SaleViewPage extends Page {
+public class SaleDetailPage extends Page {
 
     private final Sale                            sale;
     private final LinkedHashMap<Product, Integer> productsAndAmounts;
@@ -39,7 +39,7 @@ public class SaleViewPage extends Page {
     private       JTextField                      dateField;
     private       JTable                          productTable;
 
-    public SaleViewPage(Sale sale, LinkedHashMap<Product, Integer> productsAndAmounts) {
+    public SaleDetailPage(Sale sale, LinkedHashMap<Product, Integer> productsAndAmounts) {
         this.sale = sale;
         this.productsAndAmounts = productsAndAmounts;
         initPage();

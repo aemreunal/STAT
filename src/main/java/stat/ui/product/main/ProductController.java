@@ -21,8 +21,8 @@ import stat.service.exception.SoldProductDeletionException;
 import stat.ui.Page;
 import stat.ui.PageController;
 import stat.ui.product.detail.ProductDetailController;
-import stat.ui.product.main.view.ProductAddPage;
-import stat.ui.product.main.view.ProductFilterPanel;
+import stat.ui.product.add.view.ProductAddPage;
+import stat.ui.product.main.view.helper.ProductFilterPanel;
 import stat.ui.product.main.view.ProductMainPage;
 import stat.ui.product.main.view.helper.ProductColType;
 

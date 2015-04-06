@@ -20,9 +20,9 @@ import stat.service.SaleService;
 import stat.ui.Page;
 import stat.ui.PageController;
 import stat.ui.sale.add.SaleAddController;
-import stat.ui.sale.main.view.SaleFilterPanel;
+import stat.ui.sale.main.view.helper.SaleFilterPanel;
 import stat.ui.sale.main.view.SaleMainPage;
-import stat.ui.sale.main.view.SaleViewPage;
+import stat.ui.sale.main.view.SaleDetailPage;
 import stat.ui.sale.main.view.helper.SaleColType;
 
 import java.math.BigDecimal;
@@ -84,8 +84,8 @@ public class SaleController implements PageController {
         Integer saleId = saleIDList.get(row);
         Sale sale = saleService.getSaleWithId(saleId);
         LinkedHashMap<Product, Integer> productsAndAmounts = saleService.getProductsOfSale(saleId);
-        SaleViewPage saleViewPage = new SaleViewPage(sale, productsAndAmounts);
-        Page.showPopup(saleViewPage);
+        SaleDetailPage saleDetailPage = new SaleDetailPage(sale, productsAndAmounts);
+        Page.showPopup(saleDetailPage);
     }
 
     public void applyFilterButtonClicked(SaleFilterPanel filterPanel) {

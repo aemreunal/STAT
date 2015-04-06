@@ -18,6 +18,7 @@ import stat.service.exception.SoldProductDeletionException;
 import stat.ui.Page;
 import stat.ui.product.main.ProductController;
 import stat.ui.product.main.view.helper.ProductColType;
+import stat.ui.product.main.view.helper.ProductFilterPanel;
 import stat.ui.product.main.view.helper.ProductTableModel;
 import stat.ui.product.main.view.helper.ProductTableSorter;
 
