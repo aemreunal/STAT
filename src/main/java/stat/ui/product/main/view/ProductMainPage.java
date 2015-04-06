@@ -75,7 +75,7 @@ public class ProductMainPage extends Page {
 
     private void initButtons() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(0, 3, 0, 0));
+        buttonPanel.setLayout(new GridLayout(1, 3, 50, 0));
         createRemoveButton(buttonPanel);
         createViewDetailButton(buttonPanel);
         createAddButton(buttonPanel);
