@@ -31,6 +31,9 @@ repositories {
     maven {
         url 'http://repo.spring.io/release/'
     }
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 // External libs
@@ -60,6 +63,8 @@ dependencies {
 
     // Swing JDatePicker (jdatepicker.org)
     compile group: 'org.jdatepicker', name: 'jdatepicker', version: jDatePickerVersion
+
+    compile name: 'jmathplot'
 
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
