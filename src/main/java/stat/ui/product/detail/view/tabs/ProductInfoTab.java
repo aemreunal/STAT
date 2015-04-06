@@ -47,11 +47,12 @@ public class ProductInfoTab extends Page {
         initPriceField(String.valueOf(product.getPrice()));
         initAmountSoldField();
         initProductRevenueField();
+        initDuplicateButton();
     }
 
     private void initFieldHolder() {
         fieldHolder = new JPanel();
-        fieldHolder.setBounds(50, 25, 311, 165);
+        fieldHolder.setBounds(40, 25, 311, 200);
         fieldHolder.setLayout(null);
         add(fieldHolder);
     }
@@ -124,6 +125,15 @@ public class ProductInfoTab extends Page {
 
         fieldHolder.add(revenueLabel);
         fieldHolder.add(revenueField);
+    }
+
+    private void initDuplicateButton() {
+        JButton duplicateButton = new JButton("Duplicate product...");
+        duplicateButton.setSize(duplicateButton.getPreferredSize());
+        int x = (fieldHolder.getWidth() - duplicateButton.getWidth()) / 2;
+        duplicateButton.setBounds(x, 150, duplicateButton.getWidth(), duplicateButton.getHeight());
+
+        fieldHolder.add(duplicateButton);
     }
 
     public void setAmountSold(int amountSold) {
