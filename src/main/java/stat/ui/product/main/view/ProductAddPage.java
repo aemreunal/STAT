@@ -34,7 +34,7 @@ public class ProductAddPage extends Page {
 
     private JPanel     fieldHolder;
     private JTextField nameField;
-    private JTextField descriptionField;
+    private JTextArea descriptionField;
     private JTextField priceField;
     private JButton    saveButton;
     private JButton    backButton;
@@ -57,8 +57,8 @@ public class ProductAddPage extends Page {
     private void initializeFields() {
         initializeFieldHolder();
         initializeNameField();
-        initializeDescriptionField();
         initializePriceField();
+        initializeDescriptionField();
     }
 
     private void initializeFieldHolder() {
@@ -71,41 +71,42 @@ public class ProductAddPage extends Page {
 
     private void initializeNameField() {
         JLabel nameLabel = new JLabel("Name :");
-        nameLabel.setBounds(6, 17, 108, 19);
+        nameLabel.setBounds(6, 20, 108, 19);
         nameLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
         nameField = new JTextField();
-        nameField.setBounds(124, 16, 181, 20);
+        nameField.setBounds(124, 20, 181, 20);
         nameField.setColumns(10);
 
         fieldHolder.add(nameLabel);
         fieldHolder.add(nameField);
     }
 
-    private void initializeDescriptionField() {
-        JLabel descriptionLabel = new JLabel("Description :");
-        descriptionLabel.setBounds(6, 42, 108, 19);
-        descriptionLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
-
-        descriptionField = new JTextField();
-        descriptionField.setBounds(124, 41, 181, 20);
-        descriptionField.setColumns(10);
-
-        fieldHolder.add(descriptionLabel);
-        fieldHolder.add(descriptionField);
-    }
-
     private void initializePriceField() {
         JLabel priceLabel = new JLabel("Unit Price :");
-        priceLabel.setBounds(6, 66, 108, 19);
+        priceLabel.setBounds(6, 55, 108, 19);
         priceLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
         priceField = new JTextField();
-        priceField.setBounds(124, 65, 181, 20);
+        priceField.setBounds(124, 55, 181, 20);
         priceField.setColumns(10);
 
         fieldHolder.add(priceLabel);
         fieldHolder.add(priceField);
+    }
+
+    private void initializeDescriptionField() {
+        JLabel descriptionLabel = new JLabel("Description :");
+        descriptionLabel.setBounds(6, 90, 108, 19);
+        descriptionLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+
+        descriptionField = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(descriptionField);
+        scrollPane.setBounds(124, 90, 181, 60);
+        descriptionField.setFont(new Font("Tahoma", Font.PLAIN, 11));
+
+        fieldHolder.add(descriptionLabel);
+        fieldHolder.add(scrollPane);
     }
 
     private void initializeButtons() {
@@ -115,8 +116,8 @@ public class ProductAddPage extends Page {
 
     private void initializeSaveButton() {
         saveButton = new JButton("Create");
-        saveButton.setBounds(50, 210, 311, 30);
-        saveButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+        saveButton.setBounds(220, 250, 140, 30);
+        saveButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
         saveButton.addActionListener(buttonListener);
 
         add(saveButton);
@@ -124,8 +125,8 @@ public class ProductAddPage extends Page {
 
     private void initializeBackButton() {
         backButton = new JButton("Cancel");
-        backButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-        backButton.setBounds(50, 263, 311, 30);
+        backButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        backButton.setBounds(50, 250, 140, 30);
         backButton.addActionListener(buttonListener);
 
         add(backButton);
