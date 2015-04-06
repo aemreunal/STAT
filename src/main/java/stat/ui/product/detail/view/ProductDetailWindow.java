@@ -51,7 +51,7 @@ public class ProductDetailWindow extends JFrame {
     }
 
     private void initTabs() {
-        productInfoTab = new ProductInfoTab(product);
+        productInfoTab = new ProductInfoTab(controller, product);
         productSalesTab = new ProductSalesTab();
     }
 

@@ -87,6 +87,12 @@ public class ProductController implements PageController {
         Page.showPopup(productAddPage);
     }
 
+    public void addProductButtonClicked(Integer productId) {
+        Product product = productService.getProductWithId(productId);
+        ProductAddPage productAddPage = new ProductAddPage(this, product.getName(), product.getDescription(), product.getPrice().toPlainString());
+        Page.showPopup(productAddPage);
+    }
+
     public void removeProductButtonClicked(int row) {
         if (row == -1) { // If no row has been chosen
             return;
@@ -105,7 +111,7 @@ public class ProductController implements PageController {
         if (row == -1) { // If no row has been chosen
             return;
         }
-        productDetailController.showDetailsOfProductWithId(productIDList.get(row));
+        productDetailController.showDetailsOfProductWithId(this, productIDList.get(row));
     }
 
     public void applyFilterButtonClicked(ProductFilterPanel filterPanel) {

@@ -16,6 +16,7 @@ package stat.ui.product.detail.view.tabs;
 
 import stat.domain.Product;
 import stat.ui.Page;
+import stat.ui.product.detail.ProductDetailController;
 
 import java.awt.*;
 import java.math.BigDecimal;
@@ -26,11 +27,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ProductInfoTab extends Page {
 
-    private JPanel     fieldHolder;
+    private final ProductDetailController controller;
+
+    private JPanel fieldHolder;
     private JTextField revenueField;
     private JTextField amountField;
 
-    public ProductInfoTab(Product product) {
+    public ProductInfoTab(ProductDetailController controller, Product product) {
+        this.controller = controller;
         initPage();
         initFields(product);
     }
@@ -132,6 +136,7 @@ public class ProductInfoTab extends Page {
         duplicateButton.setSize(duplicateButton.getPreferredSize());
         int x = (fieldHolder.getWidth() - duplicateButton.getWidth()) / 2;
         duplicateButton.setBounds(x, 150, duplicateButton.getWidth(), duplicateButton.getHeight());
+        duplicateButton.addActionListener(e -> controller.duplicateProductButtonClicked());
 
         fieldHolder.add(duplicateButton);
     }

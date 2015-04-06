@@ -29,12 +29,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ProductAddPage extends Page {
+    public static final String PRICE_REGEX = "^([0-9]+)([.][0-9]{1,4})?$";
 
     private ProductController productController;
 
     private JPanel     fieldHolder;
     private JTextField nameField;
-    private JTextArea descriptionField;
+    private JTextArea  descriptionField;
     private JTextField priceField;
     private JButton    saveButton;
     private JButton    backButton;
@@ -42,10 +43,14 @@ public class ProductAddPage extends Page {
     private ButtonListener buttonListener;
 
     public ProductAddPage(ProductController productController) {
+        this(productController, "", "", "");
+    }
+
+    public ProductAddPage(ProductController productController, String name, String description, String price) {
         this.productController = productController;
         buttonListener = new ButtonListener();
         initPage();
-        initializeFields();
+        initializeFields(name, description, price);
         initializeButtons();
     }
 
@@ -54,11 +59,11 @@ public class ProductAddPage extends Page {
         setLayout(null);
     }
 
-    private void initializeFields() {
+    private void initializeFields(String name, String description, String price) {
         initializeFieldHolder();
-        initializeNameField();
-        initializePriceField();
-        initializeDescriptionField();
+        initializeNameField(name);
+        initializeDescriptionField(description);
+        initializePriceField(price);
     }
 
     private void initializeFieldHolder() {
@@ -69,12 +74,12 @@ public class ProductAddPage extends Page {
         add(fieldHolder);
     }
 
-    private void initializeNameField() {
+    private void initializeNameField(String name) {
         JLabel nameLabel = new JLabel("Name :");
         nameLabel.setBounds(6, 20, 108, 19);
         nameLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-        nameField = new JTextField();
+        nameField = new JTextField(name);
         nameField.setBounds(124, 20, 181, 20);
         nameField.setColumns(10);
 
@@ -82,12 +87,12 @@ public class ProductAddPage extends Page {
         fieldHolder.add(nameField);
     }
 
-    private void initializePriceField() {
+    private void initializePriceField(String price) {
         JLabel priceLabel = new JLabel("Unit Price :");
         priceLabel.setBounds(6, 55, 108, 19);
         priceLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-        priceField = new JTextField();
+        priceField = new JTextField(price);
         priceField.setBounds(124, 55, 181, 20);
         priceField.setColumns(10);
 
@@ -95,12 +100,12 @@ public class ProductAddPage extends Page {
         fieldHolder.add(priceField);
     }
 
-    private void initializeDescriptionField() {
+    private void initializeDescriptionField(String description) {
         JLabel descriptionLabel = new JLabel("Description :");
         descriptionLabel.setBounds(6, 90, 108, 19);
         descriptionLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
-        descriptionField = new JTextArea();
+        descriptionField = new JTextArea(description);
         JScrollPane scrollPane = new JScrollPane(descriptionField);
         scrollPane.setBounds(124, 90, 181, 60);
         descriptionField.setFont(new Font("Tahoma", Font.PLAIN, 11));
@@ -139,13 +144,9 @@ public class ProductAddPage extends Page {
     }
 
     private boolean fieldsAreValid() {
-        String regex = "^([0-9]+)([.][0-9]{1,4})?$";
-        String price = priceField.getText();
-        // TODO: implement
-        boolean valid = true;
-        valid &= (nameField.getText().length() > 0);
+        boolean valid = (nameField.getText().length() > 0);
         valid &= (descriptionField.getText().length() > 0);
-        valid &= price.matches(regex);
+        valid &= priceField.getText().matches(PRICE_REGEX);
         return valid;
     }
 

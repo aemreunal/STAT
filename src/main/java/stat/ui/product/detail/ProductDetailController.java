@@ -18,6 +18,7 @@ import stat.domain.Product;
 import stat.domain.Sale;
 import stat.service.ProductService;
 import stat.ui.product.detail.view.ProductDetailWindow;
+import stat.ui.product.main.ProductController;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
@@ -31,27 +32,36 @@ import org.springframework.stereotype.Component;
 public class ProductDetailController {
 
     @Autowired
-    private ProductService      productService;
-    private ProductDetailWindow productDetailWindow;
+    private ProductService productService;
 
-    public void showDetailsOfProductWithId(Integer productId) {
-        showProductWindow(productId);
-        setProductSaleStats(productId);
-        setProductSaleList(productId);
+    private ProductDetailWindow productDetailWindow;
+    private ProductController   productController;
+    private Integer productId;
+
+    public void showDetailsOfProductWithId(ProductController productController, Integer productId) {
+        this.productController = productController;
+        this.productId = productId;
+        showProductWindow();
+        setProductSaleStats();
+        setProductSaleList();
     }
 
-    private void showProductWindow(Integer productId) {
+    public void duplicateProductButtonClicked() {
+        productController.addProductButtonClicked(productId);
+    }
+
+    private void showProductWindow() {
         Product product = productService.getProductWithId(productId);
         productDetailWindow = new ProductDetailWindow(this, product);
     }
 
-    private void setProductSaleStats(Integer productId) {
+    private void setProductSaleStats() {
         int amountSold = productService.getAmountOfProductSoldTotal(productId);
         BigDecimal totalRevenue = productService.getPriceOfProductSoldTotal(productId);
         productDetailWindow.setProductSaleStats(amountSold, totalRevenue);
     }
 
-    private void setProductSaleList(Integer productId) {
+    private void setProductSaleList() {
         LinkedHashSet<Sale> sales = productService.getSalesOfProduct(productId);
         productDetailWindow.setProductSales(sales);
     }
