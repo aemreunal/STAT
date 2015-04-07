@@ -21,7 +21,10 @@ import stat.ui.stats.main.view.StatMainPage;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -35,6 +38,7 @@ import org.springframework.stereotype.Component;
 public class StatController {
 
     public static final int QUARTERS_PER_YEAR = 4;
+
     @Autowired
     private SaleService saleService;
 
@@ -190,5 +194,29 @@ public class StatController {
             totalSales = totalSales.add(sale.getTotalPrice());
         }
         return totalSales;
+    }
+
+
+
+    public void initializeYears() {
+        statMainPage.initializeYears(getSaleYears());
+    }
+
+    private HashSet<String> getSaleYears() {
+        HashSet<String> years = new HashSet<>();
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("YYYY");
+        years.addAll(saleService.getAllSales().stream().map(sale -> dateFormatter.format(sale.getDate())).collect(Collectors.toList()));
+
+        return years;
+    }
+
+    public void yearSelected(String year) {
+        //TODO add a column to the plot
+        // refreshPlot();
+    }
+
+    public void yearUnselected(String year) {
+        //TODO remove column from the plot
+        // refreshPlot();
     }
 }
