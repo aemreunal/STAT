@@ -17,7 +17,7 @@ package stat.ui.stats.main;
 import stat.domain.Sale;
 import stat.service.SaleService;
 import stat.ui.stats.main.view.StatMainPage;
-import stat.ui.stats.main.view.helper.QuarterPlot;
+import stat.ui.stats.main.view.helper.Plot;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -47,32 +47,48 @@ public class StatController {
         String title = "Summary of " + getDateFormat(year, 1, 1, "YYYY");
         String message = "Total Revenue: " + summarizeFiscalYear(year).toPlainString();
         statMainPage.showResult(message, title);
+
+        LinkedHashMap<Integer, LinkedHashMap<Integer, BigDecimal>> map = new LinkedHashMap<>();
+//        getYearAsMonths(map, 2014);
+//        getYearAsMonths(map, 2015);
+//        getYearAsMonths(map, 2016);
+//        getYearAsMonths(map, 2017);
+//        getYearAsMonths(map, 2018);
+        getYearAsMonths(map, year);
+        new Plot(map);
     }
 
     public void summarizeQuarterButtonClicked(int year) {
-//        String title = "Summary of " + getDateFormat(year, 1, 1, "YYYY");
-//        String message =
-//                "Total revenue in first quarter: " + summarizeFirstFiscalQuarter(year).toPlainString() +
-//                "\nTotal revenue in second quarter: " + summarizeSecondFiscalQuarter(year).toPlainString() +
-//                "\nTotal revenue in third quarter: " + summarizeThirdFiscalQuarter(year).toPlainString() +
-//                "\nTotal revenue in fourth quarter: " + summarizeFourthFiscalQuarter(year).toPlainString();
-//        statMainPage.showResult(message, title);
+        String title = "Summary of " + getDateFormat(year, 1, 1, "YYYY");
+        String message =
+                "Total revenue in first quarter: " + summarizeFirstFiscalQuarter(year).toPlainString() +
+                "\nTotal revenue in second quarter: " + summarizeSecondFiscalQuarter(year).toPlainString() +
+                "\nTotal revenue in third quarter: " + summarizeThirdFiscalQuarter(year).toPlainString() +
+                "\nTotal revenue in fourth quarter: " + summarizeFourthFiscalQuarter(year).toPlainString();
+        statMainPage.showResult(message, title);
 
         LinkedHashMap<Integer, LinkedHashMap<Integer, BigDecimal>> map = new LinkedHashMap<>();
-
-        getYear(map, 2014);
-        getYear(map, 2015);
-        getYear(map, 2018);
-        new QuarterPlot(map);
+//        getYearAsQuarters(map, 2014);
+//        getYearAsQuarters(map, 2015);
+//        getYearAsQuarters(map, 2018);
+        getYearAsQuarters(map, year);
+        new Plot(map);
     }
 
-    private void getYear(LinkedHashMap<Integer, LinkedHashMap<Integer, BigDecimal>> map, int year) {
-        LinkedHashMap<Integer, BigDecimal> q1 = new LinkedHashMap<>();
-        q1.put(0, summarizeFiscalQuarter(0, year));
-        q1.put(1, summarizeFiscalQuarter(1, year));
-        q1.put(2, summarizeFiscalQuarter(2, year));
-        q1.put(3, summarizeFiscalQuarter(3, year));
-        map.put(year, q1);
+    private void getYearAsQuarters(LinkedHashMap<Integer, LinkedHashMap<Integer, BigDecimal>> map, int year) {
+        LinkedHashMap<Integer, BigDecimal> breakdown = new LinkedHashMap<>();
+        for (int i = 0; i < 4; i++) {
+            breakdown.put(i, summarizeFiscalQuarter(year, i));
+        }
+        map.put(year, breakdown);
+    }
+
+    private void getYearAsMonths(LinkedHashMap<Integer, LinkedHashMap<Integer, BigDecimal>> map, int year) {
+        LinkedHashMap<Integer, BigDecimal> breakdown = new LinkedHashMap<>();
+        for (int i = 0; i < 12; i++) {
+            breakdown.put(i, summarizeMonth(year, i));
+        }
+        map.put(year, breakdown);
     }
 
     public void summarizeMonthButtonClicked(int year, int month) {
@@ -106,7 +122,7 @@ public class StatController {
         String message = "";
         // 4 quarters in a year
         for (int i = 0; i < QUARTERS_PER_YEAR; i++) {
-            message += getString((i + 1) + ". quarter of ", firstYear, secondYear, summarizeFiscalQuarter(i, firstYear), summarizeFiscalQuarter(i, secondYear));
+            message += getString((i + 1) + ". quarter of ", firstYear, secondYear, summarizeFiscalQuarter(firstYear, i), summarizeFiscalQuarter(secondYear, i));
             if (i != (QUARTERS_PER_YEAR - 1)) {
                 // Add newline except for the last quarter
                 message += "\n\n";
@@ -142,7 +158,7 @@ public class StatController {
         return summarizeInterval(year - 1, 10, 1, year, 9, 30);
     }
 
-    public BigDecimal summarizeFiscalQuarter(int quarter, int year) {
+    public BigDecimal summarizeFiscalQuarter(int year, int quarter) {
         // 4 quarters in a year
         switch (quarter % QUARTERS_PER_YEAR) {
             case 0:
