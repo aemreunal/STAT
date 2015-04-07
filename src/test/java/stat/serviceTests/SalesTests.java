@@ -28,7 +28,7 @@ import java.util.Set;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 
-import static junit.framework.Assert.*;
+import static org.junit.Assert.*;
 
 public class SalesTests extends StatTest {
 
