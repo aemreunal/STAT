@@ -19,6 +19,7 @@ import stat.ui.stats.main.StatController;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashSet;
 import javax.swing.*;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -142,6 +143,10 @@ public class StatMainPage extends Page {
 
     public void showResult(String message, String title) {
         JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void initializeYears(HashSet<String> saleYears) {
+        //TODO list years
     }
 
     private class StatPageButtonListener implements ActionListener {
