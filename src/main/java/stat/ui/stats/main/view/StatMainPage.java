@@ -14,32 +14,39 @@ package stat.ui.stats.main.view;
  * ******************************* *
  */
 
-import org.jdatepicker.impl.JDatePickerImpl;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.springframework.beans.factory.annotation.Autowired;
 import stat.ui.Page;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.LinkedHashSet;
 import javax.swing.*;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+import stat.ui.stats.main.StatController;
 
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class StatMainPage extends Page {
 
+    @Autowired
+    private StatController statController;
+
     private JPanel graphHolder;
     private JPanel optionHolder;
+    private LinkedHashSet<JCheckBox> checkBoxes;
+    private LinkedHashSet<JRadioButton> radioButtons;
 
     public StatMainPage() {
         initPage();
         initGraphHolder();
         initOptionHolder();
         initRadioHolder();
-       // initDateHolder();
     }
 
     @Override
@@ -75,6 +82,15 @@ public class StatMainPage extends Page {
         radioGroup.add(quarterRadio);
         radioGroup.add(yearRadio);
 
+        monthRadio.addActionListener(getRadioButtonListener());
+        quarterRadio.addActionListener(getRadioButtonListener());
+        yearRadio.addActionListener(getRadioButtonListener());
+
+        radioButtons = new LinkedHashSet<JRadioButton>();
+        radioButtons.add(monthRadio);
+        radioButtons.add(quarterRadio);
+        radioButtons.add(yearRadio);
+
         GridBagConstraints radioConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 1, 1);
         JPanel radioHolder = new JPanel();
         radioHolder.setLayout(new GridLayout(1, 3));
@@ -85,26 +101,14 @@ public class StatMainPage extends Page {
         optionHolder.add(radioHolder, radioConstraints);
     }
 
-    private void initDateHolder() {
-        JPanel dateHolder = new JPanel();
-        dateHolder.setLayout(new FlowLayout());
-
-        JDatePickerImpl datePicker1 = Page.createDatePicker();
-        datePicker1.setSize(datePicker1.getPreferredSize());
-
-        JDatePickerImpl datePicker2 = Page.createDatePicker();
-        datePicker2.setSize(datePicker2.getPreferredSize());
-
-        JButton addButton = new JButton("ADD");
-        addButton.setMinimumSize(new Dimension(250, 50));
-
-        dateHolder.add(addButton);
-        dateHolder.add(datePicker1);
-        dateHolder.add(datePicker2);
-
-
-        GridBagConstraints holderConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 1, 1, 7);
-        optionHolder.add(dateHolder, holderConstraints);
+    private ActionListener getRadioButtonListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                statController.yearsSelected(getSelectedYears(), getSelectedType());
+                System.out.println(getSelectedType());
+            }
+        };
     }
 
     private GridBagConstraints createConstraints(int anchor, int fill, int gridX, int gridY, int weightX, int weightY) {
@@ -120,7 +124,54 @@ public class StatMainPage extends Page {
     }
 
     public void initializeYears(LinkedHashSet<String> saleYears) {
-        // TODO: implement
+        JPanel yearHolder = new JPanel();
+        yearHolder.setLayout(null);
+
+        checkBoxes = new LinkedHashSet<JCheckBox>();
+        int gap = 30, count = 0;
+        Rectangle rect =  new Rectangle(5, 10, 50, 20);
+        for (String yearName : saleYears) {
+            JCheckBox yearBox = new JCheckBox(yearName);
+            yearBox.setSize(rect.getSize());
+            yearBox.setLocation((int) rect.getX(), (int) (rect.getY() + (count * gap)));
+            yearBox.addActionListener(getYearActionListener());
+            checkBoxes.add(yearBox);
+            yearHolder.add(yearBox);
+            count ++;
+        }
+        //TODO: add scroll feature to dateHolder
+        GridBagConstraints holderConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 1, 1, 7);
+        optionHolder.add(yearHolder, holderConstraints);
+    }
+
+    private ActionListener getYearActionListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedType = getSelectedType();
+                if (selectedType != null) {
+                    statController.yearsSelected(getSelectedYears(), selectedType);
+                    System.out.println(selectedType);
+                }
+            }
+        };
+    }
+
+    private String getSelectedType() {
+        for (JRadioButton radioButton : radioButtons) {
+            if (radioButton.isSelected())
+                return radioButton.getText();
+        }
+        return null;
+    }
+
+    private LinkedHashSet<String> getSelectedYears() {
+        LinkedHashSet<String> yearsSelected = new LinkedHashSet<String>();
+        for (JCheckBox yearBox : checkBoxes) {
+            if (yearBox.isSelected())
+                yearsSelected.add(yearBox.getText());
+        }
+        return yearsSelected;
     }
 
     public void setChart(JFreeChart chart) {

@@ -249,4 +249,8 @@ public class StatController {
         //TODO remove column from the plot
         // refreshPlot();
     }
+
+    public void yearsSelected(LinkedHashSet<String> yearsSelected, String type) {
+        //TODO : implement
+    }
 }
