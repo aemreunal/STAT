@@ -48,7 +48,7 @@ public class StatController {
     public void summarizeYearButtonClicked(int year) {
         String title = "Summary of " + getDateFormat(year, 1, 1, "YYYY");
         String message = "Total Revenue: " + summarizeFiscalYear(year).toPlainString();
-        statMainPage.showResult(message, title);
+        //statMainPage.showResult(message, title);
 
         LinkedHashMap<Integer, LinkedHashMap<Integer, BigDecimal>> map = new LinkedHashMap<>();
 //        getYearAsMonths(map, 2014);
@@ -67,7 +67,7 @@ public class StatController {
                 "\nTotal revenue in second quarter: " + summarizeSecondFiscalQuarter(year).toPlainString() +
                 "\nTotal revenue in third quarter: " + summarizeThirdFiscalQuarter(year).toPlainString() +
                 "\nTotal revenue in fourth quarter: " + summarizeFourthFiscalQuarter(year).toPlainString();
-        statMainPage.showResult(message, title);
+//        statMainPage.showResult(message, title);
 
         LinkedHashMap<Integer, LinkedHashMap<Integer, BigDecimal>> map = new LinkedHashMap<>();
 //        getYearAsQuarters(map, 2014);
@@ -96,7 +96,7 @@ public class StatController {
     public void summarizeMonthButtonClicked(int year, int month) {
         String title = "Summary of " + getDateFormat(year, month, 1, "MMMM YYYY");
         String message = "Total revenue: " + summarizeMonth(year, month).toPlainString();
-        statMainPage.showResult(message, title);
+//        statMainPage.showResult(message, title);
     }
 
     public void compareYearButtonClicked(int firstYear, int secondYear) {
@@ -105,7 +105,7 @@ public class StatController {
 
         String title = getDateFormat(firstYear, 1, 1, "YYYY") + " vs " + getDateFormat(secondYear, 1, 1, "YYYY");
         String message = getString("Total revenue of ", firstYear, secondYear, firstRevenue, secondRevenue);
-        statMainPage.showResult(message, title);
+//        statMainPage.showResult(message, title);
     }
 
     public void compareMonthButtonClicked(int firstYear, int firstMonth, int secondYear, int secondMonth) {
@@ -116,7 +116,7 @@ public class StatController {
         String message = "Total revenue of " + getDateFormat(firstYear, firstMonth, 1, "MMMM YYYY : ") + firstRevenue.toPlainString() +
                 "\nTotal revenue of " + getDateFormat(secondYear, secondMonth, 1, "MMMM YYYY : ") + secondRevenue.toPlainString() +
                 "\n" + getDifference(firstRevenue, secondRevenue);
-        statMainPage.showResult(message, title);
+//        statMainPage.showResult(message, title);
     }
 
     public void compareQuarterButtonClicked(int firstYear, int secondYear) {
@@ -130,7 +130,7 @@ public class StatController {
                 message += "\n\n";
             }
         }
-        statMainPage.showResult(message, title);
+//        statMainPage.showResult(message, title);
     }
 
     private String getDateFormat(int year, int month, int day, String format) {

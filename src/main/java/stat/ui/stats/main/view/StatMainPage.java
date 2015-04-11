@@ -14,16 +14,15 @@ package stat.ui.stats.main.view;
  * ******************************* *
  */
 
-import stat.ui.Page;
-import stat.ui.stats.main.StatController;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.HashSet;
-import javax.swing.*;
 import org.jdatepicker.impl.JDatePickerImpl;
-import org.jdatepicker.impl.UtilDateModel;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import stat.ui.Page;
+
+import java.awt.*;
+import java.util.LinkedHashSet;
+import javax.swing.*;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
@@ -32,142 +31,102 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class StatMainPage extends Page {
 
-    @Autowired
-    private StatController statController;
-
-    private UtilDateModel dateOneModel;
-    private UtilDateModel dateTwoModel;
-
-    private JButton summarizeMonthButton;
-    private JButton compareMonthButton;
-    private JButton summarizeQuarterButton;
-    private JButton compareQuarterButton;
-    private JButton summarizeYearButton;
-    private JButton compareYearButton;
-
-    private StatPageButtonListener buttonListener;
+    private JPanel graphHolder;
+    private JPanel optionHolder;
 
     public StatMainPage() {
-        buttonListener = new StatPageButtonListener();
         initPage();
-        initDateFields();
-        initLabels();
-        initButtons();
+        initGraphHolder();
+        initOptionHolder();
+        initRadioHolder();
+       // initDateHolder();
     }
 
     @Override
     protected void initPage() {
-        setLayout(null);
+        setLayout(new GridBagLayout());
     }
 
-    private void initDateFields() {
-        initDate1Field();
-        initDate2Field();
+    private void initGraphHolder() {
+        graphHolder = new JPanel();
+        graphHolder.setBackground(Color.YELLOW);
+        graphHolder.setLayout(new BorderLayout());
+
+        GridBagConstraints graphConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0, 5, 1);
+        add(graphHolder, graphConstraints);
     }
 
-    private void initDate1Field() {
-        JLabel dateLabel1 = new JLabel("Date 1 :");
-        dateLabel1.setBounds(98, 106, 46, 14);
-        add(dateLabel1);
+    private void initOptionHolder() {
+        optionHolder = new JPanel();
+        optionHolder.setBackground(Color.RED);
+        optionHolder.setLayout(new GridBagLayout());
 
-        JDatePickerImpl datePicker = createDatePicker();
-        dateOneModel = (UtilDateModel) datePicker.getModel();
-        datePicker.setLocation(98, 131);
-        datePicker.setSize(datePicker.getPreferredSize());
-        add(datePicker);
+        GridBagConstraints optionConstraints = createConstraints(GridBagConstraints.WEST, GridBagConstraints.BOTH, 1, 0, 0, 0);
+        add(optionHolder, optionConstraints);
     }
 
-    private void initDate2Field() {
-        JLabel dateLabel2 = new JLabel("Date 2 :");
-        dateLabel2.setBounds(496, 106, 46, 14);
-        add(dateLabel2);
+    private void initRadioHolder() {
+        JRadioButton monthRadio   = new JRadioButton("Month");
+        JRadioButton quarterRadio = new JRadioButton("Quarter");
+        JRadioButton yearRadio    = new JRadioButton("Year");
 
-        JDatePickerImpl datePicker = createDatePicker();
-        dateTwoModel = (UtilDateModel) datePicker.getModel();
-        datePicker.setLocation(496, 131);
-        datePicker.setSize(datePicker.getPreferredSize());
-        add(datePicker);
+        ButtonGroup radioGroup = new ButtonGroup();
+        radioGroup.add(monthRadio);
+        radioGroup.add(quarterRadio);
+        radioGroup.add(yearRadio);
+
+        GridBagConstraints radioConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 1, 1);
+        JPanel radioHolder = new JPanel();
+        radioHolder.setLayout(new GridLayout(1, 3));
+        radioHolder.add(monthRadio);
+        radioHolder.add(quarterRadio);
+        radioHolder.add(yearRadio);
+
+        optionHolder.add(radioHolder, radioConstraints);
     }
 
-    private void initLabels() {
-        JLabel summariseLabel = new JLabel("Summarise :");
-        summariseLabel.setBounds(138, 219, 75, 14);
-        add(summariseLabel);
+    private void initDateHolder() {
+        JPanel dateHolder = new JPanel();
+        dateHolder.setLayout(new FlowLayout());
 
-        JLabel compareLabel = new JLabel("Compare :");
-        compareLabel.setBounds(536, 219, 75, 14);
-        add(compareLabel);
+        JDatePickerImpl datePicker1 = Page.createDatePicker();
+        datePicker1.setSize(datePicker1.getPreferredSize());
+
+        JDatePickerImpl datePicker2 = Page.createDatePicker();
+        datePicker2.setSize(datePicker2.getPreferredSize());
+
+        JButton addButton = new JButton("ADD");
+        addButton.setMinimumSize(new Dimension(250, 50));
+
+        dateHolder.add(addButton);
+        dateHolder.add(datePicker1);
+        dateHolder.add(datePicker2);
+
+
+        GridBagConstraints holderConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 1, 1, 7);
+        optionHolder.add(dateHolder, holderConstraints);
     }
 
-    private void initButtons() {
-        initMonthButtons();
-        initQuarterButtons();
-        initYearButtons();
+    private GridBagConstraints createConstraints(int anchor, int fill, int gridX, int gridY, int weightX, int weightY) {
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.anchor  = anchor;
+        constraints.fill    = fill;
+        constraints.gridx   = gridX;
+        constraints.gridy   = gridY;
+        constraints.weightx = weightX;
+        constraints.weighty = weightY;
+
+        return constraints;
     }
 
-    private void initMonthButtons() {
-        summarizeMonthButton = new JButton("Month");
-        summarizeMonthButton.setBounds(138, 255, 89, 23);
-        summarizeMonthButton.addActionListener(buttonListener);
-        add(summarizeMonthButton);
-
-        compareMonthButton = new JButton("Month");
-        compareMonthButton.setBounds(536, 255, 89, 23);
-        compareMonthButton.addActionListener(buttonListener);
-        add(compareMonthButton);
+    public void initializeYears(LinkedHashSet<String> saleYears) {
+        // TODO: implement
     }
 
-    private void initQuarterButtons() {
-        summarizeQuarterButton = new JButton("Quarter");
-        summarizeQuarterButton.setBounds(138, 301, 89, 23);
-        summarizeQuarterButton.addActionListener(buttonListener);
-        add(summarizeQuarterButton);
-
-        compareQuarterButton = new JButton("Quarter");
-        compareQuarterButton.setBounds(536, 301, 89, 23);
-        compareQuarterButton.addActionListener(buttonListener);
-        add(compareQuarterButton);
-    }
-
-    private void initYearButtons() {
-        summarizeYearButton = new JButton("Year");
-        summarizeYearButton.setBounds(138, 350, 89, 23);
-        summarizeYearButton.addActionListener(buttonListener);
-        add(summarizeYearButton);
-
-        compareYearButton = new JButton("Year");
-        compareYearButton.setBounds(536, 350, 89, 23);
-        compareYearButton.addActionListener(buttonListener);
-        add(compareYearButton);
-    }
-
-    public void showResult(String message, String title) {
-        JOptionPane.showMessageDialog(this, message, title, JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    public void initializeYears(HashSet<String> saleYears) {
-        //TODO list years
-    }
-
-    private class StatPageButtonListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            Object sourceOfAction = e.getSource();
-            if (sourceOfAction.equals(summarizeMonthButton)) {
-                statController.summarizeMonthButtonClicked(dateOneModel.getYear(), dateOneModel.getMonth());
-            } else if (sourceOfAction.equals(summarizeQuarterButton)) {
-                statController.summarizeQuarterButtonClicked(dateOneModel.getYear());
-            } else if (sourceOfAction.equals(summarizeYearButton)) {
-                statController.summarizeYearButtonClicked(dateOneModel.getYear());
-            } else if (sourceOfAction.equals(compareMonthButton)) {
-                statController.compareMonthButtonClicked(dateOneModel.getYear(), dateOneModel.getMonth(), dateTwoModel.getYear(), dateTwoModel.getMonth());
-            } else if (sourceOfAction.equals(compareQuarterButton)) {
-                statController.compareQuarterButtonClicked(dateOneModel.getYear(), dateTwoModel.getYear());
-            } else if (sourceOfAction.equals(compareYearButton)) {
-                statController.compareYearButtonClicked(dateOneModel.getYear(), dateTwoModel.getYear());
-            }
-        }
+    public void setChart(JFreeChart chart) {
+        ChartPanel panel = new ChartPanel(chart);
+        graphHolder.removeAll();
+        graphHolder.add(panel);
     }
 
 }
