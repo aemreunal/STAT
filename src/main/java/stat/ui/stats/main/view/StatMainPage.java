@@ -180,4 +180,9 @@ public class StatMainPage extends Page {
         graphHolder.add(panel);
     }
 
+    public void refresh() {
+        this.invalidate();
+        this.revalidate();
+        this.repaint();
+    }
 }

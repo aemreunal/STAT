@@ -16,19 +16,22 @@ package stat.ui.stats.main.view.helper;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class ChartFactory {
 
     private static final String[] MONTHS = {"January", "February", "March",
-                                            "April"  , "May"     , "June",
-                                            "July"   , "August"  , "September",
-                                            "October", "November", "December"};
+                                     "April"  , "May"     , "June",
+                                     "July"   , "August"  , "September",
+                                     "October", "November", "December"};
 
     private static final String[] QUARTERS = {"Q1", "Q2", "Q3", "Q4"};
 
-    public static JFreeChart createMonthChart(Map<String, int[]> salesMap) {
+    public static JFreeChart createMonthChart(HashMap<String, int[]> salesMap) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
         for (String yearName : salesMap.keySet()) {
             int[] sales = salesMap.get(yearName);
@@ -39,7 +42,7 @@ public class ChartFactory {
         return org.jfree.chart.ChartFactory.createBarChart("Monthly Sales", "Months", "#Sales", dataset);
     }
 
-    public static JFreeChart createQuarterChart(Map<String, int[]> salesMap) {
+    public static JFreeChart createQuarterChart(HashMap<String, int[]> salesMap) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
         for (String yearName : salesMap.keySet()) {
             int[] sales = salesMap.get(yearName);
@@ -50,7 +53,7 @@ public class ChartFactory {
         return org.jfree.chart.ChartFactory.createBarChart("Quarterly Sales", "Quarters", "#Sales", dataset);
     }
 
-    public static JFreeChart createYearChart(Map<String, Integer> salesMap) {
+    public static JFreeChart createYearChart(HashMap<String, Integer> salesMap) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
         for (String yearName : salesMap.keySet()) {
             dataset.addValue(salesMap.get(yearName), yearName, yearName);

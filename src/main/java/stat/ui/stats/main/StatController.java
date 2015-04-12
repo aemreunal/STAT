@@ -14,14 +14,17 @@ package stat.ui.stats.main;
  * ******************************* *
  */
 
+import org.jfree.chart.JFreeChart;
 import stat.domain.Sale;
 import stat.service.SaleService;
 import stat.ui.stats.main.view.StatMainPage;
+import stat.ui.stats.main.view.helper.ChartFactory;
 import stat.ui.stats.main.view.helper.Plot;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
@@ -155,6 +158,8 @@ public class StatController {
         }
     }
 
+
+
     // FY 2015: 1 October 2014 - 30 September 2015
     private BigDecimal summarizeFiscalYear(int year) {
         return summarizeInterval(year - 1, 10, 1, year, 9, 30);
@@ -250,7 +255,64 @@ public class StatController {
         // refreshPlot();
     }
 
-    public void yearsSelected(LinkedHashSet<String> yearsSelected, String type) {
+    public void yearsSelected(LinkedHashSet<String> yearsSelected, String chartType) {
+        switch(chartType) {
+            case "Month":
+                statMainPage.setChart(getMonthlySalesChart(yearsSelected));
+                statMainPage.refresh();
+                break;
+            case "Quarter":
+                statMainPage.setChart(createQuarterlySalesChart(yearsSelected));
+                statMainPage.refresh();
+                break;
+            case "Year":
+                statMainPage.setChart(createYearlySalesChart(yearsSelected));
+                statMainPage.refresh();
+                break;
+            default:
+                break;
+        }
         //TODO : implement
     }
+
+    private JFreeChart getMonthlySalesChart(LinkedHashSet<String> yearsSelected) {
+        HashMap<String, int[]> monthsVsSales = new HashMap<>();
+        for (String year: yearsSelected) {
+            int[] monthlySales = new int[12];
+            for (int i = 0; i < monthlySales.length; i++) {
+                monthlySales[i] = summarizeMonth(Integer.parseInt(year), i + 1).intValue();
+            }
+
+            monthsVsSales.put(year, monthlySales);
+        }
+
+        return ChartFactory.createMonthChart(monthsVsSales);
+
+    }
+
+    private JFreeChart createQuarterlySalesChart(LinkedHashSet<String> yearsSelected) {
+        HashMap<String, int[]> quartersVsSales = new HashMap<>();
+
+        for (String year: yearsSelected) {
+            int[] quarterlySales = new int[] {summarizeFirstFiscalQuarter(Integer.parseInt(year)).intValue(),
+                                              summarizeSecondFiscalQuarter(Integer.parseInt(year)).intValue(),
+                                              summarizeThirdFiscalQuarter(Integer.parseInt(year)).intValue(),
+                                              summarizeFourthFiscalQuarter(Integer.parseInt(year)).intValue()};
+
+            quartersVsSales.put(year, quarterlySales);
+        }
+
+        return ChartFactory.createQuarterChart(quartersVsSales);
+    }
+
+    private JFreeChart createYearlySalesChart(LinkedHashSet<String> yearsSelected) {
+        HashMap<String, Integer> yearsVsSales = new HashMap<>();
+
+        for (String year: yearsSelected) {
+            yearsVsSales.put(year, summarizeFiscalYear(Integer.parseInt(year)).intValue());
+        }
+
+        return ChartFactory.createYearChart(yearsVsSales);
+    }
+
 }

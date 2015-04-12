@@ -17,6 +17,7 @@ package stat.ui.mainApp.view;
 import stat.ui.mainApp.ApplicationController;
 import stat.ui.product.main.view.ProductMainPage;
 import stat.ui.sale.main.view.SaleMainPage;
+import stat.ui.stats.main.StatController;
 import stat.ui.stats.main.view.StatMainPage;
 
 import java.awt.*;
@@ -46,6 +47,9 @@ public class ApplicationWindow extends JFrame {
 
     @Autowired
     private StatMainPage statMainPage;
+
+    @Autowired
+    private StatController statController;
 
     private JPanel      contentPane;
     private JTabbedPane pageTab;
@@ -79,6 +83,8 @@ public class ApplicationWindow extends JFrame {
         pageTab.setComponentAt(pageTab.indexOfTab(TAB_SALES), saleMainPage);
         pageTab.setComponentAt(pageTab.indexOfTab(TAB_PRODUCT), productMainPage);
         pageTab.setComponentAt(pageTab.indexOfTab(TAB_STATS), statMainPage);
+
+        statController.initializeYears();
     }
 
 }
