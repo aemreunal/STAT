@@ -23,6 +23,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -86,7 +87,7 @@ public class StatMainPage extends Page {
         quarterRadio.addActionListener(getRadioButtonListener());
         yearRadio.addActionListener(getRadioButtonListener());
 
-        radioButtons = new LinkedHashSet<JRadioButton>();
+        radioButtons = new LinkedHashSet<>();
         radioButtons.add(monthRadio);
         radioButtons.add(quarterRadio);
         radioButtons.add(yearRadio);
@@ -102,13 +103,7 @@ public class StatMainPage extends Page {
     }
 
     private ActionListener getRadioButtonListener() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                statController.yearsSelected(getSelectedYears(), getSelectedType());
-                System.out.println(getSelectedType());
-            }
-        };
+        return e -> statController.yearsSelected(getSelectedYears(), getSelectedType());
     }
 
     private GridBagConstraints createConstraints(int anchor, int fill, int gridX, int gridY, int weightX, int weightY) {
@@ -127,7 +122,7 @@ public class StatMainPage extends Page {
         JPanel yearHolder = new JPanel();
         yearHolder.setLayout(null);
 
-        checkBoxes = new LinkedHashSet<JCheckBox>();
+        checkBoxes = new LinkedHashSet<>();
         int gap = 30, count = 0;
         Rectangle rect =  new Rectangle(5, 10, 50, 20);
         for (String yearName : saleYears) {
@@ -145,14 +140,10 @@ public class StatMainPage extends Page {
     }
 
     private ActionListener getYearActionListener() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedType = getSelectedType();
-                if (selectedType != null) {
-                    statController.yearsSelected(getSelectedYears(), selectedType);
-                    System.out.println(selectedType);
-                }
+        return e -> {
+            String selectedType = getSelectedType();
+            if (selectedType != null) {
+                statController.yearsSelected(getSelectedYears(), selectedType);
             }
         };
     }
@@ -166,12 +157,7 @@ public class StatMainPage extends Page {
     }
 
     private LinkedHashSet<String> getSelectedYears() {
-        LinkedHashSet<String> yearsSelected = new LinkedHashSet<String>();
-        for (JCheckBox yearBox : checkBoxes) {
-            if (yearBox.isSelected())
-                yearsSelected.add(yearBox.getText());
-        }
-        return yearsSelected;
+        return checkBoxes.stream().filter(AbstractButton::isSelected).map(JCheckBox::getText).collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     public void setChart(JFreeChart chart) {

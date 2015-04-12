@@ -84,7 +84,7 @@ public class ApplicationWindow extends JFrame {
         pageTab.setComponentAt(pageTab.indexOfTab(TAB_PRODUCT), productMainPage);
         pageTab.setComponentAt(pageTab.indexOfTab(TAB_STATS), statMainPage);
 
-        statController.initializeYears();
+        statController.initializeYears(); // TODO Temporary work around. Change implementation
     }
 
 }

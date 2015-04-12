@@ -9,56 +9,54 @@ package stat.ui.stats.main.view.helper;
  * @author Ahmet Emre Ünal         *
  * @author Uğur Özkan              *
  * @author Burcu Başak Sarıkaya    *
- * @author Eray Tuncer             *
+ * @author Eray Tunçer             *
  *                                 *
  * ******************************* *
  */
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import java.math.BigDecimal;
 import java.util.Map;
 
 public class ChartFactory {
 
     private static final String[] MONTHS = {"January", "February", "March",
-                                     "April"  , "May"     , "June",
-                                     "July"   , "August"  , "September",
-                                     "October", "November", "December"};
+                                            "April"  , "May"     , "June",
+                                            "July"   , "August"  , "September",
+                                            "October", "November", "December"};
 
     private static final String[] QUARTERS = {"Q1", "Q2", "Q3", "Q4"};
 
-    public static JFreeChart createMonthChart(HashMap<String, int[]> salesMap) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+    public static JFreeChart createMonthChart(Map<String, Map<Integer, BigDecimal>> salesMap) {
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset( );
         for (String yearName : salesMap.keySet()) {
-            int[] sales = salesMap.get(yearName);
-            for (int monthIndex = 0; monthIndex < MONTHS.length; monthIndex++) {
-                dataset.addValue(sales[monthIndex], yearName, MONTHS[monthIndex]);
+            Map<Integer, BigDecimal> sales = salesMap.get(yearName);
+            for (Integer monthIndex : sales.keySet()){
+                dataSet.addValue(sales.get(monthIndex), yearName, MONTHS[monthIndex]);
             }
         }
-        return org.jfree.chart.ChartFactory.createBarChart("Monthly Sales", "Months", "#Sales", dataset);
+        return org.jfree.chart.ChartFactory.createBarChart("Monthly Sales", "Months", "#Sales", dataSet);
     }
 
-    public static JFreeChart createQuarterChart(HashMap<String, int[]> salesMap) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+    public static JFreeChart createQuarterChart(Map<String, Map<Integer, BigDecimal>> salesMap) {
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset( );
         for (String yearName : salesMap.keySet()) {
-            int[] sales = salesMap.get(yearName);
-            for (int quarterIndex = 0; quarterIndex < QUARTERS.length; quarterIndex++) {
-                dataset.addValue(sales[quarterIndex], yearName, QUARTERS[quarterIndex]);
+            Map<Integer, BigDecimal> sales = salesMap.get(yearName);
+            for (Integer quarterIndex : sales.keySet()){
+                dataSet.addValue(sales.get(quarterIndex), yearName, QUARTERS[quarterIndex]);
             }
         }
-        return org.jfree.chart.ChartFactory.createBarChart("Quarterly Sales", "Quarters", "#Sales", dataset);
+        return org.jfree.chart.ChartFactory.createBarChart("Quarterly Sales", "Quarters", "#Sales", dataSet);
     }
 
-    public static JFreeChart createYearChart(HashMap<String, Integer> salesMap) {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset( );
+    public static JFreeChart createYearChart(Map<String, Integer> salesMap) {
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset( );
         for (String yearName : salesMap.keySet()) {
-            dataset.addValue(salesMap.get(yearName), yearName, yearName);
+            dataSet.addValue(salesMap.get(yearName), yearName, yearName);
         }
-        return org.jfree.chart.ChartFactory.createBarChart("Yearly Sales", "Years", "#Sales", dataset);
+        return org.jfree.chart.ChartFactory.createBarChart("Yearly Sales", "Years", "#Sales", dataSet);
     }
 
 }
