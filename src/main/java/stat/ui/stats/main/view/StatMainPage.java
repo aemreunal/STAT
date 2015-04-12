@@ -14,10 +14,8 @@ package stat.ui.stats.main.view;
  * ******************************* *
  */
 
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.springframework.beans.factory.annotation.Autowired;
 import stat.ui.Page;
+import stat.ui.stats.main.StatController;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,10 +23,11 @@ import java.awt.event.ActionListener;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 import javax.swing.*;
-
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
-import stat.ui.stats.main.StatController;
 
 @Component
 // Required to not run this class in a test environment
@@ -38,12 +37,14 @@ public class StatMainPage extends Page {
     @Autowired
     private StatController statController;
 
-    private JPanel graphHolder;
-    private JPanel optionHolder;
-    private LinkedHashSet<JCheckBox> checkBoxes;
+    private JPanel                      graphHolder;
+    private JPanel                      optionHolder;
+    private LinkedHashSet<JCheckBox>    checkBoxes;
     private LinkedHashSet<JRadioButton> radioButtons;
+    private ActionListener radioButtonListener;
 
     public StatMainPage() {
+        radioButtonListener = new BreakdownSelectionListener();
         initPage();
         initGraphHolder();
         initOptionHolder();
@@ -57,7 +58,7 @@ public class StatMainPage extends Page {
 
     private void initGraphHolder() {
         graphHolder = new JPanel();
-        graphHolder.setBackground(Color.YELLOW);
+        graphHolder.setBackground(Color.WHITE);
         graphHolder.setLayout(new BorderLayout());
 
         GridBagConstraints graphConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 0, 5, 1);
@@ -66,7 +67,6 @@ public class StatMainPage extends Page {
 
     private void initOptionHolder() {
         optionHolder = new JPanel();
-        optionHolder.setBackground(Color.RED);
         optionHolder.setLayout(new GridBagLayout());
 
         GridBagConstraints optionConstraints = createConstraints(GridBagConstraints.WEST, GridBagConstraints.BOTH, 1, 0, 0, 0);
@@ -74,47 +74,36 @@ public class StatMainPage extends Page {
     }
 
     private void initRadioHolder() {
-        JRadioButton monthRadio   = new JRadioButton("Month");
-        JRadioButton quarterRadio = new JRadioButton("Quarter");
-        JRadioButton yearRadio    = new JRadioButton("Year");
-
-        ButtonGroup radioGroup = new ButtonGroup();
-        radioGroup.add(monthRadio);
-        radioGroup.add(quarterRadio);
-        radioGroup.add(yearRadio);
-
-        monthRadio.addActionListener(getRadioButtonListener());
-        quarterRadio.addActionListener(getRadioButtonListener());
-        yearRadio.addActionListener(getRadioButtonListener());
-
         radioButtons = new LinkedHashSet<>();
-        radioButtons.add(monthRadio);
-        radioButtons.add(quarterRadio);
-        radioButtons.add(yearRadio);
+        ButtonGroup radioGroup = new ButtonGroup();
 
-        GridBagConstraints radioConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 1, 1);
+        GridBagConstraints radioConstraints = createConstraints(GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 0, 1, 1);
         JPanel radioHolder = new JPanel();
         radioHolder.setLayout(new GridLayout(1, 3));
-        radioHolder.add(monthRadio);
-        radioHolder.add(quarterRadio);
-        radioHolder.add(yearRadio);
+
+        createRadioButton(radioGroup, radioHolder, "Month");
+        createRadioButton(radioGroup, radioHolder, "Quarter");
+        createRadioButton(radioGroup, radioHolder, "Year");
 
         optionHolder.add(radioHolder, radioConstraints);
     }
 
-    private ActionListener getRadioButtonListener() {
-        return e -> statController.yearsSelected(getSelectedYears(), getSelectedType());
+    private void createRadioButton(ButtonGroup group, JPanel holderPanel, String label) {
+        JRadioButton radioButton = new JRadioButton(label);
+        radioButton.addActionListener(radioButtonListener);
+        group.add(radioButton);
+        radioButtons.add(radioButton);
+        holderPanel.add(radioButton);
     }
 
     private GridBagConstraints createConstraints(int anchor, int fill, int gridX, int gridY, int weightX, int weightY) {
         GridBagConstraints constraints = new GridBagConstraints();
-        constraints.anchor  = anchor;
-        constraints.fill    = fill;
-        constraints.gridx   = gridX;
-        constraints.gridy   = gridY;
+        constraints.anchor = anchor;
+        constraints.fill = fill;
+        constraints.gridx = gridX;
+        constraints.gridy = gridY;
         constraints.weightx = weightX;
         constraints.weighty = weightY;
-
         return constraints;
     }
 
@@ -124,7 +113,7 @@ public class StatMainPage extends Page {
 
         checkBoxes = new LinkedHashSet<>();
         int gap = 30, count = 0;
-        Rectangle rect =  new Rectangle(5, 10, 50, 20);
+        Rectangle rect = new Rectangle(5, 10, 50, 20);
         for (String yearName : saleYears) {
             JCheckBox yearBox = new JCheckBox(yearName);
             yearBox.setSize(rect.getSize());
@@ -132,7 +121,7 @@ public class StatMainPage extends Page {
             yearBox.addActionListener(getYearActionListener());
             checkBoxes.add(yearBox);
             yearHolder.add(yearBox);
-            count ++;
+            count++;
         }
         //TODO: add scroll feature to dateHolder
         GridBagConstraints holderConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 1, 1, 7);
@@ -150,8 +139,9 @@ public class StatMainPage extends Page {
 
     private String getSelectedType() {
         for (JRadioButton radioButton : radioButtons) {
-            if (radioButton.isSelected())
+            if (radioButton.isSelected()) {
                 return radioButton.getText();
+            }
         }
         return null;
     }
@@ -167,8 +157,14 @@ public class StatMainPage extends Page {
     }
 
     public void refresh() {
-        this.invalidate();
         this.revalidate();
         this.repaint();
+    }
+
+    private class BreakdownSelectionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            statController.yearsSelected(StatMainPage.this.getSelectedYears(), StatMainPage.this.getSelectedType());
+        }
     }
 }

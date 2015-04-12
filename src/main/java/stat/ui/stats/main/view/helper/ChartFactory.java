@@ -9,54 +9,79 @@ package stat.ui.stats.main.view.helper;
  * @author Ahmet Emre Ünal         *
  * @author Uğur Özkan              *
  * @author Burcu Başak Sarıkaya    *
- * @author Eray Tunçer             *
+ * @author Eray Tuncer             *
  *                                 *
  * ******************************* *
  */
 
-import org.jfree.chart.JFreeChart;
-import org.jfree.data.category.DefaultCategoryDataset;
-
+import java.awt.*;
 import java.math.BigDecimal;
 import java.util.Map;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 
+import static org.jfree.chart.ChartFactory.createBarChart;
+
+@Component
+// Required to not run this class in a test environment
+@ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ChartFactory {
+    private static final String[] MONTHS = { "January", "February", "March",
+            "April", "May", "June",
+            "July", "August", "September",
+            "October", "November", "December" };
 
-    private static final String[] MONTHS = {"January", "February", "March",
-                                            "April"  , "May"     , "June",
-                                            "July"   , "August"  , "September",
-                                            "October", "November", "December"};
+    private static final String[] QUARTERS = { "1 (01/10-31/12)", "2 (01/01-31/03)", "3 (01/04-30/06)", "4 (01/07-30/09)" };
 
-    private static final String[] QUARTERS = {"Q1", "Q2", "Q3", "Q4"};
+    public JFreeChart createMonthlyChart(Map<String, Map<Integer, BigDecimal>> salesMap) {
+        JFreeChart barChart = createBarChart("Monthly Sales", "Months", "Sales", getDataSet(salesMap, MONTHS));
+        flattenChart(barChart, false);
+        return barChart;
+    }
 
-    public static JFreeChart createMonthChart(Map<String, Map<Integer, BigDecimal>> salesMap) {
-        DefaultCategoryDataset dataSet = new DefaultCategoryDataset( );
+    public JFreeChart createQuarterlyChart(Map<String, Map<Integer, BigDecimal>> salesMap) {
+        JFreeChart barChart = createBarChart("Quarterly Sales", "Quarters", "Sales", getDataSet(salesMap, QUARTERS));
+        flattenChart(barChart, false);
+        return barChart;
+    }
+
+    private DefaultCategoryDataset getDataSet(Map<String, Map<Integer, BigDecimal>> salesMap, String[] columnNames) {
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
         for (String yearName : salesMap.keySet()) {
             Map<Integer, BigDecimal> sales = salesMap.get(yearName);
-            for (Integer monthIndex : sales.keySet()){
-                dataSet.addValue(sales.get(monthIndex), yearName, MONTHS[monthIndex]);
+            for (Integer breakdownIndex : sales.keySet()) {
+                dataSet.addValue(sales.get(breakdownIndex), yearName, columnNames[breakdownIndex]);
             }
         }
-        return org.jfree.chart.ChartFactory.createBarChart("Monthly Sales", "Months", "#Sales", dataSet);
+        return dataSet;
     }
 
-    public static JFreeChart createQuarterChart(Map<String, Map<Integer, BigDecimal>> salesMap) {
-        DefaultCategoryDataset dataSet = new DefaultCategoryDataset( );
+    public JFreeChart createYearlyChart(Map<String, Integer> salesMap) {
+        DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
+        Integer rowKey = 0;
         for (String yearName : salesMap.keySet()) {
-            Map<Integer, BigDecimal> sales = salesMap.get(yearName);
-            for (Integer quarterIndex : sales.keySet()){
-                dataSet.addValue(sales.get(quarterIndex), yearName, QUARTERS[quarterIndex]);
-            }
+            dataSet.addValue(salesMap.get(yearName), rowKey, yearName);
         }
-        return org.jfree.chart.ChartFactory.createBarChart("Quarterly Sales", "Quarters", "#Sales", dataSet);
+        JFreeChart barChart = createBarChart("Yearly Sales", "Years", "Sales", dataSet);
+        flattenChart(barChart, true);
+        return barChart;
     }
 
-    public static JFreeChart createYearChart(Map<String, Integer> salesMap) {
-        DefaultCategoryDataset dataSet = new DefaultCategoryDataset( );
-        for (String yearName : salesMap.keySet()) {
-            dataSet.addValue(salesMap.get(yearName), yearName, yearName);
+    private void flattenChart(JFreeChart barChart, boolean removeLegend) {
+        CategoryPlot plot = (CategoryPlot) barChart.getPlot();
+        plot.setBackgroundPaint(new Color(221, 223, 238));
+        BarRenderer renderer = (BarRenderer) plot.getRenderer();
+        renderer.setDrawBarOutline(true);
+        renderer.setMaximumBarWidth(0.25);
+        renderer.setGradientPaintTransformer(null);
+        renderer.setBarPainter(new StandardBarPainter());
+        if (removeLegend) {
+            barChart.removeLegend();
         }
-        return org.jfree.chart.ChartFactory.createBarChart("Yearly Sales", "Years", "#Sales", dataSet);
     }
-
 }

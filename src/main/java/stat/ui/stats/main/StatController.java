@@ -14,7 +14,6 @@ package stat.ui.stats.main;
  * ******************************* *
  */
 
-import org.jfree.chart.JFreeChart;
 import stat.domain.Sale;
 import stat.service.SaleService;
 import stat.ui.stats.main.view.StatMainPage;
@@ -22,8 +21,12 @@ import stat.ui.stats.main.view.helper.ChartFactory;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.stream.Collectors;
+import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -44,6 +47,9 @@ public class StatController {
 
     @Autowired
     private StatMainPage statMainPage;
+
+    @Autowired
+    private ChartFactory chartFactory;
 
     // FY 2015: 1 October 2014 - 30 September 2015
     private BigDecimal summarizeFiscalYear(int year) {
@@ -155,7 +161,7 @@ public class StatController {
         for (String year: yearsSelected) {
             getYearAsMonths(yearsVsMonthlySales, year);
         }
-        return ChartFactory.createMonthChart(yearsVsMonthlySales);
+        return chartFactory.createMonthlyChart(yearsVsMonthlySales);
     }
 
     private void getYearAsMonths(Map<String, Map<Integer, BigDecimal>> map, String year) {
@@ -171,7 +177,7 @@ public class StatController {
         for (String year: yearsSelected) {
             getYearAsQuarters(yearsVsQuarterlySales, year);
         }
-        return ChartFactory.createQuarterChart(yearsVsQuarterlySales);
+        return chartFactory.createQuarterlyChart(yearsVsQuarterlySales);
     }
 
     private void getYearAsQuarters(Map<String, Map<Integer, BigDecimal>> map, String year) {
@@ -187,7 +193,7 @@ public class StatController {
         for (String year: yearsSelected) {
             yearsVsSales.put(year, summarizeFiscalYear(Integer.parseInt(year)).intValue());
         }
-        return ChartFactory.createYearChart(yearsVsSales);
+        return chartFactory.createYearlyChart(yearsVsSales);
     }
 
 }
