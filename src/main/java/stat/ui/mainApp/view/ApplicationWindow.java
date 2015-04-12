@@ -14,10 +14,9 @@ package stat.ui.mainApp.view;
  * ******************************* *
  */
 
-import stat.ui.mainApp.ApplicationController;
+import stat.ui.Page;
 import stat.ui.product.main.view.ProductMainPage;
 import stat.ui.sale.main.view.SaleMainPage;
-import stat.ui.stats.main.StatController;
 import stat.ui.stats.main.view.StatMainPage;
 
 import java.awt.*;
@@ -31,13 +30,9 @@ import org.springframework.stereotype.Component;
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ApplicationWindow extends JFrame {
-
     public static final String TAB_SALES   = "Sales";
     public static final String TAB_PRODUCT = "Product";
     public static final String TAB_STATS   = "Stats";
-
-    @Autowired
-    private ApplicationController applicationController;
 
     @Autowired
     private SaleMainPage saleMainPage;
@@ -48,11 +43,8 @@ public class ApplicationWindow extends JFrame {
     @Autowired
     private StatMainPage statMainPage;
 
-    @Autowired
-    private StatController statController;
-
     private JPanel      contentPane;
-    private JTabbedPane pageTab;
+    private JTabbedPane tabbedPagePane;
 
     public ApplicationWindow() {
         initWindow();
@@ -60,7 +52,7 @@ public class ApplicationWindow extends JFrame {
     }
 
     private void initWindow() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBounds(100, 100, 940, 600);
 
         contentPane = new JPanel();
@@ -70,21 +62,23 @@ public class ApplicationWindow extends JFrame {
     }
 
     private void initTabs() {
-        pageTab = new JTabbedPane(JTabbedPane.TOP);
-        pageTab.addTab(TAB_SALES, new JPanel());
-        pageTab.addTab(TAB_PRODUCT, new JPanel());
-        pageTab.addTab(TAB_STATS, new JPanel());
+        tabbedPagePane = new JTabbedPane(JTabbedPane.TOP);
+        tabbedPagePane.addTab(TAB_SALES, new JPanel());
+        tabbedPagePane.addTab(TAB_PRODUCT, new JPanel());
+        tabbedPagePane.addTab(TAB_STATS, new JPanel());
+        tabbedPagePane.addChangeListener(e -> {
+            int index = ((JTabbedPane) e.getSource()).getSelectedIndex();
+            ((Page) tabbedPagePane.getComponentAt(index)).refresh();
+        });
 
-        contentPane.add(pageTab, BorderLayout.CENTER);
+        contentPane.add(tabbedPagePane, BorderLayout.CENTER);
     }
 
     public void display() {
         setVisible(true);
-        pageTab.setComponentAt(pageTab.indexOfTab(TAB_SALES), saleMainPage);
-        pageTab.setComponentAt(pageTab.indexOfTab(TAB_PRODUCT), productMainPage);
-        pageTab.setComponentAt(pageTab.indexOfTab(TAB_STATS), statMainPage);
-
-        statController.initializeYears(); // TODO Temporary work around. Change implementation
+        tabbedPagePane.setComponentAt(tabbedPagePane.indexOfTab(TAB_SALES), saleMainPage);
+        tabbedPagePane.setComponentAt(tabbedPagePane.indexOfTab(TAB_PRODUCT), productMainPage);
+        tabbedPagePane.setComponentAt(tabbedPagePane.indexOfTab(TAB_STATS), statMainPage);
     }
 
 }

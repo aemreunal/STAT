@@ -84,4 +84,8 @@ public abstract class Page extends JPanel {
         popupWindow.setResizable(false);
         popupWindow.setVisible(true);
     }
+
+    public void refresh() {
+        // Do nothing
+    }
 }
