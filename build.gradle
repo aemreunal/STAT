@@ -47,12 +47,9 @@ def slf4jLog4jVersion = '1.7.10'
 def wrapperGradleVersion = '2.3'
 
 dependencies {
+    // Spring
     compile group: 'org.springframework.boot', name: 'spring-boot-starter'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
-//    compile("org.springframework.boot:spring-boot-starter-jdbc")
-
-    // slf4j, used by Hibernate for logging
-//    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: slf4jLog4jVersion
 
     // Hibernate
     compile group: 'org.hibernate', name: 'hibernate-c3p0', version: hibernateC3P0Version
@@ -65,9 +62,10 @@ dependencies {
     // Swing JDatePicker (jdatepicker.org)
     compile group: 'org.jdatepicker', name: 'jdatepicker', version: jDatePickerVersion
 
-    compile name: 'jmathplot'
+    // For displaying charts
     compile group: 'org.jfree', name: 'jfreechart', version: jFreeChartVersion
 
+    // JUnit for testing
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
 }
 
