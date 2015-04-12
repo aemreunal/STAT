@@ -17,16 +17,13 @@ package stat.ui.stats.main;
 import stat.domain.Sale;
 import stat.service.SaleService;
 import stat.ui.stats.main.view.StatMainPage;
-import stat.ui.stats.main.view.helper.ChartFactory;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.jfree.chart.JFreeChart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -40,7 +37,7 @@ import org.springframework.stereotype.Component;
 public class StatController {
 
     public static final int QUARTERS_PER_YEAR = 4;
-    public static final int MONTHS_PER_YEAR = 12;
+    public static final int MONTHS_PER_YEAR   = 12;
 
     @Autowired
     private SaleService saleService;
@@ -48,8 +45,6 @@ public class StatController {
     @Autowired
     private StatMainPage statMainPage;
 
-    @Autowired
-    private ChartFactory chartFactory;
 
     // FY 2015: 1 October 2014 - 30 September 2015
     private BigDecimal summarizeFiscalYear(int year) {
@@ -124,76 +119,66 @@ public class StatController {
         return totalSales;
     }
 
-    public void initializeYears() {
-        statMainPage.initializeYears(getSaleYears());
-    }
-
-    private LinkedHashSet<String> getSaleYears() {
-        LinkedHashSet<String> years = new LinkedHashSet<>();
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("YYYY");
-        years.addAll(saleService.getAllSales().stream().map(sale -> dateFormatter.format(sale.getDate())).collect(Collectors.toList()));
-
-        return years;
-    }
-
-    public void yearsSelected(LinkedHashSet<String> yearsSelected, String chartType) {
-        switch(chartType) {
+    public void yearSelectionChanged(String chartType) {
+        switch (chartType) {
             case "Month":
-                statMainPage.setChart(getMonthlySalesChart(yearsSelected));
-                statMainPage.refresh();
+                createMonthlySalesChart();
                 break;
             case "Quarter":
-                statMainPage.setChart(createQuarterlySalesChart(yearsSelected));
-                statMainPage.refresh();
+                createQuarterlySalesChart();
                 break;
             case "Year":
-                statMainPage.setChart(createYearlySalesChart(yearsSelected));
-                statMainPage.refresh();
+                createYearlySalesChart();
                 break;
             default:
-                statMainPage.refresh();
                 break;
         }
     }
 
-    private JFreeChart getMonthlySalesChart(LinkedHashSet<String> yearsSelected) {
-        Map<String, Map<Integer, BigDecimal>> yearsVsMonthlySales = new LinkedHashMap<>();
-        for (String year: yearsSelected) {
+    private void createMonthlySalesChart() {
+        Map<Integer, Map<Integer, BigDecimal>> yearsVsMonthlySales = new LinkedHashMap<>();
+        for (Integer year : statMainPage.getSelectedYears()) {
             getYearAsMonths(yearsVsMonthlySales, year);
         }
-        return chartFactory.createMonthlyChart(yearsVsMonthlySales);
+        statMainPage.showMonthlySalesChart(yearsVsMonthlySales);
     }
 
-    private void getYearAsMonths(Map<String, Map<Integer, BigDecimal>> map, String year) {
+    private void getYearAsMonths(Map<Integer, Map<Integer, BigDecimal>> map, Integer year) {
         LinkedHashMap<Integer, BigDecimal> breakdown = new LinkedHashMap<>();
         for (int i = 0; i < MONTHS_PER_YEAR; i++) {
-            breakdown.put(i, summarizeMonth(Integer.parseInt(year), i));
+            breakdown.put(i, summarizeMonth(year, i));
         }
         map.put(year, breakdown);
     }
 
-    private JFreeChart createQuarterlySalesChart(LinkedHashSet<String> yearsSelected) {
-        Map<String, Map<Integer, BigDecimal>> yearsVsQuarterlySales = new LinkedHashMap<>();
-        for (String year: yearsSelected) {
+    private void createQuarterlySalesChart() {
+        Map<Integer, Map<Integer, BigDecimal>> yearsVsQuarterlySales = new LinkedHashMap<>();
+        for (Integer year : statMainPage.getSelectedYears()) {
             getYearAsQuarters(yearsVsQuarterlySales, year);
         }
-        return chartFactory.createQuarterlyChart(yearsVsQuarterlySales);
+        statMainPage.showQuarterlySalesChart(yearsVsQuarterlySales);
     }
 
-    private void getYearAsQuarters(Map<String, Map<Integer, BigDecimal>> map, String year) {
+    private void getYearAsQuarters(Map<Integer, Map<Integer, BigDecimal>> map, Integer year) {
         LinkedHashMap<Integer, BigDecimal> breakdown = new LinkedHashMap<>();
         for (int i = 0; i < QUARTERS_PER_YEAR; i++) {
-            breakdown.put(i, summarizeFiscalQuarter(Integer.parseInt(year), i));
+            breakdown.put(i, summarizeFiscalQuarter(year, i));
         }
         map.put(year, breakdown);
     }
 
-    private JFreeChart createYearlySalesChart(LinkedHashSet<String> yearsSelected) {
-        LinkedHashMap<String, Integer> yearsVsSales = new LinkedHashMap<>();
-        for (String year: yearsSelected) {
-            yearsVsSales.put(year, summarizeFiscalYear(Integer.parseInt(year)).intValue());
+    private void createYearlySalesChart() {
+        LinkedHashMap<Integer, BigDecimal> yearsVsSales = new LinkedHashMap<>();
+        for (Integer year : statMainPage.getSelectedYears()) {
+            yearsVsSales.put(year, summarizeFiscalYear(year));
         }
-        return chartFactory.createYearlyChart(yearsVsSales);
+        statMainPage.showYearlySalesChart(yearsVsSales);
     }
 
+    public LinkedHashSet<Integer> getListOfSalesYears() {
+        return saleService.getAllSales().stream()
+                          .map(sale -> sale.getDate().getYear() + 1900)
+                          .sorted()
+                          .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
 }

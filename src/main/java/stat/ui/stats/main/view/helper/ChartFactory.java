@@ -16,6 +16,7 @@ package stat.ui.stats.main.view.helper;
 
 import java.awt.*;
 import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
@@ -38,34 +39,34 @@ public class ChartFactory {
 
     private static final String[] QUARTERS = { "1 (01/10-31/12)", "2 (01/01-31/03)", "3 (01/04-30/06)", "4 (01/07-30/09)" };
 
-    public JFreeChart createMonthlyChart(Map<String, Map<Integer, BigDecimal>> salesMap) {
+    public JFreeChart createMonthlyChart(Map<Integer, Map<Integer, BigDecimal>> salesMap) {
         JFreeChart barChart = createBarChart("Monthly Sales", "Months", "Sales", getDataSet(salesMap, MONTHS));
         flattenChart(barChart, false);
         return barChart;
     }
 
-    public JFreeChart createQuarterlyChart(Map<String, Map<Integer, BigDecimal>> salesMap) {
+    public JFreeChart createQuarterlyChart(Map<Integer, Map<Integer, BigDecimal>> salesMap) {
         JFreeChart barChart = createBarChart("Quarterly Sales", "Quarters", "Sales", getDataSet(salesMap, QUARTERS));
         flattenChart(barChart, false);
         return barChart;
     }
 
-    private DefaultCategoryDataset getDataSet(Map<String, Map<Integer, BigDecimal>> salesMap, String[] columnNames) {
+    private DefaultCategoryDataset getDataSet(Map<Integer, Map<Integer, BigDecimal>> salesMap, String[] columnNames) {
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
-        for (String yearName : salesMap.keySet()) {
-            Map<Integer, BigDecimal> sales = salesMap.get(yearName);
+        for (Integer year : salesMap.keySet()) {
+            Map<Integer, BigDecimal> sales = salesMap.get(year);
             for (Integer breakdownIndex : sales.keySet()) {
-                dataSet.addValue(sales.get(breakdownIndex), yearName, columnNames[breakdownIndex]);
+                dataSet.addValue(sales.get(breakdownIndex), year, columnNames[breakdownIndex]);
             }
         }
         return dataSet;
     }
 
-    public JFreeChart createYearlyChart(Map<String, Integer> salesMap) {
+    public JFreeChart createYearlyChart(LinkedHashMap<Integer, BigDecimal> salesMap) {
         DefaultCategoryDataset dataSet = new DefaultCategoryDataset();
         Integer rowKey = 0;
-        for (String yearName : salesMap.keySet()) {
-            dataSet.addValue(salesMap.get(yearName), rowKey, yearName);
+        for (Integer year : salesMap.keySet()) {
+            dataSet.addValue(salesMap.get(year), rowKey, year);
         }
         JFreeChart barChart = createBarChart("Yearly Sales", "Years", "Sales", dataSet);
         flattenChart(barChart, true);
