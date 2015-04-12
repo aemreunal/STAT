@@ -33,20 +33,21 @@ import static org.jfree.chart.ChartFactory.createBarChart;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ChartFactory {
     private static final String[] MONTHS = { "January", "February", "March",
-            "April", "May", "June",
-            "July", "August", "September",
-            "October", "November", "December" };
+                                             "April", "May", "June",
+                                             "July", "August", "September",
+                                             "October", "November", "December" };
 
-    private static final String[] QUARTERS = { "1 (01/10-31/12)", "2 (01/01-31/03)", "3 (01/04-30/06)", "4 (01/07-30/09)" };
+    private static final String[] QUARTERS = { "1 (01/10-31/12)", "2 (01/01-31/03)",
+                                               "3 (01/04-30/06)", "4 (01/07-30/09)" };
 
     public JFreeChart createMonthlyChart(Map<Integer, Map<Integer, BigDecimal>> salesMap) {
-        JFreeChart barChart = createBarChart("Monthly Sales", "Months", "Sales", getDataSet(salesMap, MONTHS));
+        JFreeChart barChart = createBarChart("Monthly Revenues", "Months", "Revenues", getDataSet(salesMap, MONTHS));
         flattenChart(barChart, false);
         return barChart;
     }
 
     public JFreeChart createQuarterlyChart(Map<Integer, Map<Integer, BigDecimal>> salesMap) {
-        JFreeChart barChart = createBarChart("Quarterly Sales", "Quarters", "Sales", getDataSet(salesMap, QUARTERS));
+        JFreeChart barChart = createBarChart("Quarterly Revenues", "Quarters", "Revenues", getDataSet(salesMap, QUARTERS));
         flattenChart(barChart, false);
         return barChart;
     }
@@ -68,7 +69,7 @@ public class ChartFactory {
         for (Integer year : salesMap.keySet()) {
             dataSet.addValue(salesMap.get(year), rowKey, year);
         }
-        JFreeChart barChart = createBarChart("Yearly Sales", "Years", "Sales", dataSet);
+        JFreeChart barChart = createBarChart("Yearly Revenues", "Years", "Revenues", dataSet);
         flattenChart(barChart, true);
         return barChart;
     }

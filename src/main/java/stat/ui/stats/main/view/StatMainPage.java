@@ -49,7 +49,7 @@ public class StatMainPage extends Page {
     private JPanel                      graphHolder  = new JPanel();
     private JPanel                      optionHolder = new JPanel();
     private LinkedHashSet<JRadioButton> radioButtons = new LinkedHashSet<>();
-    private JList<Integer>               yearList     = new JList<>();
+    private JList<Integer>              yearList     = new JList<>();
 
     private ActionListener radioButtonListener;
     private LinkedHashSet<Integer> listOfSalesYears;
