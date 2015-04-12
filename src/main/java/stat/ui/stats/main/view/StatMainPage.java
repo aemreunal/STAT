@@ -85,7 +85,7 @@ public class StatMainPage extends Page {
 
     private void initRadioHolder() {
         JPanel radioHolder = new JPanel();
-        radioHolder.setLayout(new GridLayout(1, 3));
+        radioHolder.setLayout(new GridLayout(3, 1));
         ButtonGroup radioGroup = new ButtonGroup();
         radioButtons = new LinkedHashSet<>();
 
@@ -118,9 +118,12 @@ public class StatMainPage extends Page {
             }
         });
         yearList.addListSelectionListener(new YearListListener());
+        yearList.setFont(new Font("Arial", Font.PLAIN, 18));
+        DefaultListCellRenderer renderer = (DefaultListCellRenderer) yearList.getCellRenderer();
+        renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
         GridBagConstraints holderConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 1, 1, 7);
-        optionHolder.add(yearList, holderConstraints);
+        optionHolder.add(new JScrollPane(yearList), holderConstraints);
     }
 
     @Override
