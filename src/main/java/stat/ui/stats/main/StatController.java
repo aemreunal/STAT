@@ -200,13 +200,22 @@ public class StatController {
 
     private double[][] getSalesAsDoubleMatrix(LinkedHashMap<Integer, BigDecimal> salesOfYears, Integer firstYear) {
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
-        int numYears = thisYear - firstYear;
-        double[][] sales = new double[numYears][1];
-        for (Integer year : salesOfYears.keySet()) {
-            BigDecimal salesOfYear = salesOfYears.get(year);
-            sales[numYears + (firstYear - thisYear)][0] = salesOfYear.doubleValue();
+        int numYears = thisYear - firstYear + 1;
+        double[][] sales = new double[numYears][2];
+        for (int yearIndex = 0; yearIndex < sales.length; yearIndex++) {
+            int year = firstYear + yearIndex;
+            putSaleToMatrix(salesOfYears, sales, yearIndex, year);
         }
         return sales;
+    }
+
+    private void putSaleToMatrix(LinkedHashMap<Integer, BigDecimal> salesOfYears, double[][] sales, int yearIndex, int year) {
+        BigDecimal salesOfYear = new BigDecimal(0);
+        if (salesOfYears.containsKey(year)) {
+            salesOfYear = salesOfYears.get(year);
+        }
+        sales[yearIndex][0] = yearIndex;
+        sales[yearIndex][1] = salesOfYear.doubleValue();
     }
 
     public void addSalesToMap(LinkedHashMap<Integer, BigDecimal> salesMap, Sale sale) {
