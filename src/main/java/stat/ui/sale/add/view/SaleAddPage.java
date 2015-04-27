@@ -23,7 +23,10 @@ import stat.ui.sale.add.view.helper.CustNameCompletionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
@@ -169,6 +172,12 @@ public class SaleAddPage extends Page {
         dateModel = (UtilDateModel) datePicker.getModel();
         datePicker.setLocation(160, 45);
         datePicker.setSize(datePicker.getPreferredSize());
+        datePicker.addActionListener(e -> {
+            if (dateModel.getValue().after(new Date())) {
+                JOptionPane.showMessageDialog(null, "You cannot select a date after today!", "Error", JOptionPane.ERROR_MESSAGE);
+                dateModel.setValue(new Date());
+            }
+        });
 
         fieldHolder.add(labelDate);
         fieldHolder.add(datePicker);
