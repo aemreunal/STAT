@@ -20,10 +20,7 @@ import stat.ui.stats.main.view.StatMainPage;
 import stat.ui.stats.main.view.helper.BreakdownType;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -182,5 +179,44 @@ public class StatController {
                           .map(sale -> sale.getDate().getYear() + 1900)
                           .sorted()
                           .collect(Collectors.toCollection(LinkedHashSet::new));
+    }
+
+    public double[][] getSalesOfAllYears() {
+        LinkedHashMap<Integer, BigDecimal> salesOfYears = getYearlySalesMap();
+        Optional<Integer> firstYear = salesOfYears.keySet().stream().sorted().findFirst();
+        if (!firstYear.isPresent()) {
+            return new double[0][0];
+        }
+        return getSalesAsDoubleMatrix(salesOfYears, firstYear.get());
+    }
+
+    private LinkedHashMap<Integer, BigDecimal> getYearlySalesMap() {
+        LinkedHashMap<Integer, BigDecimal> salesOfYears = new LinkedHashMap<Integer, BigDecimal>();
+        saleService.getAllSales()
+                   .stream()
+                   .forEach(sale -> addSalesToMap(salesOfYears, sale));
+        return salesOfYears;
+    }
+
+    private double[][] getSalesAsDoubleMatrix(LinkedHashMap<Integer, BigDecimal> salesOfYears, Integer firstYear) {
+        int thisYear = Calendar.getInstance().get(Calendar.YEAR);
+        int numYears = thisYear - firstYear;
+        double[][] sales = new double[numYears][1];
+        for (Integer year : salesOfYears.keySet()) {
+            BigDecimal salesOfYear = salesOfYears.get(year);
+            sales[numYears + (firstYear - thisYear)][0] = salesOfYear.doubleValue();
+        }
+        return sales;
+    }
+
+    public void addSalesToMap(LinkedHashMap<Integer, BigDecimal> salesMap, Sale sale) {
+        Integer year = sale.getDate().getYear() + 1900;
+        BigDecimal amount = sale.getTotalPrice();
+        if (salesMap.containsKey(year)) {
+            BigDecimal newAmount = salesMap.get(year).add(amount);
+            salesMap.put(year, newAmount);
+        } else {
+            salesMap.put(year, amount);
+        }
     }
 }
