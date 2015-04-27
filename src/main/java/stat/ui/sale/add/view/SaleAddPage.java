@@ -28,7 +28,6 @@ import java.util.Date;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
-
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
@@ -169,6 +168,12 @@ public class SaleAddPage extends Page {
         dateModel = (UtilDateModel) datePicker.getModel();
         datePicker.setLocation(160, 45);
         datePicker.setSize(datePicker.getPreferredSize());
+        datePicker.addActionListener(e -> {
+            if (dateModel.getValue().after(new Date())) {
+                JOptionPane.showMessageDialog(null, "You cannot select a future date!", "Error", JOptionPane.ERROR_MESSAGE);
+                dateModel.setValue(new Date());
+            }
+        });
 
         fieldHolder.add(labelDate);
         fieldHolder.add(datePicker);
