@@ -94,7 +94,7 @@ public class StatMainPage extends Page {
         createRadioButton(radioGroup, radioHolder, "Quarter");
         createRadioButton(radioGroup, radioHolder, "Year");
 
-        GridBagConstraints radioConstraints = createConstraints(GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 0, 1, 1);
+        GridBagConstraints radioConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 0, 1, 1);
         optionHolder.add(radioHolder, radioConstraints);
     }
 
@@ -109,7 +109,7 @@ public class StatMainPage extends Page {
     private void initForecastButton() {
         JButton forecastButton = new JButton("Forecast");
         forecastButton.addActionListener(getForecastListener());
-        GridBagConstraints forecastConstraints = createConstraints(GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 1, 1, 1);
+        GridBagConstraints forecastConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 1, 1, 1);
         optionHolder.add(forecastButton, forecastConstraints);
     }
 
@@ -117,6 +117,7 @@ public class StatMainPage extends Page {
         return new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 System.out.println("Clicked forecast button!");
             }
         };
@@ -139,7 +140,7 @@ public class StatMainPage extends Page {
         DefaultListCellRenderer renderer = (DefaultListCellRenderer) yearList.getCellRenderer();
         renderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-        GridBagConstraints holderConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 1, 1, 7);
+        GridBagConstraints holderConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.BOTH, 0, 2, 1, 7);
         optionHolder.add(new JScrollPane(yearList), holderConstraints);
     }
 
