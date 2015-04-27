@@ -9,7 +9,7 @@ package stat.ui.product.main.view;
  * @author Ahmet Emre Ünal         *
  * @author Uğur Özkan              *
  * @author Burcu Başak Sarıkaya    *
- * @author Eray Tuncer             *
+ * @author Eray Tunçer             *
  *                                 *
  * ******************************* *
  */
