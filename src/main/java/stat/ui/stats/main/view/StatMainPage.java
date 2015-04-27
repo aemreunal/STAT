@@ -172,7 +172,7 @@ public class StatMainPage extends Page {
         @Override
         public void actionPerformed(ActionEvent e) {
             getSelectedType();
-            System.out.println("Clicked forecast button!");
+            System.out.println(statController.getForecastResult());
         }
     }
 

@@ -14,6 +14,7 @@ package stat.ui.stats.main;
  * ******************************* *
  */
 
+import org.apache.commons.math3.stat.regression.SimpleRegression;
 import stat.domain.Sale;
 import stat.service.SaleService;
 import stat.ui.stats.main.view.StatMainPage;
@@ -181,7 +182,15 @@ public class StatController {
                           .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public double[][] getSalesOfAllYears() {
+    public double getForecastResult() {
+        double[][] salesOfAllYears = getSalesOfAllYears();
+        SimpleRegression simpleRegression = new SimpleRegression(true);
+        simpleRegression.clear();
+        simpleRegression.addData(salesOfAllYears);
+        return simpleRegression.predict(salesOfAllYears.length);
+    }
+
+    private double[][] getSalesOfAllYears() {
         LinkedHashMap<Integer, BigDecimal> salesOfYears = getYearlySalesMap();
         Optional<Integer> firstYear = salesOfYears.keySet().stream().sorted().findFirst();
         if (!firstYear.isPresent()) {
@@ -191,7 +200,7 @@ public class StatController {
     }
 
     private LinkedHashMap<Integer, BigDecimal> getYearlySalesMap() {
-        LinkedHashMap<Integer, BigDecimal> salesOfYears = new LinkedHashMap<Integer, BigDecimal>();
+        LinkedHashMap<Integer, BigDecimal> salesOfYears = new LinkedHashMap<>();
         saleService.getAllSales()
                    .stream()
                    .forEach(sale -> addSalesToMap(salesOfYears, sale));
