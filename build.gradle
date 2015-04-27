@@ -37,13 +37,13 @@ repositories {
 }
 
 // External libs
+def apacheCommonsMathVersion = '3.5'
 def hibernateC3P0Version = '4.3.8.Final'
 def javaxElVersion = '3.0.0'
 def jDatePickerVersion = '1.3.4'
 def jFreeChartVersion = '1.0.19'
 def hibernateValidatorVersion = '5.1.3.Final'
 def mysqlConnectorJDBCVersion = '5.1.34'
-def slf4jLog4jVersion = '1.7.10'
 def wrapperGradleVersion = '2.3'
 
 dependencies {
@@ -64,6 +64,9 @@ dependencies {
 
     // For displaying charts
     compile group: 'org.jfree', name: 'jfreechart', version: jFreeChartVersion
+
+    // For forecasting
+    compile group: 'org.apache.commons', name: 'commons-math3', version: apacheCommonsMathVersion
 
     // JUnit for testing
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
