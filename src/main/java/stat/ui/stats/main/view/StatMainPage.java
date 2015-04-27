@@ -16,6 +16,7 @@ package stat.ui.stats.main.view;
 
 import stat.ui.Page;
 import stat.ui.stats.main.StatController;
+import stat.ui.stats.main.view.helper.BreakdownType;
 import stat.ui.stats.main.view.helper.ChartFactory;
 
 import java.awt.*;
@@ -108,19 +109,9 @@ public class StatMainPage extends Page {
 
     private void initForecastButton() {
         JButton forecastButton = new JButton("Forecast");
-        forecastButton.addActionListener(getForecastListener());
+        forecastButton.addActionListener(new ForecastListener());
         GridBagConstraints forecastConstraints = createConstraints(GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, 0, 1, 1, 1);
         optionHolder.add(forecastButton, forecastConstraints);
-    }
-
-    private ActionListener getForecastListener() {
-        return new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                System.out.println("Clicked forecast button!");
-            }
-        };
     }
 
     private void initYearList() {
@@ -177,6 +168,14 @@ public class StatMainPage extends Page {
         validate();
     }
 
+    private class ForecastListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getSelectedType();
+            System.out.println("Clicked forecast button!");
+        }
+    }
+
     private class BreakdownSelectionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -187,17 +186,26 @@ public class StatMainPage extends Page {
     private class YearListListener implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            String selectedType = getSelectedType();
+            BreakdownType selectedType = getSelectedType();
             if (selectedType != null) {
                 statController.yearSelectionChanged(selectedType);
             }
         }
     }
 
-    private String getSelectedType() {
+    private BreakdownType getSelectedType() {
         for (JRadioButton radioButton : radioButtons) {
             if (radioButton.isSelected()) {
-                return radioButton.getText();
+                switch (radioButton.getText()) {
+                    case "Month":
+                        return BreakdownType.MONTHLY;
+                    case "Quarter":
+                        return BreakdownType.QUARTERLY;
+                    case "Year":
+                        return BreakdownType.YEARLY;
+                    default:
+                        return null;
+                }
             }
         }
         return null;

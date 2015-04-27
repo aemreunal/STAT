@@ -17,6 +17,7 @@ package stat.ui.stats.main;
 import stat.domain.Sale;
 import stat.service.SaleService;
 import stat.ui.stats.main.view.StatMainPage;
+import stat.ui.stats.main.view.helper.BreakdownType;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -119,15 +120,15 @@ public class StatController {
         return totalSales;
     }
 
-    public void yearSelectionChanged(String chartType) {
-        switch (chartType) {
-            case "Month":
+    public void yearSelectionChanged(BreakdownType breakdownType) {
+        switch (breakdownType) {
+            case MONTHLY:
                 createMonthlySalesChart();
                 break;
-            case "Quarter":
+            case QUARTERLY:
                 createQuarterlySalesChart();
                 break;
-            case "Year":
+            case YEARLY:
                 createYearlySalesChart();
                 break;
             default:
@@ -176,7 +177,8 @@ public class StatController {
     }
 
     public LinkedHashSet<Integer> getListOfSalesYears() {
-        return saleService.getAllSales().stream()
+        return saleService.getAllSales()
+                          .stream()
                           .map(sale -> sale.getDate().getYear() + 1900)
                           .sorted()
                           .collect(Collectors.toCollection(LinkedHashSet::new));
