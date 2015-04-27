@@ -60,6 +60,7 @@ public class StatMainPage extends Page {
         initGraphHolder();
         initOptionHolder();
         initRadioHolder();
+        initForecastButton();
         initYearList();
     }
 
@@ -103,6 +104,22 @@ public class StatMainPage extends Page {
         group.add(radioButton);
         radioButtons.add(radioButton);
         holderPanel.add(radioButton);
+    }
+
+    private void initForecastButton() {
+        JButton forecastButton = new JButton("Forecast");
+        forecastButton.addActionListener(getForecastListener());
+        GridBagConstraints forecastConstraints = createConstraints(GridBagConstraints.NORTH, GridBagConstraints.HORIZONTAL, 0, 1, 1, 1);
+        optionHolder.add(forecastButton, forecastConstraints);
+    }
+
+    private ActionListener getForecastListener() {
+        return new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Clicked forecast button!");
+            }
+        };
     }
 
     private void initYearList() {
