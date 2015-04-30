@@ -14,7 +14,6 @@ package stat.ui.stats.main;
  * ******************************* *
  */
 
-import org.apache.commons.math3.stat.regression.SimpleRegression;
 import stat.domain.Sale;
 import stat.service.SaleService;
 import stat.ui.stats.main.view.StatMainPage;
@@ -23,6 +22,7 @@ import stat.ui.stats.main.view.helper.BreakdownType;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
@@ -44,6 +44,19 @@ public class StatController {
     @Autowired
     private StatMainPage statMainPage;
 
+    private Set<Sale> allSales;
+    private Integer   firstYear;
+
+    public void refreshSalesList() {
+        allSales = saleService.getAllSales();
+        Optional<Integer> firstYear = allSales.stream()
+                                              .map(sale -> (sale.getDate().getYear() + 1900))
+                                              .sorted()
+                                              .findFirst();
+        if (firstYear != null) {
+            this.firstYear = firstYear.get();
+        }
+    }
 
     // FY 2015: 1 October 2014 - 30 September 2015
     private BigDecimal summarizeFiscalYear(int year) {
@@ -175,66 +188,98 @@ public class StatController {
     }
 
     public LinkedHashSet<Integer> getListOfSalesYears() {
-        return saleService.getAllSales()
-                          .stream()
-                          .map(sale -> sale.getDate().getYear() + 1900)
-                          .sorted()
-                          .collect(Collectors.toCollection(LinkedHashSet::new));
+        return allSales.stream()
+                       .map(sale -> sale.getDate().getYear() + 1900)
+                       .sorted()
+                       .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public double getForecastResult() {
-        double[][] salesOfAllYears = getSalesOfAllYears();
-        SimpleRegression simpleRegression = new SimpleRegression(true);
-        simpleRegression.clear();
-        simpleRegression.addData(salesOfAllYears);
-        return simpleRegression.predict(salesOfAllYears.length);
+    public double getForecast(BreakdownType breakdownType) {
+        if (firstYear == null) {
+            return 0;
+        }
+        double[][] salesOfAllPeriods;
+        switch (breakdownType) {
+            case MONTHLY:
+                salesOfAllPeriods = getSalesOfAllMonths();
+                break;
+            case QUARTERLY:
+                salesOfAllPeriods = getSalesOfAllQuarters();
+                break;
+            case YEARLY:
+                salesOfAllPeriods = getSalesOfAllYears();
+                break;
+            default:
+                salesOfAllPeriods = getSalesOfAllYears();
+                break;
+        }
+        return getPeriodForecast(salesOfAllPeriods);
+    }
+
+    private double[][] getSalesOfAllMonths() {
+        LinkedHashMap<Integer, BigDecimal> salesOfMonths = new LinkedHashMap<>();
+        allSales.stream()
+                .forEach(sale -> {
+                    Integer period = sale.getDate().getMonth();
+                    addSaleToMap(salesOfMonths, sale, period);
+                });
+        return getSalesAsDoubleMatrix(salesOfMonths);
+    }
+
+    private double[][] getSalesOfAllQuarters() {
+        LinkedHashMap<Integer, BigDecimal> salesOfQuarters = new LinkedHashMap<>();
+        allSales.stream()
+                .forEach(sale -> {
+                    Integer period = 0; // getQuarterIndex(sale.getDate().getMonth());
+                    addSaleToMap(salesOfQuarters, sale, period);
+                });
+        return getSalesAsDoubleMatrix(salesOfQuarters);
     }
 
     private double[][] getSalesOfAllYears() {
-        LinkedHashMap<Integer, BigDecimal> salesOfYears = getYearlySalesMap();
-        Optional<Integer> firstYear = salesOfYears.keySet().stream().sorted().findFirst();
-        if (!firstYear.isPresent()) {
-            return new double[0][0];
-        }
-        return getSalesAsDoubleMatrix(salesOfYears, firstYear.get());
-    }
-
-    private LinkedHashMap<Integer, BigDecimal> getYearlySalesMap() {
         LinkedHashMap<Integer, BigDecimal> salesOfYears = new LinkedHashMap<>();
-        saleService.getAllSales()
-                   .stream()
-                   .forEach(sale -> addSalesToMap(salesOfYears, sale));
-        return salesOfYears;
+        allSales.stream()
+                .forEach(sale -> {
+                    Integer period = sale.getDate().getYear() + 1900;
+                    addSaleToMap(salesOfYears, sale, period);
+                });
+        return getSalesAsDoubleMatrix(salesOfYears);
     }
 
-    private double[][] getSalesAsDoubleMatrix(LinkedHashMap<Integer, BigDecimal> salesOfYears, Integer firstYear) {
+    private double getPeriodForecast(double[][] salesOfAllPeriods) {
+        SimpleRegression simpleRegression = new SimpleRegression(true);
+        simpleRegression.clear();
+        simpleRegression.addData(salesOfAllPeriods);
+        return simpleRegression.predict(salesOfAllPeriods.length);
+    }
+
+    private double[][] getSalesAsDoubleMatrix(LinkedHashMap<Integer, BigDecimal> salesOfAllPeriods) {
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
         int numYears = thisYear - firstYear + 1;
         double[][] sales = new double[numYears][2];
         for (int yearIndex = 0; yearIndex < sales.length; yearIndex++) {
             int year = firstYear + yearIndex;
-            putSaleToMatrix(salesOfYears, sales, yearIndex, year);
+            putSaleToMatrix(salesOfAllPeriods, sales, yearIndex, year);
         }
         return sales;
     }
 
-    private void putSaleToMatrix(LinkedHashMap<Integer, BigDecimal> salesOfYears, double[][] sales, int yearIndex, int year) {
-        BigDecimal salesOfYear = new BigDecimal(0);
-        if (salesOfYears.containsKey(year)) {
-            salesOfYear = salesOfYears.get(year);
+    private void putSaleToMatrix(LinkedHashMap<Integer, BigDecimal> salesOfAllPeriods, double[][] sales, int yearIndex, int period) {
+        BigDecimal salesOfThisPeriod = new BigDecimal(0);
+        if (salesOfAllPeriods.containsKey(period)) {
+            salesOfThisPeriod = salesOfAllPeriods.get(period);
         }
         sales[yearIndex][0] = yearIndex;
-        sales[yearIndex][1] = salesOfYear.doubleValue();
+        sales[yearIndex][1] = salesOfThisPeriod.doubleValue();
     }
 
-    public void addSalesToMap(LinkedHashMap<Integer, BigDecimal> salesMap, Sale sale) {
-        Integer year = sale.getDate().getYear() + 1900;
+    private void addSaleToMap(LinkedHashMap<Integer, BigDecimal> salesMap, Sale sale, Integer key) {
         BigDecimal amount = sale.getTotalPrice();
-        if (salesMap.containsKey(year)) {
-            BigDecimal newAmount = salesMap.get(year).add(amount);
-            salesMap.put(year, newAmount);
+        if (salesMap.containsKey(key)) {
+            BigDecimal newAmount = salesMap.get(key).add(amount);
+            salesMap.put(key, newAmount);
         } else {
-            salesMap.put(year, amount);
+            salesMap.put(key, amount);
         }
     }
 }

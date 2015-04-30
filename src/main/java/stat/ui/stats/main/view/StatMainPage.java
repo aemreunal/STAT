@@ -137,6 +137,7 @@ public class StatMainPage extends Page {
 
     @Override
     public void refresh() {
+        statController.refreshSalesList();
         refreshYearList();
         validate();
     }
@@ -171,8 +172,7 @@ public class StatMainPage extends Page {
     private class ForecastListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            getSelectedType();
-            System.out.println(statController.getForecastResult());
+            System.out.println(statController.getForecast(getSelectedType()));
         }
     }
 
