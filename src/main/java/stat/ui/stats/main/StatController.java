@@ -22,6 +22,7 @@ import stat.ui.stats.main.view.helper.BreakdownType;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -198,55 +199,22 @@ public class StatController {
         if (firstYear == null) {
             return 0;
         }
-        double[][] salesOfAllPeriods;
+        double[][] forecastMatrix;
         switch (breakdownType) {
             case MONTHLY:
-                salesOfAllPeriods = getSalesOfAllMonths();
+                forecastMatrix = getSalesOfAllMonths();
                 break;
             case QUARTERLY:
-                salesOfAllPeriods = getSalesOfAllQuarters();
+                forecastMatrix = getSalesOfAllQuarters();
                 break;
             case YEARLY:
-                salesOfAllPeriods = getSalesOfAllYears();
+                forecastMatrix = getSalesOfAllYears();
                 break;
             default:
-                salesOfAllPeriods = getSalesOfAllYears();
+                forecastMatrix = getSalesOfAllYears();
                 break;
         }
-        return getPeriodForecast(salesOfAllPeriods);
-    }
-
-    private double[][] getSalesOfAllMonths() {
-        LinkedHashMap<Integer, BigDecimal> salesOfMonths = new LinkedHashMap<>();
-        int thisMonth = Calendar.getInstance().get(Calendar.MONTH);
-        allSales.stream()
-                .filter(sale -> sale.getDate().getMonth() == thisMonth)
-                .forEach(sale -> {
-                    Integer period = sale.getDate().getYear() + 1900;
-                    addSaleToMap(salesOfMonths, sale, period);
-                });
-        return getSalesAsForecastMatrix(salesOfMonths);
-    }
-
-    private double[][] getSalesOfAllQuarters() {
-//        LinkedHashMap<Integer, BigDecimal> salesOfQuarters = new LinkedHashMap<>();
-//        allSales.stream()
-//                .forEach(sale -> {
-//                    Integer period = 0; // getQuarterIndex(sale.getDate().getMonth());
-//                    addSaleToMap(salesOfQuarters, sale, period);
-//                });
-//        return getSalesAsForecastMatrix(salesOfQuarters);
-        return new double[0][0];
-    }
-
-    private double[][] getSalesOfAllYears() {
-        LinkedHashMap<Integer, BigDecimal> salesOfYears = new LinkedHashMap<>();
-        allSales.stream()
-                .forEach(sale -> {
-                    Integer period = sale.getDate().getYear() + 1900;
-                    addSaleToMap(salesOfYears, sale, period);
-                });
-        return getSalesAsForecastMatrix(salesOfYears);
+        return getPeriodForecast(forecastMatrix);
     }
 
     private double getPeriodForecast(double[][] salesOfAllPeriods) {
@@ -256,7 +224,39 @@ public class StatController {
         return simpleRegression.predict(salesOfAllPeriods.length);
     }
 
-    private double[][] getSalesAsForecastMatrix(LinkedHashMap<Integer, BigDecimal> salesOfAllPeriods) {
+    private double[][] getSalesOfAllMonths() {
+        int thisMonth = Calendar.getInstance().get(Calendar.MONTH);
+        Stream<Sale> saleStream = allSales.stream()
+                                          .filter(sale -> sale.getDate().getMonth() == thisMonth);
+        return getSalesForecastMatrix(saleStream);
+    }
+
+    private double[][] getSalesOfAllQuarters() {
+//        LinkedHashMap<Integer, BigDecimal> salesOfQuarters = new LinkedHashMap<>();
+//        allSales.stream()
+//                .forEach(sale -> {
+//                    Integer period = 0; // getQuarterIndex(sale.getDate().getMonth());
+//                    addSaleToMap(salesOfQuarters, sale, period);
+//                });
+//        return salesMapToForecastMatrix(salesOfQuarters);
+        return new double[0][0];
+    }
+
+    private double[][] getSalesOfAllYears() {
+        Stream<Sale> saleStream = allSales.stream();
+        return getSalesForecastMatrix(saleStream);
+    }
+
+    private double[][] getSalesForecastMatrix(Stream<Sale> saleStream) {
+        LinkedHashMap<Integer, BigDecimal> salesOfBreakdown = new LinkedHashMap<>();
+        saleStream.forEach(sale -> {
+            Integer period = sale.getDate().getYear() + 1900;
+            addSaleToMap(salesOfBreakdown, sale, period);
+        });
+        return salesMapToForecastMatrix(salesOfBreakdown);
+    }
+
+    private double[][] salesMapToForecastMatrix(LinkedHashMap<Integer, BigDecimal> salesOfAllPeriods) {
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
         int numYears = thisYear - firstYear + 1;
         double[][] sales = new double[numYears][2];
