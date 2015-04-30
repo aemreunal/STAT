@@ -16,5 +16,18 @@ package stat.ui.stats.main.view.helper;
 
 
 public enum BreakdownType {
-    MONTHLY, QUARTERLY, YEARLY
+    MONTHLY, QUARTERLY, YEARLY;
+
+    public String toTitleCasedString () {
+        return this.name().substring(0,1).toUpperCase() + this.name().substring(1).toLowerCase();
+    }
+
+    public String toLowerCaseString() {
+        return this.name().toLowerCase();
+    }
+
+    public String toUppperCaseString() {
+        return this.name().toUpperCase();
+    }
+
 }

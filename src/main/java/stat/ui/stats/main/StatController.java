@@ -194,9 +194,24 @@ public class StatController {
                        .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    public double getForecast(BreakdownType breakdownType) {
-        if (firstYear == null) {
+
+    private int getQuarter(Date date) {
+        if (date.getMonth() >= 9 && date.getMonth() <= 11) { // 1st quarter for FY 2015: 1 October 2014 – 31 December 2014
             return 0;
+        } else if (date.getMonth() >= 0 && date.getMonth() <= 2) { // 2nd quarter for FY 2015: 1 January 2015 – 31 March 2015
+            return 1;
+        } else if (date.getMonth() >= 3 && date.getMonth() <= 5) { // 3rd quarter for FY 2015: 1 April 2015 – 30 June 2015
+            return 2;
+        } else if (date.getMonth() >= 6 && date.getMonth() <= 8) { // 4th quarter for FY 2015: 1 July 2015 – 30 September 2015
+            return 3;
+        } else { // N/A
+            return -1;
+        }
+    }
+    
+    public void forecastButtonClicked(BreakdownType breakdownType) {
+        if (firstYear == null) {
+            statMainPage.showForecastResult(0, breakdownType.toTitleCasedString());
         }
         double[][] salesOfAllPeriods;
         switch (breakdownType) {
@@ -213,7 +228,7 @@ public class StatController {
                 salesOfAllPeriods = getSalesOfAllYears();
                 break;
         }
-        return getPeriodForecast(salesOfAllPeriods);
+        statMainPage.showForecastResult(getPeriodForecast(salesOfAllPeriods), breakdownType.toTitleCasedString());
     }
 
     private double[][] getSalesOfAllMonths() {

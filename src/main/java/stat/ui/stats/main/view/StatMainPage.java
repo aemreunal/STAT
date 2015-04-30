@@ -169,10 +169,17 @@ public class StatMainPage extends Page {
         validate();
     }
 
+    public void showForecastResult(double value, String selectedType) {
+        JOptionPane.showMessageDialog(this,
+                selectedType + " forecast is : " + value,
+                selectedType + " Forecast",
+                JOptionPane.INFORMATION_MESSAGE );
+    }
+
     private class ForecastListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(statController.getForecast(getSelectedType()));
+            statController.forecastButtonClicked(getSelectedType());
         }
     }
 
