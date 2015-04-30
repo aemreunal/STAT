@@ -52,7 +52,7 @@ public class StatMainPage extends Page {
     private LinkedHashSet<JRadioButton> radioButtons = new LinkedHashSet<>();
     private JList<Integer>              yearList     = new JList<>();
 
-    private ActionListener radioButtonListener;
+    private ActionListener         radioButtonListener;
     private LinkedHashSet<Integer> listOfSalesYears;
 
     public StatMainPage() {
@@ -169,11 +169,23 @@ public class StatMainPage extends Page {
         validate();
     }
 
+    public void showForecastResult(long forecastResult) {
+        String selectedType = getSelectedType().toTitleCasedString();
+        JOptionPane.showMessageDialog(this,
+                                      selectedType + " forecast is : " + forecastResult,
+                                      selectedType + " Forecast",
+                                      JOptionPane.INFORMATION_MESSAGE);
+    }
+
     private class ForecastListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(statController.getForecast(getSelectedType()));
+            BreakdownType selectedType = getSelectedType();
+            if (selectedType != null) {
+                statController.forecastButtonClicked(getSelectedType());
+            }
         }
+
     }
 
     private class BreakdownSelectionListener implements ActionListener {
