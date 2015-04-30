@@ -43,8 +43,8 @@ public class ApplicationWindow extends JFrame {
     @Autowired
     private StatMainPage statMainPage;
 
-    private JPanel      contentPane;
-    private JTabbedPane tabbedPagePane;
+    private JPanel       contentPane;
+    private JTabbedPane  tabbedPagePane;
 
     public ApplicationWindow() {
         initWindow();

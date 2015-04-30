@@ -213,6 +213,7 @@ public class StatController {
         if (firstYear == null) {
             statMainPage.showForecastResult(0);
         }
+
         double[][] forecastMatrix;
         switch (breakdownType) {
             case MONTHLY:

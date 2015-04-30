@@ -42,16 +42,16 @@ public class GlobalSettings {
     // create:      creates the schema, destroying previous data.
     // create-drop: drop the schema at the end of the session.
     //----------------------------------------
-    public static final String HBM2DDL_KEY      = "hibernate.hbm2ddl.auto";
-    public static final String HBM2DDL_PROPERTY = "update";
+    public static final String HBM2DDL_KEY         = "hibernate.hbm2ddl.auto";
+    public static final String HBM2DDL_PROPERTY    = "update";
     //-------------------------------------------------------------------------------------------
 
 
     //-------------------------------------------------------------------------------------------
     // Property name: "hibernate.show_sql"
     //----------------------------------------
-    public static final String SHOW_SQL_KEY      = "hibernate.show_sql";
-    public static final String SHOW_SQL_PROPERTY = "false";
+    public static final String SHOW_SQL_KEY        = "hibernate.show_sql";
+    public static final String SHOW_SQL_PROPERTY   = "false";
     //-------------------------------------------------------------------------------------------
 
 
@@ -79,16 +79,16 @@ public class GlobalSettings {
     public static final String DB_PROPERTY_PASSWORD_KEY = "db.password";
     public static final String DB_DEFAULT_PASSWORD      = "stat";
 
-    public static final String DB_PROPERTY_IP_KEY = "db.ip";
-    public static final String DB_DEFAULT_IP      = "localhost";
+    public static final String DB_PROPERTY_IP_KEY       = "db.ip";
+    public static final String DB_DEFAULT_IP            = "localhost";
 
-    public static final String DB_PROPERTY_PORT_KEY = "db.port";
-    public static final String DB_DEFAULT_PORT      = "3306";
+    public static final String DB_PROPERTY_PORT_KEY     = "db.port";
+    public static final String DB_DEFAULT_PORT          = "3306";
 
-    public static final String DB_PROPERTY_NAME_KEY = "db.name";
-    public static final String DB_DEFAULT_NAME      = "stat";
+    public static final String DB_PROPERTY_NAME_KEY     = "db.name";
+    public static final String DB_DEFAULT_NAME          = "stat";
 
-    public static final String DB_PROPERTY_DDL_KEY = "db.hbm2_ddl";
+    public static final String DB_PROPERTY_DDL_KEY      = "db.hbm2_ddl";
 
     public static final String DB_PROPERTY_SHOW_SQL_KEY = "db.show_sql";
     public static final int    PRICE_TOTAL_PRECISION    = 16;

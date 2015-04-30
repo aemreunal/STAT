@@ -105,8 +105,19 @@ public class ProductMainPage extends Page {
         tableModel.setDataVector(items, ProductColType.getColNameList());
     }
 
-    private class ProductPageButtonListener implements ActionListener {
+    public int getDeletionConfirmationResult() {
+        return JOptionPane.showConfirmDialog(this,"Are you sure?", "Product Deletion", JOptionPane.YES_NO_OPTION);
+    }
 
+    public void applyFilterButtonClicked() {
+        productController.applyFilterButtonClicked(filterPanel);
+    }
+
+    public void displayProductDeletionError(SoldProductDeletionException exception) {
+        JOptionPane.showMessageDialog(this, exception.getErrorMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private class ProductPageButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             int selectedRow = getRow();
@@ -130,11 +141,4 @@ public class ProductMainPage extends Page {
         }
     }
 
-    public void applyFilterButtonClicked() {
-        productController.applyFilterButtonClicked(filterPanel);
-    }
-
-    public void displayProductDeletionError(SoldProductDeletionException exception) {
-        JOptionPane.showMessageDialog(this, exception.getErrorMessage(), "Delete Error", JOptionPane.ERROR_MESSAGE);
-    }
 }

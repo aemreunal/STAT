@@ -104,6 +104,14 @@ public class SaleMainPage extends Page {
         tableModel.setDataVector(items, SaleColType.getColNameList());
     }
 
+    public int getDeletionConfirmationResult() {
+        return JOptionPane.showConfirmDialog(this,"Are you sure?", "Sale Deletion", JOptionPane.YES_NO_OPTION);
+    }
+
+    public void applyFilterButtonClicked() {
+        saleController.applyFilterButtonClicked(filterPanel);
+    }
+
     private class SalePageButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -128,9 +136,7 @@ public class SaleMainPage extends Page {
         }
     }
 
-    public void applyFilterButtonClicked() {
-        saleController.applyFilterButtonClicked(filterPanel);
-    }
+
 }
 
 

@@ -44,7 +44,7 @@ public class Sale implements Comparable {
             joinColumns = @JoinColumn(name = "sale_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
     @OrderBy("productId")
-    private Set<Product> products = new LinkedHashSet<Product>();
+    private Set<Product> products = new LinkedHashSet<>();
 
     // The amounts map from a product ID to the amount sold of that product
     @ElementCollection(fetch = FetchType.LAZY)

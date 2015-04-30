@@ -32,10 +32,10 @@ import static org.jfree.chart.ChartFactory.createBarChart;
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public class ChartFactory {
-    private static final String[] MONTHS = { "January", "February", "March",
-                                             "April", "May", "June",
-                                             "July", "August", "September",
-                                             "October", "November", "December" };
+    private static final String[] MONTHS   = { "January", "February", "March",
+                                               "April",   "May",      "June",
+                                               "July",    "August",   "September",
+                                               "October", "November", "December" };
 
     private static final String[] QUARTERS = { "1 (01/10-31/12)", "2 (01/01-31/03)",
                                                "3 (01/04-30/06)", "4 (01/07-30/09)" };

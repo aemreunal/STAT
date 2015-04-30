@@ -34,6 +34,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import javax.swing.*;
+
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
@@ -97,13 +99,15 @@ public class ProductController implements PageController {
         if (row == -1) { // If no row has been chosen
             return;
         }
-        //TODO: Confirm option must be added.
-        int productIdToRemove = productIDList.remove(row);
-        try {
-            productService.deleteProduct(productIdToRemove);
-            refreshPage();
-        } catch (SoldProductDeletionException e) {
-            productMainPage.displayProductDeletionError(e);
+
+        if (productMainPage.getDeletionConfirmationResult() == JOptionPane.YES_OPTION) {
+            int productIdToRemove = productIDList.remove(row);
+            try {
+                productService.deleteProduct(productIdToRemove);
+                refreshPage();
+            } catch (SoldProductDeletionException e) {
+                productMainPage.displayProductDeletionError(e);
+            }
         }
     }
 

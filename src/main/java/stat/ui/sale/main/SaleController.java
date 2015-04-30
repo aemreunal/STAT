@@ -31,6 +31,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import javax.swing.*;
+
 @Component
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
@@ -72,9 +74,12 @@ public class SaleController implements PageController {
         if (row == -1) { // If no row has been chosen
             return;
         }
-        int saleIdToRemove = saleIDList.remove(row);
-        saleService.deleteSale(saleIdToRemove);
-        refreshPage();
+
+        if (saleMainPage.getDeletionConfirmationResult() == JOptionPane.YES_OPTION) {
+            int saleIdToRemove = saleIDList.remove(row);
+            saleService.deleteSale(saleIdToRemove);
+            refreshPage();
+        }
     }
 
     public void showSaleDetailsButtonClicked(int row) {

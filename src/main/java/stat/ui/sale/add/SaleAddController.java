@@ -131,7 +131,6 @@ public class SaleAddController implements PageController {
         } else {
             recordSale();
         }
-
     }
 
     private boolean haveProducts() {
@@ -202,6 +201,5 @@ public class SaleAddController implements PageController {
         } catch (NoSuchElementException e) {
             return "";
         }
-
     }
 }

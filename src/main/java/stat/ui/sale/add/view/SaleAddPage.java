@@ -44,7 +44,7 @@ public class SaleAddPage extends Page {
     private JTable chosenProductsTable;
 
     private JButton cancelButton;
-    private JButton confirmButton;
+    private JButton createButton;
     private JButton addProductButton;
     private JButton removeProductButton;
 
@@ -112,11 +112,11 @@ public class SaleAddPage extends Page {
     }
 
     private void initConfirmButton() {
-        confirmButton = new JButton("Create");
-        confirmButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        confirmButton.setBounds(260, 335, 180, 30);
-        confirmButton.addActionListener(buttonListener);
-        add(confirmButton);
+        createButton = new JButton("Create");
+        createButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        createButton.setBounds(260, 335, 180, 30);
+        createButton.addActionListener(buttonListener);
+        add(createButton);
     }
 
     private void initCancelButton() {
@@ -128,7 +128,7 @@ public class SaleAddPage extends Page {
     }
 
     private void initCustomerNameField() {
-        JLabel labelCustomerName = new JLabel("Customer Name:");
+        JLabel labelCustomerName = new JLabel("Customer Name :");
         labelCustomerName.setHorizontalAlignment(SwingConstants.RIGHT);
         labelCustomerName.setFont(new Font("Tahoma", Font.PLAIN, 14));
         labelCustomerName.setBounds(25, 12, 125, 24);
@@ -159,7 +159,7 @@ public class SaleAddPage extends Page {
     }
 
     private void initDateField() {
-        JLabel labelDate = new JLabel("Date:");
+        JLabel labelDate = new JLabel("Date :");
         labelDate.setHorizontalAlignment(SwingConstants.RIGHT);
         labelDate.setFont(new Font("Tahoma", Font.PLAIN, 14));
         labelDate.setBounds(25, 45, 125, 24);
@@ -170,7 +170,7 @@ public class SaleAddPage extends Page {
         datePicker.setSize(datePicker.getPreferredSize());
         datePicker.addActionListener(e -> {
             if (dateModel.getValue().after(new Date())) {
-                JOptionPane.showMessageDialog(null, "You cannot select a future date!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "You cannot select a future date!", "Date Error", JOptionPane.ERROR_MESSAGE);
                 dateModel.setValue(new Date());
             }
         });
@@ -180,7 +180,7 @@ public class SaleAddPage extends Page {
     }
 
     private void initTotalPrice() {
-        JLabel labelTotal = new JLabel("Total:");
+        JLabel labelTotal = new JLabel("Total :");
         labelTotal.setFont(new Font("Tahoma", Font.PLAIN, 14));
         labelTotal.setBounds(288, 245, 49, 24);
 
@@ -218,7 +218,7 @@ public class SaleAddPage extends Page {
                 if (chosenProdsRow != -1) {
                     saleAddController.removeProductButtonClicked(chosenProdsRow);
                 }
-            } else if (sourceOfAction.equals(confirmButton)) {
+            } else if (sourceOfAction.equals(createButton)) {
                 saleAddController.confirmButtonClicked();
             }
         }
@@ -271,7 +271,7 @@ public class SaleAddPage extends Page {
     }
 
     public void displaySuccess() {
-        JOptionPane.showMessageDialog(this, "The Sale was successfully saved.");
+        JOptionPane.showMessageDialog(this, "The sale was successfully saved.");
     }
 
     public void showSaveError() {

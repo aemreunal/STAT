@@ -51,7 +51,7 @@ public class FilterFieldListener implements DocumentListener {
             Document document = event.getDocument();
             return document.getText(0, document.getLength());
         } catch (BadLocationException e1) {
-            System.err.println("Unable too get text, will not filter.");
+            System.err.println("Unable to get text, will not filter.");
             return "";
         }
     }

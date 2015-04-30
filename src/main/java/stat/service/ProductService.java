@@ -182,7 +182,7 @@ public class ProductService {
     public LinkedHashSet<Product> searchForProducts(String name, String description, BigDecimal minPrice, BigDecimal maxPrice) {
         List searchResult = productRepo.findAll(productWithSpecification(name, description, minPrice, maxPrice));
 
-        LinkedHashSet<Product> products = new LinkedHashSet<Product>();
+        LinkedHashSet<Product> products = new LinkedHashSet<>();
         for (Object productObject : searchResult) {
             products.add(((Product) productObject));
         }
@@ -200,7 +200,7 @@ public class ProductService {
 
     private Specification<Product> productWithSpecification(String name, String description, BigDecimal minPrice, BigDecimal maxPrice) {
         return (root, query, builder) -> {
-            ArrayList<Predicate> predicates = new ArrayList<Predicate>();
+            ArrayList<Predicate> predicates = new ArrayList<>();
 
             if (name != null && !name.equals("")) {
                 predicates.add(builder.like(builder.lower(root.get("name").as(String.class)), "%" + name.toLowerCase() + "%"));

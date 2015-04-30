@@ -73,7 +73,7 @@ public class SaleService {
         Set<Product> products = sale.getProducts();
         Map<Integer, Integer> amounts = sale.getAmounts();
 
-        LinkedHashMap<Product, Integer> productsAndAmounts = new LinkedHashMap<Product, Integer>();
+        LinkedHashMap<Product, Integer> productsAndAmounts = new LinkedHashMap<>();
         for (Product product : products) {
             Integer amountOfProduct = amounts.get(product.getProductId());
             productsAndAmounts.put(product, amountOfProduct);
@@ -126,7 +126,7 @@ public class SaleService {
     public LinkedHashSet<Sale> searchForSales(String customerName, Date from, Date until, BigDecimal minPrice, BigDecimal maxPrice) {
         List searchResult = saleRepo.findAll(saleWithSpecification(customerName, from, until, minPrice, maxPrice));
 
-        LinkedHashSet<Sale> sales = new LinkedHashSet<Sale>();
+        LinkedHashSet<Sale> sales = new LinkedHashSet<>();
         for (Object saleObject : searchResult) {
             sales.add(((Sale) saleObject));
         }
@@ -143,7 +143,7 @@ public class SaleService {
 
     private Specification<Sale> saleWithSpecification(String customerName, Date from, Date until, BigDecimal minPrice, BigDecimal maxPrice) {
         return (root, query, builder) -> {
-            ArrayList<Predicate> predicates = new ArrayList<Predicate>();
+            ArrayList<Predicate> predicates = new ArrayList<>();
 
             if (customerName != null && !customerName.equals("")) {
                 predicates.add(builder.like(builder.lower(root.get("customerName").as(String.class)), "%" + customerName.toLowerCase() + "%"));

@@ -31,6 +31,10 @@ public class SaleTableSorter extends TableRowSorter {
     }
 
     private Comparator<Sale> getComparatorForCol(int colIndex) {
+        if (SaleColType.fromColIndex(colIndex) == null) {
+            return null;
+        }
+
         switch (SaleColType.fromColIndex(colIndex)) {
             case NAME:
                 return new SaleCustomerNameComparator();

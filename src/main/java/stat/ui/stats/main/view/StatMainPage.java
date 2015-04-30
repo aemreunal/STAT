@@ -170,7 +170,7 @@ public class StatMainPage extends Page {
     }
 
     public void showForecastResult(long forecastResult) {
-        String selectedType = getSelectedType().toTitleCasedString();
+        String selectedType = (getSelectedType() == null ? "null" : getSelectedType().toTitleCasedString());
         JOptionPane.showMessageDialog(this,
                                       selectedType + " forecast is : " + forecastResult,
                                       selectedType + " Forecast",
@@ -185,7 +185,6 @@ public class StatMainPage extends Page {
                 statController.forecastButtonClicked(getSelectedType());
             }
         }
-
     }
 
     private class BreakdownSelectionListener implements ActionListener {

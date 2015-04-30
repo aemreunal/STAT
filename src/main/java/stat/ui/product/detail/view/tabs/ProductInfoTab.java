@@ -29,7 +29,7 @@ public class ProductInfoTab extends Page {
 
     private final ProductDetailController controller;
 
-    private JPanel fieldHolder;
+    private JPanel     fieldHolder;
     private JTextField revenueField;
     private JTextField amountField;
 
@@ -104,7 +104,7 @@ public class ProductInfoTab extends Page {
     }
 
     private void initAmountSoldField() {
-        JLabel amountLabel = new JLabel("Amount Sold:");
+        JLabel amountLabel = new JLabel("Amount Sold :");
         amountLabel.setBounds(6, 90, 108, 19);
         amountLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 
@@ -118,7 +118,7 @@ public class ProductInfoTab extends Page {
     }
 
     private void initProductRevenueField() {
-        JLabel revenueLabel = new JLabel("Total Revenue:");
+        JLabel revenueLabel = new JLabel("Total Revenue :");
         revenueLabel.setBounds(6, 114, 108, 19);
         revenueLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 

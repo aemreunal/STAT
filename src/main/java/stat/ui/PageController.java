@@ -22,5 +22,5 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
 public interface PageController {
 
-    public abstract void refreshPage();
+    void refreshPage();
 }

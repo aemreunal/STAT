@@ -14,17 +14,17 @@ package stat.ui.product.add.view;
  * ******************************* *
  */
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import stat.ui.Page;
 import stat.ui.product.main.ProductController;
 
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.TitledBorder;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 // Required to not run this class in a test environment
 @ConditionalOnProperty(value = "java.awt.headless", havingValue = "false")
@@ -33,12 +33,12 @@ public class ProductAddPage extends Page {
 
     private ProductController productController;
 
-    private JPanel     fieldHolder;
-    private JTextField nameField;
-    private JTextArea  descriptionField;
-    private JTextField priceField;
-    private JButton    saveButton;
-    private JButton    backButton;
+    private JPanel      fieldHolder;
+    private JTextField  nameField;
+    private JTextArea   descriptionField;
+    private JTextField  priceField;
+    private JButton     createButton;
+    private JButton     cancelButton;
 
     private ButtonListener buttonListener;
 
@@ -120,21 +120,21 @@ public class ProductAddPage extends Page {
     }
 
     private void initializeSaveButton() {
-        saveButton = new JButton("Create");
-        saveButton.setBounds(220, 250, 140, 30);
-        saveButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        saveButton.addActionListener(buttonListener);
+        createButton = new JButton("Create");
+        createButton.setBounds(220, 250, 140, 30);
+        createButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        createButton.addActionListener(buttonListener);
 
-        add(saveButton);
+        add(createButton);
     }
 
     private void initializeBackButton() {
-        backButton = new JButton("Cancel");
-        backButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        backButton.setBounds(50, 250, 140, 30);
-        backButton.addActionListener(buttonListener);
+        cancelButton = new JButton("Cancel");
+        cancelButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        cancelButton.setBounds(50, 250, 140, 30);
+        cancelButton.addActionListener(buttonListener);
 
-        add(backButton);
+        add(cancelButton);
     }
 
     public void clearInputFields() {
@@ -158,36 +158,34 @@ public class ProductAddPage extends Page {
     }
 
     public void displaySuccess() {
-        JOptionPane.showMessageDialog(this, "The Product was successfully saved.");
+        JOptionPane.showMessageDialog(this, "The product was successfully saved.");
     }
 
     public void displayValidationError() {
         JOptionPane.showMessageDialog(this,
-                                      "The fields have invalid data. Please check them again.",
-                                      "Validation Error",
-                                      JOptionPane.ERROR_MESSAGE);
+                "The fields have invalid/incomplete data. Please check them.",
+                "Validation Error",
+                JOptionPane.ERROR_MESSAGE);
     }
 
     public void displayNameError() {
         JOptionPane.showMessageDialog(this,
-                                      "There already is a product named \'" + nameField.getText().trim() + "\', please enter a different name.",
-                                      "Validation Error",
-                                      JOptionPane.ERROR_MESSAGE);
+                "There already is a product named \'" + nameField.getText().trim() + "\', please enter a different name.",
+                "Validation Error",
+                JOptionPane.ERROR_MESSAGE);
     }
 
     private class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             Object sourceOfAction = e.getSource();
-            if (sourceOfAction.equals(saveButton)) {
+            if (sourceOfAction.equals(createButton)) {
                 if (fieldsAreValid()) {
                     saveProduct();
-                    //TODO close maybe?
                 } else {
                     displayValidationError();
-                    //TODO ask again
                 }
-            } else if (sourceOfAction.equals(backButton)) {
+            } else if (sourceOfAction.equals(cancelButton)) {
                 JFrame parentFrame = (JFrame) getRootPane().getParent();
                 parentFrame.dispose();
             }
