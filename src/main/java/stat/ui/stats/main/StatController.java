@@ -218,22 +218,25 @@ public class StatController {
 
     private double[][] getSalesOfAllMonths() {
         LinkedHashMap<Integer, BigDecimal> salesOfMonths = new LinkedHashMap<>();
+        int thisMonth = Calendar.getInstance().get(Calendar.MONTH);
         allSales.stream()
+                .filter(sale -> sale.getDate().getMonth() == thisMonth)
                 .forEach(sale -> {
-                    Integer period = sale.getDate().getMonth();
+                    Integer period = sale.getDate().getYear() + 1900;
                     addSaleToMap(salesOfMonths, sale, period);
                 });
-        return getSalesAsDoubleMatrix(salesOfMonths);
+        return getSalesAsForecastMatrix(salesOfMonths);
     }
 
     private double[][] getSalesOfAllQuarters() {
-        LinkedHashMap<Integer, BigDecimal> salesOfQuarters = new LinkedHashMap<>();
-        allSales.stream()
-                .forEach(sale -> {
-                    Integer period = 0; // getQuarterIndex(sale.getDate().getMonth());
-                    addSaleToMap(salesOfQuarters, sale, period);
-                });
-        return getSalesAsDoubleMatrix(salesOfQuarters);
+//        LinkedHashMap<Integer, BigDecimal> salesOfQuarters = new LinkedHashMap<>();
+//        allSales.stream()
+//                .forEach(sale -> {
+//                    Integer period = 0; // getQuarterIndex(sale.getDate().getMonth());
+//                    addSaleToMap(salesOfQuarters, sale, period);
+//                });
+//        return getSalesAsForecastMatrix(salesOfQuarters);
+        return new double[0][0];
     }
 
     private double[][] getSalesOfAllYears() {
@@ -243,7 +246,7 @@ public class StatController {
                     Integer period = sale.getDate().getYear() + 1900;
                     addSaleToMap(salesOfYears, sale, period);
                 });
-        return getSalesAsDoubleMatrix(salesOfYears);
+        return getSalesAsForecastMatrix(salesOfYears);
     }
 
     private double getPeriodForecast(double[][] salesOfAllPeriods) {
@@ -253,11 +256,11 @@ public class StatController {
         return simpleRegression.predict(salesOfAllPeriods.length);
     }
 
-    private double[][] getSalesAsDoubleMatrix(LinkedHashMap<Integer, BigDecimal> salesOfAllPeriods) {
+    private double[][] getSalesAsForecastMatrix(LinkedHashMap<Integer, BigDecimal> salesOfAllPeriods) {
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
         int numYears = thisYear - firstYear + 1;
         double[][] sales = new double[numYears][2];
-        for (int yearIndex = 0; yearIndex < sales.length; yearIndex++) {
+        for (int yearIndex = 0; yearIndex < numYears; yearIndex++) {
             int year = firstYear + yearIndex;
             putSaleToMatrix(salesOfAllPeriods, sales, yearIndex, year);
         }
